@@ -175,6 +175,22 @@ main{flex:1;overflow-y:auto;overflow-x:hidden;position:relative}
 .vdots{display:flex;justify-content:center;gap:7px;padding:12px 0 18px}
 .vdots span{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.35);transition:background .2s,transform .2s}
 .vdots span.on{background:#fff;transform:scale(1.2)}
+.storyopen{display:block;width:100%;text-align:left;padding:0;color:inherit}
+.postpin{display:inline-flex;align-items:center;gap:6px;background:var(--pill);border:1px solid var(--line);border-radius:30px;padding:5px 12px;font-size:12px;color:var(--ink)}
+.postlayer{padding-bottom:84px}
+.cmhead{margin-top:26px;padding-top:18px;border-top:1px solid var(--line);display:flex;align-items:center;gap:8px}
+.cm{display:flex;gap:10px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line)}
+.cm:last-child{border-bottom:0}
+.cmtext{font-size:14px;line-height:1.5;margin-top:2px;overflow-wrap:anywhere;color:var(--black)}
+.composer{position:fixed;left:0;right:0;bottom:0;max-width:480px;margin:0 auto;display:flex;gap:8px;align-items:flex-end;background:var(--surface);border-top:1px solid var(--line);padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));z-index:31}
+.composer textarea{flex:1;resize:none;border:1.5px solid var(--line);border-radius:20px;padding:10px 14px;font-size:14px;background:var(--bg);color:var(--ink);max-height:120px}
+.composer textarea:focus{outline:none;border-color:var(--accent)}
+.composer .btn{min-height:40px;border-radius:20px}
+.adstats{display:grid;grid-template-columns:repeat(4,1fr);text-align:center;border:1.5px solid var(--line);border-radius:15px;background:var(--surface);padding:12px 0;margin-top:14px}
+.adstats>*+*{border-left:1px solid var(--line)}
+.adstats b{display:block;font-weight:400;font-size:19px}
+.adstats span{font-size:10px;color:var(--ink-2)}
+.adminpage .card .member+.member{border-top:1px solid var(--line)}
 .zoomctl{position:absolute;right:23px;bottom:150px;z-index:2;display:flex;flex-direction:column;gap:6px}
 .zoomctl button{width:36px;height:36px;border-radius:50%;background:var(--surface);color:var(--ink);display:grid;place-items:center;box-shadow:var(--shadow-sm)}
 .zoomctl button[hidden]{display:none}
@@ -478,11 +494,10 @@ const TAGS={
  firsts:{label:'First times',icon:'star',bg:'var(--t-rec)'},
  funny:{label:'Funny',icon:'smile',bg:'var(--t-question)'},
  hidden:{label:'Hidden gem',icon:'search',bg:'var(--t-noticing)'},
- history:{label:'History',icon:'landmark',bg:'var(--t-fact)'},
  advice:{label:'Advice',icon:'flag',bg:'var(--t-photo)'},
  nature:{label:'Nature',icon:'leaf',bg:'var(--t-history)'}
 };
-const LEGACY_TAG={memory:'heartfelt',photo:'hidden',rec:'advice',fact:'history',history:'history',question:'advice',noticing:'hidden'};
+const LEGACY_TAG={memory:'heartfelt',photo:'hidden',rec:'advice',fact:'heartfelt',history:'heartfelt',question:'advice',noticing:'hidden'};
 function firstSentence(t){
  t=String(t||'').replace(/\s+/g,' ').trim();if(!t)return '';
  const m=t.match(/^.+?[.!?…](?=\s|$)/);let out=m?m[0]:t;
@@ -490,27 +505,29 @@ function firstSentence(t){
  return out;
 }
 function normStory(id,v){
- const tags=Array.isArray(v.tags)&&v.tags.length?v.tags.filter(t=>TAGS[t]):[LEGACY_TAG[v.type]||'heartfelt'];
+ let tags=Array.isArray(v.tags)&&v.tags.length?v.tags.filter(t=>TAGS[t]):[LEGACY_TAG[v.type]||'heartfelt'];if(!tags.length)tags=['heartfelt'];
  const photos=Array.isArray(v.photos)&&v.photos.length?v.photos.filter(Boolean):(v.photo?[v.photo]:[]);
  const teaser=photos.length&&v.teaser!=='text'?(v.teaser==='photo'||!v.teaser?'photo':'text'):'text';
  return {id,...v,photos,photo:photos[0]||null,video:null,headline:v.headline||firstSentence(v.text)||'A story',peek:firstSentence(v.text),tags,teaser};
 }
-/* "Give me a prompt" ideas: heartfelt first, per the class feedback. */
-const PROMPTS=[
- ['The first time this place felt like mine','The first time I came here, I…'],
- ['Someone I met right here','I didn’t expect to meet anyone that day, but…'],
- ['What I was carrying the day I sat here','I remember sitting here, worrying about…'],
- ['A small kindness I got here','Someone I didn’t know…'],
- ['The night I stayed too late','It was way past midnight when…'],
- ['What I’d tell a freshman standing here','If you’re standing where I stood, here’s what I wish I’d known…'],
- ['A call home I made from this spot','I called home from right here because…'],
- ['Where I celebrated good news','I found out right here that…'],
- ['A detail almost everyone walks past','Next time you’re here, look for…'],
- ['The best and worst day here','This spot was part of both my best and worst day.'],
- ['Where I go when it’s all too much','When things get overwhelming, I come here because…'],
- ['A tradition I started here','Every week I…'],
- ['What this place sounds like at 7am','If you come early enough…'],
- ['The friend I made because of this spot','We probably wouldn’t be friends if not for…']
+/* "Generate a fake story": ready-made stories so testers can post without typing. {place} becomes the spot's name. */
+const FAKE_STORIES=[
+ {h:'The day a stranger saved my midterm',t:'I showed up to {place} twenty minutes before my midterm and realized I had no pencil, no calculator, nothing. A guy I had never seen before just handed me both without saying a word. I aced it. I never found him again, but I always carry a spare pencil now, just in case it’s my turn.',tags:['heartfelt']},
+ {h:'Where I finally called my mom back',t:'I had been avoiding my mom’s calls for two weeks because I didn’t want to admit I was struggling. I sat down at {place} and finally called her back. She didn’t lecture me at all. She just listened, and I cried a little, and then we laughed about my dad’s new obsession with sourdough.',tags:['heartfelt']},
+ {h:'My first friend at this school',t:'It was the first week and I didn’t know anyone. I was eating lunch alone at {place} when someone asked if the seat next to me was taken. We talked for two hours and missed our next classes. Three years later, she’s my roommate.',tags:['heartfelt','firsts']},
+ {h:'I got lost and found my favorite spot',t:'I took a wrong turn trying to find my lab and ended up at {place}. It was so quiet that I sat down for “just a minute” and stayed for an hour. Now I come here on purpose every time I need to think.',tags:['hidden','firsts']},
+ {h:'The pigeon that stole my sandwich',t:'I set my sandwich down for one second at {place} to answer a text. A pigeon swooped in, grabbed half of it, and stared at me while it ate. Three people saw. One of them gave me half of their burrito out of pity. Honestly, it was a better lunch.',tags:['funny']},
+ {h:'Where I found out I got the internship',t:'I was refreshing my email at {place} when the offer came through. I screamed so loud that a whole group of people turned around. A stranger high-fived me without even knowing why. I still think about how happy that stranger was for me.',tags:['heartfelt','firsts']},
+ {h:'Our rainy day dance',t:'It started pouring out of nowhere while my friends and I were at {place}. Instead of running for cover, my roommate started dancing. Then all of us did. We were soaked and freezing and it’s still my favorite memory of freshman year.',tags:['funny','heartfelt']},
+ {h:'The night I almost gave up',t:'I sat at {place} at 1am after failing my second exam in a row, convinced I wasn’t smart enough to be here. A janitor finishing his shift sat down and told me he’d watched a lot of students sit in that exact spot feeling that exact way, and most of them graduated. I did too.',tags:['heartfelt','advice']},
+ {h:'The best nap of my life',t:'I had pulled an all-nighter and had a two-hour gap before my next class. I lay down at {place} meaning to close my eyes for ten minutes. I woke up to the sunset and a squirrel sitting on my backpack. I missed my class, but it was worth it.',tags:['funny']},
+ {h:'Where we made up after our big fight',t:'My best friend and I didn’t talk for almost a month after a stupid argument. We ran into each other at {place} and just stood there awkwardly. Then she said “I miss you” and we both started laughing. We still meet here every Friday.',tags:['heartfelt']},
+ {h:'The secret view nobody talks about',t:'If you stand at {place} right around golden hour, the light hits everything in this warm orange glow. I found it by accident while waiting for a friend. I’ve brought three different people here since, and every single one of them took a photo.',tags:['hidden','nature']},
+ {h:'I learned my professor’s first name here',t:'I was too nervous to go to office hours, so I accidentally ran into my professor at {place} instead. We ended up talking for half an hour about his favorite hiking trails. He told me to call him by his first name. I went to office hours every week after that.',tags:['heartfelt','advice']},
+ {h:'My little brother’s first visit',t:'My little brother visited for the first time and I brought him to {place}. He looked around and said “I want to go here when I grow up.” He’s eleven. I almost cried right there.',tags:['heartfelt','firsts']},
+ {h:'The time I tripped in front of everyone',t:'I was walking past {place}, trying to look cool, when I tripped over absolutely nothing and dropped all my papers. Instead of laughing, four people stopped to help me pick everything up. One of them is in my discussion section now and we joke about it every week.',tags:['funny']},
+ {h:'Hummingbird season',t:'Every spring, the hummingbirds come back to {place}. I started keeping a little tally on my phone of how many I see each morning on my walk. Last April I counted eleven in one day. It’s a small thing, but it’s my favorite part of the week.',tags:['nature']},
+ {h:'Advice from a senior on my last day',t:'On my last day before graduating, I sat at {place} and wrote a note to my freshman self. The main point: the people you sit next to by accident will end up mattering more than any grade. Talk to them.',tags:['advice','heartfelt']}
 ];
 const AV_COLORS=['#7EA730','#9C88B8','#E0A21E','#3FA7A8','#4F8FD1','#E07A9A','#8A6D1E','#5A8900'];
 
@@ -525,10 +542,31 @@ function ago(t){if(!t)return'';const s=(Date.now()-t)/1000;if(s<60)return'just n
 function toast(msg,ms=2600){const t=$('#toast');t.innerHTML=`<div class="toast" role="status">${esc(msg)}</div>`;clearTimeout(toast._t);toast._t=setTimeout(()=>{t.innerHTML=''},ms)}
 
 /* profanity filter */
-const BAD_SUB=['fuck','shit','cunt','nigg','fagg','motherf','bitch','whore','slut','retard'];
-const BAD_WORD=['ass','asshole','dick','cock','pussy','bastard','fag','twat','wank','prick','damn','piss','tits','douche','jackass','dumbass'];
-function norm(s){return s.toLowerCase().replace(/[0]/g,'o').replace(/[1!|]/g,'i').replace(/3/g,'e').replace(/[4@]/g,'a').replace(/[5$]/g,'s').replace(/7/g,'t')}
-function hasProfanity(s){if(!s)return false;const n=norm(s);const squashed=n.replace(/[^a-z]/g,'');if(BAD_SUB.some(w=>squashed.includes(w)))return true;return n.split(/[^a-z]+/).some(w=>BAD_WORD.includes(w))}
+/* Language filter: profanity, slurs and hate phrases, including disguised spellings
+   (sh1t, f.u.c.k, fuuuck). Short words only match whole words, so "raccoon" or
+   "Scunthorpe" still get through. The list is encoded so it isn't readable in the code. */
+const FILTER=(()=>{const d=JSON.parse(atob("eyJzIjogWyJmdWNrIiwgInNoaXQiLCAibmlnZ2VyIiwgIm5pZ2dhIiwgIm5pZ2dhaCIsICJmYWdnb3QiLCAibW90aGVyZnVjayIsICJiaXRjaCIsICJ3aG9yZSIsICJzbHV0IiwgIndldGJhY2siLCAiYmVhbmVyIiwgInJhZ2hlYWQiLCAidG93ZWxoZWFkIiwgInBvcmNobW9ua2V5IiwgImp1bmdsZWJ1bm55IiwgInppcHBlcmhlYWQiLCAicmVkc2tpbiIsICJraWtlIiwgImNvY2tzdWNrZXIiLCAiZGlja2hlYWQiLCAicmV0YXJkZWQiXSwgInciOiBbImFzcyIsICJhc3NlcyIsICJhc3Nob2xlIiwgImFzc2hvbGVzIiwgImRpY2siLCAiZGlja3MiLCAiY29jayIsICJjb2NrcyIsICJwdXNzeSIsICJwdXNzaWVzIiwgImJhc3RhcmQiLCAiYmFzdGFyZHMiLCAiZmFnIiwgImZhZ3MiLCAidHdhdCIsICJ0d2F0cyIsICJ3YW5rIiwgIndhbmtlciIsICJwcmljayIsICJwcmlja3MiLCAicGlzcyIsICJ0aXRzIiwgInRpdHR5IiwgImRvdWNoZSIsICJkb3VjaGViYWciLCAiamFja2FzcyIsICJkdW1iYXNzIiwgImN1bnQiLCAiY3VudHMiLCAic3BpYyIsICJzcGljcyIsICJzcGljayIsICJjaGluayIsICJjaGlua3MiLCAiZ29vayIsICJnb29rcyIsICJjb29uIiwgImNvb25zIiwgImR5a2UiLCAiZHlrZXMiLCAicGFraSIsICJwYWtpcyIsICJqYXAiLCAiamFwcyIsICJuZWdybyIsICJuZWdyb2VzIiwgImNoaW5hbWFuIiwgImhvbmt5IiwgImt5cyIsICJyZXRhcmQiLCAicmV0YXJkcyIsICJ0cmFubnkiLCAidHJhbm5pZXMiLCAid29wIiwgIndvcHMiLCAia3lrZSIsICJneXAiLCAiaG9lIiwgImhvZXMiLCAic2thbmsiLCAiY3JhY2thIiwgImdyaW5nb3MiLCAiYmVhbmVycyJdLCAicCI6IFsid2hpdGUgcG93ZXIiLCAid2hpdGUgcHJpZGUiLCAiaGVpbCBoaXRsZXIiLCAic2llZyBoZWlsIiwgImtpbGwgeW91cnNlbGYiLCAiZ28gYmFjayB0byB5b3VyIGNvdW50cnkiLCAiZ28gYmFjayB3aGVyZSB5b3UgY2FtZSBmcm9tIiwgImdhcyB0aGUgamV3cyIsICJraWxsIGFsbCJdfQ=="));
+ const rx=w=>w.split('').map(c=>c.replace(/[^a-z]/g,'')+'+').join('');
+ return {sub:d.s.map(w=>new RegExp(rx(w))),word:d.w.map(w=>new RegExp('^'+rx(w)+'$')),phrase:d.p}})();
+function norm(s){
+ return String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()
+  .replace(/0/g,'o').replace(/[1!|]/g,'i').replace(/3/g,'e').replace(/[4@]/g,'a').replace(/[5$]/g,'s').replace(/7|\+/g,'t').replace(/8/g,'b').replace(/9/g,'g');
+}
+function hasProfanity(s){
+ if(!s)return false;
+ if(/\b14\s*[\/.\-]?\s*88\b/.test(String(s)))return true;
+ const n=norm(s);
+ const toks=n.split(/[^a-z]+/).filter(Boolean);
+ // join runs of single letters: "f u c k" -> "fuck"
+ const joined=[];let run='';for(const t of toks){if(t.length===1)run+=t;else{if(run.length>1)joined.push(run);run=''}}if(run.length>1)joined.push(run);
+ const all=[...toks,...joined];
+ if(all.some(t=>FILTER.word.some(r=>r.test(t))))return true;
+ // harmless words that contain a filtered stem
+ const squashed=toks.filter(t=>!/^(shiitake|shiitakes|cockatoo|cockatoos|hancock|peacock|peacocks|scunthorpe)$/.test(t)).join('');
+ if(FILTER.sub.some(r=>r.test(squashed)))return true;
+ const spaced=' '+toks.join(' ')+' ';
+ return FILTER.phrase.some(ph=>spaced.includes(' '+ph+' '));
+}
 
 /* ---------- store: shared db with a local fallback ---------- */
 const S={uid:null,me:null,isOwner:false,canWrite:null,view:'map',pin:null,page:null,modal:null,filter:'all',chalTab:'you',addForm:{},onb:null,pendingScan:null,fresh:null,seenBadges:null,ready:false};
@@ -582,7 +620,7 @@ const Store={sb:null,practice:false,remote:{},local:{},data:{},loaded:{},
  }
 };
 const D=Store.data;
-const COLLS=['config','pins','posts','players','likes','checks','replies','invites','groups','scans','friendreqs'];
+const COLLS=['config','pins','posts','players','likes','checks','replies','invites','groups','scans','friendreqs','claims','reports'];
 
 /* ---------- data accessors ---------- */
 const cfg=()=>(D.config&&D.config.main)||{};
@@ -597,8 +635,10 @@ function players(){const o={...(D.players||{})};if(S.uid&&S.me)o[S.uid]=S.me;ret
 function nameOf(uid,fallback){const p=player(uid);return p&&p.username?p.username:(fallback||'someone')}
 function likesOf(post){return Object.values(D.likes||{}).filter(l=>l.post===post)}
 function checksOf(post){return Object.values(D.checks||{}).filter(c=>c.post===post)}
-function repliesOf(post){return Object.entries(D.replies||{}).map(([id,v])=>({id,...v})).filter(r=>r.post===post).sort((a,b)=>a.at-b.at)}
-function isHidden(post){return checksOf(post.id).filter(c=>c.v==='dup'&&c.uid!==post.by).length>=2}
+function repliesOf(post){return Object.entries(D.replies||{}).map(([id,v])=>({id,...v})).filter(r=>r.post===post&&!reportHidden(r.id)).sort((a,b)=>a.at-b.at)}
+function reportsFor(id){return Object.values(D.reports||{}).filter(r=>r.target===id)}
+function reportHidden(id){const r=reportsFor(id);return r.length>=3||r.some(x=>x.uid===S.uid)}
+function isHidden(post){return reportHidden(post.id)||checksOf(post.id).filter(c=>c.v==='dup'&&c.uid!==post.by).length>=2}
 function unlockedList(uid){const p=player(uid);return (p&&Array.isArray(p.unlocked))?p.unlocked:[]}
 function isUnlocked(pin,uid=S.uid){return unlockedList(uid).some(u=>u.pin===pin)}
 function groupId(){return S.me&&S.me.groupId||null}
@@ -674,6 +714,8 @@ function renderAll(){
  if(!STATIC_VIEWS.includes(S.view)&&!(S.arrive&&S.view==='map'&&$('#view .mapsvg')))renderView();
  if(S.pin)renderPin();
  if(S.modal&&S.modal.live)renderModal();
+ if(S.page&&S.page.type==='post'){const b=$('#postbody');const raw=(D.posts||{})[S.page.post];if(b&&raw)b.innerHTML=postBody(normStory(S.page.post,raw))}
+ if(S.page&&S.page.type==='admin'){const b=$('#adminlive');if(b)b.innerHTML=adminLive()}
  checkBadges();
  checkGroupUnlocks();
  checkWalkEnded();
@@ -882,9 +924,10 @@ function feedList(list,scope){
  return L.map(x=>scope==='feed'?feedCard(x):storyCard(x)).join('');
 }
 /* A sneak-peek card: headline + what it's about + teaser media, never the full story. */
+function suspense(t){return String(t||'').replace(/[\s.!?…,;:]+$/,'')+'…'}
 function peekCard(x,compact){
  const tm=teaserMedia(x,compact?64:110);
- return `<div class="peek">${tm}<div class="peektxt"><p class="peekhead">${esc(x.headline)}</p>${x.peek?`<p class="small muted" style="margin-top:3px">${esc(x.peek)}</p>`:''}
+ return `<div class="peek">${tm}<div class="peektxt"><p class="peekhead">${esc(x.headline)}</p>${x.peek?`<p class="small muted peekline" style="margin-top:3px">${esc(suspense(x.peek))}</p>`:''}
   <p class="tiny muted" style="margin-top:6px">by @${esc(nameOf(x.by,x.byName))} • ${ic('heart',11,2)} ${likeCount(x.id)}</p>
   <div class="tagrow">${x.tags.map(t=>`<span class="tag" style="background:${TAGS[t].bg}">${TAGS[t].label}</span>`).join('')}</div></div></div>`;
 }
@@ -961,7 +1004,7 @@ function viewProfile(){
   <div class="stack" style="margin-top:22px">
    <button class="btn block ghost" data-act="tab" data-tab="collection">${ic('grid',20)} Your collection</button>
    <button class="btn block ghost" data-act="help">${ic('help',20)} How to play</button>
-   <button class="btn block ghost" data-act="qr">${ic('qr',20)} QR codes</button>
+   <button class="btn block ghost" data-act="openAdmin">${ic('shield',20)} Admin</button>
    <button class="btn block ghost" data-act="switchUser">${ic('users',20)} Switch account</button>
   </div>
  </div>`;
@@ -1006,7 +1049,14 @@ function viewFriends(){
 }
 
 /* ---------- add ---------- */
-function freeSpares(){const used=new Set(pinsList().map(p=>p.id));const a=[];for(let i=1;i<=spareCount();i++){if(!used.has('spare'+i))a.push('spare'+i)}return a}
+function isAdmin(){return !!S.isOwner||((cfg().admins||[]).includes(S.uid))}
+/* A spare code someone scanned is held for them for 30 minutes while they create their pin. */
+const CLAIM_MS=30*60*1000;
+function claimOf(spare){const c=(D.claims||{})[spare];if(!c||Date.now()-(c.at||0)>CLAIM_MS)return null;return c}
+function claimedByOther(spare){const c=claimOf(spare);return !!c&&c.uid!==S.uid}
+function claimSpareCode(spare){if(!spare||claimedByOther(spare)||pinById(spare))return;Store.set('claims',spare,{uid:S.uid,at:Date.now()}).catch(()=>{})}
+function releaseClaim(spare){const c=(D.claims||{})[spare];if(c&&(c.uid===S.uid||isAdmin()))Store.del('claims',spare).catch(()=>{})}
+function freeSpares(){const used=new Set(pinsList().map(p=>p.id));const a=[];for(let i=1;i<=spareCount();i++){const id='spare'+i;if(!used.has(id)&&!claimedByOther(id))a.push(id)}return a}
 function viewAdd(){
  const un=pinsList().filter(p=>isUnlocked(p.id));
  const free=freeSpares();
@@ -1034,9 +1084,7 @@ function storyFormHtml(f){
  const tm=photos.length&&f.teaser!=='text'?'photo':'text';f.teaser=tm;
  const opt=(k,l,ok)=>`<button type="button" class="chip" data-act="sfTeaser" data-k="${k}" aria-pressed="${tm===k}" ${ok?'':'disabled'} style="background:var(--surface);border-color:${tm===k?'var(--line-dark)':'var(--line)'};max-width:none;flex:1">${l}</button>`;
  return `<div class="card" style="background:var(--pill);border-color:var(--line)">
-   <div class="row"><span style="flex:1">Need an idea?</span><button type="button" class="btn sm" data-act="sfPrompt">${ic('sparkle',16,1.8)} Give me a prompt</button></div>
-   <p class="small" id="sf-prompt" style="margin-top:8px;${f.prompt?'':'display:none'}">${f.prompt?esc(f.prompt[0]):''}</p>
-   <button type="button" class="linkbtn" data-act="sfUsePrompt" id="sf-use" style="margin-top:6px;${f.prompt?'':'display:none'}">Use this prompt</button>
+   <div class="row" style="align-items:center"><span style="flex:1;line-height:1.35">Testing the app?<span class="tiny muted" style="display:block;margin-top:2px">Fill in a made-up story instead of typing one.</span></span><button type="button" class="btn sm" data-act="sfFake" style="flex:none">${ic('sparkle',16,1.8)} Generate a fake story</button></div>
   </div>
   <div><label class="flabel" for="sf-head">Headline</label><input class="field" id="sf-head" maxlength="70" placeholder="The bench where I made my first friend" value="${esc(f.headline||'')}"></div>
   <div><div class="dash"><textarea id="sf-text" maxlength="1200" placeholder="Your full story" aria-label="Your full story" style="min-height:170px">${esc(f.text||'')}</textarea><span class="count" id="sf-count">0 / 1200</span></div>
@@ -1109,8 +1157,9 @@ function viewCreatePin(){
 }
 function afterCreatePin(){
  const f=S.addForm;
+ if(f.spare)claimSpareCode(f.spare);
  const el=$('#pf-name');if(el)el.addEventListener('input',()=>{f.name=el.value});
- const sp=$('#pf-spare');if(sp)sp.addEventListener('change',()=>{f.spare=sp.value;$('#pf-spare-face').textContent='Spare QR '+sp.value.replace('spare','#')});
+ const sp=$('#pf-spare');if(sp)sp.addEventListener('change',()=>{releaseClaim(f.spare);f.spare=sp.value;claimSpareCode(f.spare);$('#pf-spare-face').textContent='Spare QR '+sp.value.replace('spare','#')});
  bindStoryForm(f);
 }
 function nearEdge(x,y){const L=labels();const d=[[y,L.top],[530-y,L.bottom],[x,L.left],[350-x,L.right]].sort((a,b)=>a[0]-b[0]);return String(d[0][1]).toLowerCase()}
@@ -1124,6 +1173,12 @@ function renderPage(){
  if(!pg){L.innerHTML='';return}
  if(pg.type==='scan'){L.innerHTML=scanHtml(pg);return}
  if(pg.type==='accounts'){L.innerHTML=accountsHtml();return}
+ if(pg.type==='admin'){L.innerHTML=adminHtml();bindAdmin();return}
+ if(pg.type==='post'){const raw=(D.posts||{})[pg.post];if(!raw){S.page=null;L.innerHTML='';toast('That story was deleted.');return}
+  L.innerHTML=`<div class="layer postlayer">${head('Story','closePage')}<div class="pad" id="postbody">${postBody(normStory(pg.post,raw))}</div>
+   <div class="composer"><textarea id="ctext2" maxlength="200" rows="1" placeholder="Add a comment…" aria-label="Add a comment"></textarea><button class="btn sm" data-act="sendComment">Post</button></div></div>`;
+  const t=$('#ctext2');t.addEventListener('input',()=>{t.style.height='auto';t.style.height=Math.min(120,t.scrollHeight)+'px'});
+  if(pg.focus)setTimeout(()=>t.focus(),320);return}
  const p=pinById(pg.pin);if(!p){S.page=null;L.innerHTML='';return}
  L.innerHTML=`<div class="layer">${head('Share a Story','closePage')}<div class="pad stack">
   <div class="locfield">${ic('pin',30,1.7)}<span>${esc(p.name)}</span></div>
@@ -1144,18 +1199,13 @@ function scanHtml(pg){
    <span class="vf-c tl"></span><span class="vf-c tr"></span><span class="vf-c bl"></span><span class="vf-c br"></span>
    <div class="vf-idle">${ic('qr',56,1.3)}</div></div>
   <p class="small" id="scanstatus" style="text-align:center" aria-live="polite">Starting the camera…</p>
-  <div class="card stack">
-   <div><h3>No QR codes yet?</h3><p class="small muted" style="margin-top:4px">Test mode: tap a spot to pretend you scanned its QR code.</p></div>
-   ${pins.map(p=>{const c=PIN_CATS[p.cat]||PIN_CATS.landmark;return row(p.id,p.name,c.icon,c.color,isUnlocked(p.id)?'Unlocked':'Locked')}).join('')}
-   ${spares.map((id,i)=>{const p=pinById(id);return p?row(id,p.name,(PIN_CATS[p.cat]||PIN_CATS.landmark).icon,(PIN_CATS[p.cat]||PIN_CATS.landmark).color,isUnlocked(id)?'Unlocked':'Locked'):row(id,'Spare QR #'+(i+1),'qr','#B9BFB2','Empty')}).join('')}
-  </div>
   <div class="card stack"><label class="flabel" for="scancode" style="font-size:16px;margin:0">Or type the code under a QR</label><div class="row"><input class="field" id="scancode" autocapitalize="none" autocomplete="off" placeholder="e.g. geisel"><button class="btn sm" data-act="submitScanCode" style="min-height:48px;border-radius:15px">Unlock</button></div><p class="err" id="scan-err"></p></div>
  </div></div>`;
 }
 async function startCamera(){
  const st=()=>$('#scanstatus');const v=$('#scanvideo');
  const fail=msg=>{if(st())st().textContent=msg};
- if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){fail('This browser can’t use the camera here. Use test mode below.');return}
+ if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){fail('This browser can’t use the camera here. Type the code printed under the QR instead.');return}
  try{
   const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false});
   if(!S.page||S.page.type!=='scan'){stream.getTracks().forEach(t=>t.stop());return}
@@ -1174,7 +1224,7 @@ async function startCamera(){
    S.camLoop=setTimeout(tick,250);
   };
   tick();
- }catch(e){fail(e&&e.name==='NotAllowedError'?'Camera access is blocked. Use test mode below, or open the QR link with your phone’s camera app.':'The camera isn’t available here. Use test mode below, or your phone’s camera app.')}
+ }catch(e){fail(e&&e.name==='NotAllowedError'?'Camera access is blocked. Type the code printed under the QR instead, or scan it with your phone’s camera app.':'The camera isn’t available here. Type the code printed under the QR instead, or scan it with your phone’s camera app.')}
 }
 function stopCamera(){clearTimeout(S.camLoop);if(S.cam){S.cam.getTracks().forEach(t=>t.stop());S.cam=null}}
 function finishScan(code){stopCamera();S.page=null;$('#pagelayer').innerHTML='';scan(code)}
@@ -1203,21 +1253,38 @@ function renderPin(){
  if(S.scrollStory){const el=document.getElementById('story-'+S.scrollStory);S.scrollStory=null;if(el)setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),60)}
 }
 /* A full story, shown once the spot is unlocked. */
+function openPost(id,focus){if(!(D.posts||{})[id])return;closeModal();S.page={type:'post',post:id,focus:!!focus};renderPage();const el=$('#pagelayer').firstElementChild;if(el)el.classList.add('enter')}
+function postBody(x){
+ const likes=likesOf(x.id);const liked=likes.some(l=>l.uid===S.uid);
+ const reps=repliesOf(x.id);const name=nameOf(x.by,x.byName);const p=pinById(x.pin);
+ return `<button class="postpin" data-act="openPin" data-id="${esc(x.pin)}">${ic('pin',16,1.8)} ${esc(p?p.name:'Removed spot')}</button>
+  <div class="row" style="gap:10px;margin-top:14px">${avatar(x.by==='seed'?null:x.by,name,'sm')}<div style="flex:1"><p class="small">@${esc(name)}</p><p class="tiny muted">${ago(x.at)}</p></div>
+   ${canDelete(x)?`<button class="iconbtn" data-act="delStory" data-id="${esc(x.id)}" aria-label="Delete this story" style="width:36px;height:36px">${ic('trash',18,1.7)}</button>`:''}</div>
+  <h2 style="margin-top:12px">${esc(x.headline)}</h2>
+  <div class="tagrow">${x.tags.map(t=>`<span class="tag" style="background:${TAGS[t].bg}">${TAGS[t].label}</span>`).join('')}</div>
+  ${x.text?`<p class="storytext">${esc(x.text)}</p>`:''}
+  ${storyPhotos(x,name)}
+  <div class="acts" style="margin-top:12px"><button class="act heart ${liked?'on':''}" data-act="like" data-id="${esc(x.id)}" aria-pressed="${liked}" aria-label="Like, ${likes.length}">${ic('heart',21,1.7)} ${likes.length} ${likes.length===1?'like':'likes'}</button>${x.by!==S.uid?`<button class="act" data-act="report" data-kind="post" data-id="${esc(x.id)}" aria-label="Report this story" style="margin-left:auto">${ic('flag',17,1.7)} Report</button>`:''}</div>
+  <h3 class="cmhead">Comments <span class="tiny muted">${reps.length}</span></h3>
+  ${reps.length?reps.map(r=>`<div class="cm">${avatar(r.by==='seed'?null:r.by,nameOf(r.by,r.byName),'sm')}<div style="flex:1;min-width:0"><p class="small">@${esc(nameOf(r.by,r.byName))} <span class="tiny muted">${ago(r.at)}</span></p><p class="cmtext">${esc(r.text)}</p></div>${r.by===S.uid?`<button class="iconbtn" data-act="delReply" data-id="${esc(r.id)}" aria-label="Delete your comment" style="width:32px;height:32px">${ic('trash',16,1.7)}</button>`:`<button class="iconbtn" data-act="report" data-kind="reply" data-id="${esc(r.id)}" aria-label="Report this comment" style="width:32px;height:32px;color:var(--ink-3)">${ic('flag',15,1.7)}</button>`}</div>`).join(''):'<p class="small muted" style="margin-top:8px">No comments yet. Be the first.</p>'}`;
+}
+function storyPhotos(x,name){return x.photos.length===1?`<button class="photobtn" data-act="viewPhoto" data-id="${esc(x.id)}" data-i="0" aria-label="View photo from @${esc(name)}"><img class="storymedia" src="${x.photos[0]}" alt="Photo from @${esc(name)}"></button>`:x.photos.length?`<div class="gallery" aria-label="${x.photos.length} photos, swipe to see more">${x.photos.map((ph,i)=>`<button class="photobtn" data-act="viewPhoto" data-id="${esc(x.id)}" data-i="${i}" aria-label="View photo ${i+1} of ${x.photos.length} from @${esc(name)}"><img src="${ph}" alt="Photo ${i+1} of ${x.photos.length} from @${esc(name)}"></button>`).join('')}</div><p class="tiny muted" style="margin-top:6px">${ic('camera',12,1.8)} ${x.photos.length} photos • swipe</p>`:''}
 function storyCard(x){
  const likes=likesOf(x.id);const liked=likes.some(l=>l.uid===S.uid);
  const reps=repliesOf(x.id);const name=nameOf(x.by,x.byName);
  return `<article class="story" id="story-${esc(x.id)}">
   <div class="row" style="gap:10px">${avatar(x.by==='seed'?null:x.by,name,'sm')}<div style="flex:1"><p class="small">@${esc(name)}</p><p class="tiny muted">${ago(x.at)}</p></div>
    ${canDelete(x)?`<button class="iconbtn" data-act="delStory" data-id="${esc(x.id)}" aria-label="Delete this story" style="width:36px;height:36px">${ic('trash',18,1.7)}</button>`:''}</div>
-  <h3 style="margin-top:10px">${esc(x.headline)}</h3>
+  <button class="storyopen" data-act="openPost" data-id="${esc(x.id)}" aria-label="Open story: ${esc(x.headline)}"><h3 style="margin-top:10px">${esc(x.headline)}</h3>
   <div class="tagrow">${x.tags.map(t=>`<span class="tag" style="background:${TAGS[t].bg}">${TAGS[t].label}</span>`).join('')}</div>
-  ${x.text?`<p class="storytext">${esc(x.text)}</p>`:''}
+  ${x.text?`<p class="storytext">${esc(x.text)}</p>`:''}</button>
   ${x.photos.length===1?`<button class="photobtn" data-act="viewPhoto" data-id="${esc(x.id)}" data-i="0" aria-label="View photo from @${esc(name)}"><img class="storymedia" src="${x.photos[0]}" alt="Photo from @${esc(name)}"></button>`:x.photos.length?`<div class="gallery" aria-label="${x.photos.length} photos, swipe to see more">${x.photos.map((ph,i)=>`<button class="photobtn" data-act="viewPhoto" data-id="${esc(x.id)}" data-i="${i}" aria-label="View photo ${i+1} of ${x.photos.length} from @${esc(name)}"><img src="${ph}" alt="Photo ${i+1} of ${x.photos.length} from @${esc(name)}"></button>`).join('')}</div><p class="tiny muted" style="margin-top:6px">${ic('camera',12,1.8)} ${x.photos.length} photos • swipe</p>`:''}
   <div class="acts">
    <button class="act heart ${liked?'on':''}" data-act="like" data-id="${esc(x.id)}" aria-pressed="${liked}" aria-label="Like, ${likes.length}">${ic('heart',21,1.7)} ${likes.length}</button>
    <button class="act" data-act="reply" data-id="${esc(x.id)}" aria-label="Comment, ${reps.length}">${ic('chat',21,1.7)} ${reps.length}</button>
+   ${x.by!==S.uid?`<button class="act" data-act="report" data-kind="post" data-id="${esc(x.id)}" aria-label="Report this story" style="margin-left:auto">${ic('flag',17,1.7)} Report</button>`:''}
   </div>
-  ${reps.length?`<div class="replies" style="margin-top:8px">${reps.map(r=>`<div class="reply">@${esc(nameOf(r.by,r.byName))}: ${esc(r.text)} <span class="tiny muted">${ago(r.at)}</span>${r.by===S.uid?` <button class="linkbtn" data-act="delReply" data-id="${esc(r.id)}" style="font-size:11px">Delete</button>`:''}</div>`).join('')}</div>`:''}
+  ${reps.length?`<div class="replies" style="margin-top:10px">${reps.slice(-2).map(r=>`<div class="reply">@${esc(nameOf(r.by,r.byName))}: ${esc(r.text)} <span class="tiny muted">${ago(r.at)}</span></div>`).join('')}</div><button class="linkbtn" data-act="openPost" data-id="${esc(x.id)}" style="margin-top:6px;font-size:12px">${reps.length>2?`View all ${reps.length} comments`:'View story and comments'}</button>`:''}
  </article>`;
 }
 /* ---------- modals ---------- */
@@ -1256,7 +1323,7 @@ const MODALS={
    <h2>${esc(p.name)}</h2>
    <div class="row" style="margin-top:6px"><span class="lockline">${ic(un?'unlock':'lock',20,1.8)} ${un?'Unlocked':'Locked'}</span></div>
    <div class="pinstats"><span><b>${posts.length}</b> ${posts.length===1?'story':'stories'}</span><span><b>${likes}</b> ${likes===1?'like':'likes'}</span>${fcount?`<span class="green"><b>${fcount}</b> friend${fcount>1?'s':''} posted</span>`:''}</div>
-   ${posts.length?`<p class="tiny muted" style="margin:12px 0 6px">${un?'Stories here':'Sneak peeks: walk over to read the full stories'}</p>${posts.slice(0,4).map(x=>`<div class="peekwrap">${peekCard(x,true)}</div>`).join('')}${posts.length>4?`<p class="tiny muted">+ ${posts.length-4} more</p>`:''}`:'<p class="small muted" style="margin-top:10px">No stories yet. Unlock it and be the first storyteller.</p>'}
+   ${posts.length?`<p class="tiny muted" style="margin:12px 0 6px">${un?'Stories here':'Sneak peeks: walk over to read the full stories'}</p>${posts.slice(0,2).map(x=>`<div class="peekwrap">${peekCard(x,true)}</div>`).join('')}${posts.length>2?`<p class="tiny muted" style="margin-top:6px">+ ${posts.length-2} more ${posts.length-2===1?'story':'stories'} waiting</p>`:''}`:'<p class="small muted" style="margin-top:10px">No stories yet. Unlock it and be the first storyteller.</p>'}
    ${un?`<button class="btn block" style="margin-top:16px" data-act="openPin" data-id="${esc(p.id)}">Read the stories</button>`:
    `<button class="scanrow" data-act="openScan" data-id="${esc(p.id)}" style="width:100%;text-align:inherit"><span class="qrbubble">${ic('qr',44,1.5)}</span><span class="scanpill">Scan the QR code here to read the full stories!</span></button>
     ${g&&gm.length>1?`<p class="tiny muted" style="margin-top:10px">You’re on a group walk: all ${gm.length} of you need to scan it.</p>`:''}`}
@@ -1283,6 +1350,8 @@ const MODALS={
    ${gm.map(x=>`<div class="member">${avatar(x.id,x.username,'sm')}<span style="flex:1">@${esc(x.username)}${x.id===S.uid?' (you)':''}</span>${sc.has(x.id)?`<span class="lockline">${ic('check',18,2)} Scanned</span>`:'<span class="small muted">On the way</span>'}</div>`).join('')}
    <div style="margin-top:14px"><p class="small muted">${done?'Everyone’s here. Unlocking for the whole group…':'Waiting for the rest of your group to scan this spot’s QR code. It unlocks for everyone automatically.'}</p></div>`;
  },
+ spareTaken(m){const c=claimOf(m.spare);const n=m.spare.replace('spare','');const mins=c?Math.max(1,Math.ceil((CLAIM_MS-(Date.now()-c.at))/60000)):0;
+  return `<h2>Spare QR #${esc(n)} is taken</h2><p class="muted small" style="margin:8px 0 16px;line-height:1.6">@${esc(nameOf(c&&c.uid))} scanned this code first and is creating a pin with it. Check back soon: once their pin is up, scanning this code unlocks their story.${mins?` If they don’t finish, the code frees up in about ${mins} min.`:''}</p><button class="btn block" data-act="closeModal">OK</button>`},
  spare(m){const n=m.spare.replace('spare','');return `<h2>Spare QR #${esc(n)} is empty</h2><p class="muted small" style="margin:8px 0 16px">Nobody has claimed this code yet. Create a pin for something you noticed, then stick this code up at that spot.</p><button class="btn block" data-act="claimSpare" data-id="${esc(m.spare)}">Create a pin with this code</button>`},
  reply(m){
   const x=(D.posts||{})[m.post];if(!x)return null;
@@ -1292,6 +1361,9 @@ const MODALS={
    <div class="dash" style="margin-top:12px"><textarea id="rtext" maxlength="200" style="min-height:100px" placeholder="Write here"></textarea></div><p class="err" id="r-err"></p>
    <button class="btn block" data-act="submitReply">Add</button>`;
  },
+ adminCode(){return `<h2>Admin</h2><p class="small muted" style="margin:6px 0 14px;line-height:1.6">Enter the admin password to manage pins, QR codes and resets. This account (@${esc(S.me.username)}) will stay an admin until you remove it.</p><input class="field" id="acode" type="password" autocomplete="off" autocapitalize="none" placeholder="Admin password" aria-label="Admin password"><p class="err" id="a-err" aria-live="polite"></p><button class="btn block" data-act="submitAdminCode">Unlock admin</button>`},
+ report(m){return `<h2>Report this ${m.kind==='reply'?'comment':'story'}</h2><p class="small muted" style="margin:6px 0 14px;line-height:1.6">It’ll be hidden for you right away, and for everyone once 3 people report it. Admins review every report.</p>
+  <div class="stack">${['Racism or hate','Harassment or bullying','Sexual or violent content','Spam or fake','Something else'].map(r=>`<button class="btn block ghost" style="justify-content:flex-start" data-act="sendReport" data-r="${esc(r)}">${esc(r)}</button>`).join('')}</div>`},
  invites(){
   const inv=myInvites();const inc=incomingReqs();
   const fr=inc.map(r=>`<div class="card" style="margin-top:12px"><div class="row">${avatar(r.from,nameOf(r.from),'sm')}<p style="flex:1">@${esc(nameOf(r.from))} sent you a friend request.</p></div><div class="row" style="margin-top:10px"><button class="btn sm" data-act="acceptFriend" data-id="${esc(r.from)}">Accept</button><button class="btn sm ghost" data-act="declineFriend" data-id="${esc(r.from)}">Decline</button></div></div>`).join('');
@@ -1306,14 +1378,9 @@ const MODALS={
   const base=(cfg().baseUrl||(location.protocol.startsWith('http')?location.origin+location.pathname:'')).split('#')[0];const L=labels();
   const items=[...pinsList().filter(p=>!/^spare\d+$/.test(p.id)).map(p=>({id:p.id,name:p.name})),...Array.from({length:spareCount()},(_,i)=>{const id='spare'+(i+1);const p=pinById(id);return {id,name:'Spare QR #'+(i+1)+(p?': '+p.name:'')}})];
   return `<div class="qrsheet"><h2 class="noprint">QR codes for the room</h2>
-   ${S.isOwner?`<div class="noprint stack" style="margin:14px 0;background:var(--pill);border-radius:15px;padding:14px"><span>Host settings</span>
-     <div><label class="small" for="q-base">App link</label><input class="field" id="q-base" value="${esc(base)}" placeholder="https://claude.ai/…"><p class="hint">Leave blank to use this site’s address. Each QR code opens the app at one spot.</p></div>
-     <div class="grid">${['top','bottom','left','right'].map(k=>`<div><label class="small" for="q-${k}">Map ${k} edge</label><input class="field" id="q-${k}" value="${esc(L[k])}"></div>`).join('')}</div>
-     <div><label class="small" for="q-sp">Number of spare QR codes</label><input class="field" id="q-sp" type="number" min="0" max="12" value="${spareCount()}"></div>
-     <button class="btn" data-act="saveCfg">Save settings</button></div>`:''}
    ${base?`<p class="small muted noprint" style="margin:8px 0">Print these, cut them out, and tape each one where its spot is on the map. The code under each one works as a typed backup.</p>
-    <button class="btn ghost noprint" data-act="print" style="margin-bottom:12px">${ic('print',20)} Print</button>
-    <div class="qrgrid">${items.map(it=>`<div class="qrcard"><div class="q" data-qr="${esc(base+'#'+it.id)}"></div><b>${esc(it.name)}</b><code>code: ${esc(it.id)}</code></div>`).join('')}</div>`:'<p class="muted small" style="margin-top:10px">The host hasn’t added the app link yet, so the QR codes can’t be made.</p>'}
+    <div class="row noprint" style="gap:8px;margin-bottom:12px"><button class="btn ghost" style="flex:1" data-act="print">${ic('print',20)} Print all</button><button class="btn ghost" style="flex:1" data-act="downloadAllQR">Download all</button></div>
+    <div class="qrgrid">${items.map(it=>`<div class="qrcard"><div class="q" data-qr="${esc(base+'#'+it.id)}"></div><b>${esc(it.name)}</b><code>code: ${esc(it.id)}</code><button class="linkbtn noprint" data-act="downloadQR" data-id="${esc(it.id)}" data-name="${esc(it.name)}" style="display:block;margin:8px auto 0;font-size:12px">Download</button></div>`).join('')}</div>`:'<p class="muted small" style="margin-top:10px">Add the app link in Admin → Settings to make the QR codes.</p>'}
   </div>`;
  }
 };
@@ -1398,6 +1465,57 @@ function viewerUI(){const V=S.viewer;if(!V)return;const c=$('#vcount');if(c)c.te
  document.querySelectorAll('.vdots span').forEach((d,k)=>d.classList.toggle('on',k===V.i));
  const pv=document.querySelector('.vnav.prev'),nx=document.querySelector('.vnav.next');if(pv)pv.disabled=V.i===0;if(nx)nx.disabled=V.i===V.n-1}
 function closeViewer(){S.viewer=null;const v=document.getElementById('viewer');if(v)v.innerHTML=''}
+/* Admin password check. Only a scrambled version of the password is stored here. */
+const ADMIN_PW_HASH=1558992055;
+function adminPasswordOk(v){return hashStr(String(v||'').trim().toLowerCase())===ADMIN_PW_HASH}
+function openAdmin(){S.page={type:'admin'};renderPage();const el=$('#pagelayer').firstElementChild;if(el)el.classList.add('enter')}
+function adminLive(){
+ const pins=pinsList();const posts=allPosts();const userPins=pins.filter(p=>p.by!=='seed');
+ const spares=Array.from({length:spareCount()},(_,i)=>'spare'+(i+1));
+ return `<div class="adstats"><div><b>${players().length}</b><span>Players</span></div><div><b>${pins.length}</b><span>Pins</span></div><div><b>${posts.length}</b><span>Stories</span></div><div><b>${Object.keys(D.replies||{}).length}</b><span>Comments</span></div></div>
+  ${(()=>{const by={};Object.values(D.reports||{}).forEach(r=>{(by[r.target]||(by[r.target]={kind:r.kind,list:[]})).list.push(r)});
+   const items=Object.entries(by).map(([t,v])=>{const rec=v.kind==='reply'?(D.replies||{})[t]:(D.posts||{})[t];if(!rec)return '';
+    const title=v.kind==='reply'?'“'+rec.text+'”':normStory(t,rec).headline;const reasons=[...new Set(v.list.map(r=>r.reason))].join(', ');
+    return `<div class="member" style="align-items:flex-start"><span class="simico" style="background:var(--heart)">${ic('flag',16,1.8)}</span><span style="flex:1;min-width:0"><span style="display:block;overflow-wrap:anywhere">${esc(title)}</span><span class="tiny muted" style="display:block;margin-top:2px">${v.kind==='reply'?'Comment':'Story'} by @${esc(nameOf(rec.by,rec.byName))} • ${v.list.length} report${v.list.length===1?'':'s'}${v.list.length>=3?' • hidden':''}</span><span class="tiny" style="display:block;color:var(--heart);margin-top:2px">${esc(reasons)}</span>
+     <span class="row" style="gap:8px;margin-top:8px"><button class="btn sm ghost" data-act="adminKeep" data-id="${esc(t)}">Keep</button><button class="btn sm" style="background:var(--heart)" data-act="adminRemove" data-id="${esc(t)}" data-kind="${v.kind}">Remove</button></span></span></div>`}).filter(Boolean);
+   return items.length?`<div class="sectionhead"><h2>Reported</h2></div><div class="card">${items.join('')}</div>`:''})()}
+  <div class="sectionhead"><h2>Spare QR codes</h2></div>
+  <div class="card">${spares.map((id,i)=>{const p=pinById(id);const c=claimOf(id);
+   return `<div class="member"><span class="simico" style="background:${p?'var(--accent)':c?'#E0A21E':'#B9BFB2'}">${ic(p?'pin':c?'lock':'qr',18,1.8)}</span><span style="flex:1;min-width:0">Spare #${i+1}<span class="tiny muted" style="display:block">${p?esc(p.name)+' • by @'+esc(nameOf(p.by)):c?'Claimed by @'+esc(nameOf(c.uid))+' • '+ago(c.at):'Free'}</span></span>
+    ${p?`<button class="btn sm ghost" data-act="adminDelPin" data-id="${id}">Remove pin</button>`:c?`<button class="btn sm ghost" data-act="adminRelease" data-id="${id}">Release</button>`:''}</div>`}).join('')||'<p class="small muted">No spare codes. Add some in Settings below.</p>'}</div>
+  ${userPins.filter(p=>!/^spare\d+$/.test(p.id)).length?`<div class="card" style="margin-top:12px">${userPins.filter(p=>!/^spare\d+$/.test(p.id)).map(p=>`<div class="member"><span style="flex:1">${esc(p.name)}<span class="tiny muted" style="display:block">by @${esc(nameOf(p.by))}</span></span><button class="btn sm ghost" data-act="adminDelPin" data-id="${esc(p.id)}">Remove pin</button></div>`).join('')}</div>`:''}`;
+}
+function adminHtml(){
+ const L=labels();const base=(cfg().baseUrl||(location.protocol.startsWith('http')?location.origin+location.pathname:'')).split('#')[0];
+ const pins=pinsList().filter(p=>!/^spare\d+$/.test(p.id)||true);
+ return `<div class="layer">${head('Admin','closePage')}<div class="pad adminpage">
+  <p class="small muted" style="margin:0 4px">Signed in as @${esc(S.me.username)}, admin.</p>
+  <div id="adminlive">${adminLive()}</div>
+  <div class="sectionhead"><h2>QR codes</h2></div>
+  <div class="card stack"><p class="small">Print the codes for every spot and spare, or download them as images.</p><button class="btn block" data-act="qr">${ic('qr',20)} Show QR codes</button></div>
+  <div class="sectionhead"><h2>Test mode</h2></div>
+  <div class="card"><p class="small muted" style="margin-bottom:8px">Pretend you scanned a spot’s QR code. Only admins see this.</p>
+   ${[...pinsList(),...Array.from({length:spareCount()},(_,i)=>'spare'+(i+1)).filter(id=>!pinById(id)).map(id=>({id,name:'Spare QR #'+id.slice(5),empty:true}))].map(p=>`<button class="spotrow" data-act="simScan" data-id="${esc(p.id)}"><span class="simico" style="background:${p.empty?'#B9BFB2':isUnlocked(p.id)?'var(--accent)':'#B9BFB2'}">${ic(p.empty?'qr':isUnlocked(p.id)?'unlock':'lock',18,1.8)}</span><span style="flex:1">${esc(p.name)}</span><span class="tiny muted">${p.empty?'Empty':isUnlocked(p.id)?'Unlocked':'Locked'}</span></button>`).join('')}</div>
+  <div class="sectionhead"><h2>Reset</h2></div>
+  <div class="card stack">
+   <button class="btn block ghost" data-act="adminReset" data-k="stories">Clear test stories, comments and likes</button>
+   <button class="btn block ghost" data-act="adminReset" data-k="pins">Remove all new pins (frees spare codes)</button>
+   <button class="btn block ghost" data-act="adminReset" data-k="progress">Reset everyone’s unlocks and walks</button>
+   <button class="btn block" style="background:var(--heart)" data-act="adminReset" data-k="all">Full reset: everything except starter spots</button>
+   <p class="tiny muted" style="line-height:1.6">The six starter spots and their stories always stay. A full reset also removes every account, so everyone picks a new username next time they open the app.</p>
+  </div>
+  <div class="sectionhead"><h2>Settings</h2></div>
+  <div class="card stack">
+   <div><label class="small" for="q-base">App link for QR codes</label><input class="field" id="q-base" value="${esc(cfg().baseUrl||'')}" placeholder="${esc(base||'https://…')}"><p class="hint">Leave blank to use this site’s address.</p></div>
+   <div class="grid">${['top','bottom','left','right'].map(k=>`<div><label class="small" for="q-${k}">Map ${k} edge</label><input class="field" id="q-${k}" value="${esc(L[k])}"></div>`).join('')}</div>
+   <div><label class="small" for="q-sp">Number of spare QR codes</label><input class="field" id="q-sp" type="number" min="0" max="50" value="${spareCount()}"></div>
+   <button class="btn" data-act="saveCfg">Save settings</button>
+  </div>
+  ${S.isOwner?'':`<button class="btn block ghost" style="margin-top:22px" data-act="leaveAdmin">Remove my admin access</button>`}
+ </div></div>`;
+}
+function bindAdmin(){}
+async function delMany(pairs){let n=0;for(let i=0;i<pairs.length;i+=12){await Promise.all(pairs.slice(i,i+12).map(([c,id])=>Store.del(c,id).then(()=>{n++}).catch(()=>{})))}return n}
 function reveal(){
  S.splash=null;S.arrive=true;
  renderBanner();renderAll();
@@ -1422,7 +1540,9 @@ function scan(code){
  if(S.onb||!S.me||!S.me.onboarded||!Store.loaded.pins){S.pendingScan=code;return}
  const p=pinById(code);
  if(!p){
-  if(/^spare\d+$/.test(code)&&Number(code.slice(5))<=spareCount()){openModal({type:'spare',spare:code});return}
+  if(/^spare\d+$/.test(code)&&Number(code.slice(5))<=spareCount()){
+   if(claimedByOther(code)){openModal({type:'spareTaken',spare:code});return}
+   claimSpareCode(code);openModal({type:'spare',spare:code});return}
   toast('That code doesn’t match a spot on the map.');return;
  }
  closePinLayer();closePage();
@@ -1456,6 +1576,42 @@ function slideOut(id,after){const L=$('#'+id);const el=L.firstElementChild;if(!e
 const ACT={
  tab(el){go(el.dataset.tab)},
  toProfile(){go('profile')},
+ report(el){openModal({type:'report',target:el.dataset.id,kind:el.dataset.kind})},
+ async sendReport(el){const m=S.modal;if(!m)return;try{await Store.set('reports',safeSeg(m.target+'_'+S.uid),{target:m.target,kind:m.kind,reason:el.dataset.r,uid:S.uid,at:Date.now()});closeModal();toast('Thanks for reporting. It’s hidden for you now.');
+  if(m.kind==='post'&&S.page&&S.page.type==='post'&&S.page.post===m.target)ACT.closePage();else{if(S.pin)renderPin();renderView()}}catch(e){toast('Couldn’t send the report. Check your connection.')}},
+ adminKeep(el){const t=el.dataset.id;delMany(Object.entries(D.reports||{}).filter(([k,r])=>r.target===t).map(([k])=>['reports',k])).then(()=>toast('Kept. Reports cleared.'))},
+ async adminRemove(el){const t=el.dataset.id,kind=el.dataset.kind;if(!confirm('Remove this '+(kind==='reply'?'comment':'story')+' for everyone?'))return;
+  const extra=kind==='post'?[...Object.entries(D.replies||{}).filter(([k,r])=>r.post===t).map(([k])=>['replies',k]),...Object.entries(D.likes||{}).filter(([k,l])=>l.post===t).map(([k])=>['likes',k])]:[];
+  await delMany([[kind==='reply'?'replies':'posts',t],...extra,...Object.entries(D.reports||{}).filter(([k,r])=>r.target===t).map(([k])=>['reports',k])]);toast('Removed.')},
+ openAdmin(){if(isAdmin()){openAdmin();return}openModal({type:'adminCode',autofocus:true})},
+ async submitAdminCode(el){const v=($('#acode').value||'').trim();
+  if(!v){$('#a-err').textContent='Type the admin password.';return}
+  if(!adminPasswordOk(v)){$('#a-err').textContent='Wrong password. Try again.';$('#acode').select();return}
+  el.disabled=true;try{const a=new Set(cfg().admins||[]);a.add(S.uid);await Store.set('config','main',{...cfg(),admins:[...a]});closeModal();toast('Admin unlocked for @'+S.me.username+'.');renderView();openAdmin()}catch(e){el.disabled=false;$('#a-err').textContent='Couldn’t save. Check your connection.'}},
+ async leaveAdmin(){if(!confirm('Remove admin access from this account?'))return;await Store.set('config','main',{...cfg(),admins:(cfg().admins||[]).filter(x=>x!==S.uid)});closePage();renderView();toast('Admin access removed.')},
+ adminRelease(el){Store.del('claims',el.dataset.id).then(()=>toast('Spare code released')).catch(()=>toast('Couldn’t release it.'))},
+ async adminDelPin(el){const p=pinById(el.dataset.id);if(!p||!isAdmin())return;const n=postsAt(p.id).length;if(!confirm(`Remove “${p.name}” and its ${n} ${n===1?'story':'stories'}?`))return;
+  await delMany([...postsAt(p.id).map(x=>['posts',x.id]),['pins',p.id],['claims',p.id]]);toast('Pin removed'+(/^spare\d+$/.test(p.id)?'. Its QR code is free again.':''))},
+ async adminReset(el){if(!isAdmin())return;const k=el.dataset.k;
+  const msg={stories:'Delete every story, comment and like people added? Starter stories stay.',pins:'Remove every pin people created, with their stories? Spare codes become free.',progress:'Reset everyone’s unlocks and end all group walks?',all:'Full reset? This removes all new stories, pins, likes, comments, walks, friends and accounts. Only the starter spots stay.'}[k];
+  if(!confirm(msg))return;el.disabled=true;el.textContent='Working…';
+  const notSeed=c=>Object.entries(D[c]||{}).filter(([id,v])=>v&&v.by!=='seed').map(([id])=>[c,id]);
+  const all=c=>Object.keys(D[c]||{}).map(id=>[c,id]);
+  let pairs=[];
+  if(k==='stories'||k==='all')pairs.push(...notSeed('posts'),...notSeed('replies'),...all('likes'),...all('checks'),...all('reports'));
+  if(k==='pins'||k==='all'){const up=pinsList().filter(p=>p.by!=='seed').map(p=>p.id);pairs.push(...up.map(id=>['pins',id]),...Object.entries(D.posts||{}).filter(([id,v])=>up.includes(v.pin)).map(([id])=>['posts',id]),...all('claims'))}
+  if(k==='progress'||k==='all')pairs.push(...all('scans'),...all('groups'),...all('invites'));
+  if(k==='all')pairs.push(...all('players'),...all('friendreqs'));
+  const seen=new Set();pairs=pairs.filter(([c,id])=>{const kk=c+'/'+id;if(seen.has(kk))return false;seen.add(kk);return true});
+  const n=await delMany(pairs);
+  if(k==='progress'){for(const p of players()){const v={...(D.players||{})[p.id]};if(!v.username)continue;v.unlocked=[];v.groupId=null;await Store.set('players',p.id,v).catch(()=>{})}S.me={...S.me,unlocked:[],groupId:null}}
+  if(k==='all'){toast('Everything was reset.');setTimeout(()=>{try{localStorage.removeItem('em-badges-'+S.uid)}catch(e){}location.hash='';location.reload()},900);return}
+  toast(`Done. ${n} item${n===1?'':'s'} cleared.`);renderPage();renderView()},
+ async downloadQR(el){const card=el.closest('.qrcard');const c=card&&card.querySelector('canvas');if(!c){toast('The QR code isn’t ready yet.');return}
+  const W=720,H=860,o=document.createElement('canvas');o.width=W;o.height=H;const g=o.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,W,H);
+  g.imageSmoothingEnabled=false;g.drawImage(c,60,40,600,600);g.fillStyle='#0A3600';g.textAlign='center';g.font='600 40px Seurat, system-ui, sans-serif';g.fillText(el.dataset.name,W/2,720);g.font='28px Seurat, system-ui, sans-serif';g.fillStyle='#55703F';g.fillText('code: '+el.dataset.id,W/2,770);g.fillText('EnvironMemo',W/2,820);
+  const a=document.createElement('a');a.href=o.toDataURL('image/png');a.download='environmemo-'+el.dataset.id+'.png';document.body.appendChild(a);a.click();a.remove()},
+ async downloadAllQR(){const b=[...document.querySelectorAll('[data-act="downloadQR"]')];for(const x of b){await ACT.downloadQR(x);await sleep(350)}},
  zoomIn(){const v=mv();zoomAt(1.6,v.x+v.w/2,v.y+v.h/2)},
  zoomOut(){const v=mv();zoomAt(1/1.6,v.x+v.w/2,v.y+v.h/2)},
  zoomReset(){S.mapView=null;applyView()},
@@ -1482,9 +1638,20 @@ const ACT={
  feedSort(el){const F=feedState(el.dataset.scope);if(F.sort===el.dataset.k)return;F.sort=el.dataset.k;rerenderFeed(el.dataset.scope,'fade')},
  feedWho(el){const F=feedState(el.dataset.scope);if(F.who===el.dataset.k)return;F.who=el.dataset.k;rerenderFeed(el.dataset.scope,'fade')},
  feedTag(el){const F=feedState(el.dataset.scope);if(F.tag===el.dataset.k)return;const o=['all',...Object.keys(TAGS)];const d=o.indexOf(el.dataset.k)>o.indexOf(F.tag)?'slide-r':'slide-l';F.tag=el.dataset.k;rerenderFeed(el.dataset.scope,d)},
- openStory(el){S.scrollStory=el.dataset.id;openPin(el.dataset.pin)},
- sfPrompt(){const f=storyForm();if(!f)return;let i;do{i=Math.floor(Math.random()*PROMPTS.length)}while(PROMPTS.length>1&&f.prompt&&PROMPTS[i][0]===f.prompt[0]);f.prompt=PROMPTS[i];const pe=$('#sf-prompt');pe.textContent='“'+f.prompt[0]+'”';pe.style.display='';$('#sf-use').style.display=''},
- sfUsePrompt(){const f=storyForm();if(!f||!f.prompt)return;const h=$('#sf-head'),t=$('#sf-text');if(h&&!h.value.trim()){h.value=f.prompt[0];f.headline=h.value}if(t&&!t.value.trim()){t.value=f.prompt[1]+' ';f.text=t.value;t.dispatchEvent(new Event('input'))}if(!(f.tags||[]).length){f.tags=['heartfelt'];document.querySelectorAll('[data-act="sfTag"]').forEach(b=>b.setAttribute('aria-pressed',f.tags.includes(b.dataset.k)))}t&&t.focus()},
+ openStory(el){openPost(el.dataset.id)},
+ openPost(el){openPost(el.dataset.id)},
+ async sendComment(el){const t=$('#ctext2');const v=(t.value||'').trim();if(!v)return;if(hasProfanity(v)){toast('That comment includes a word that isn’t allowed.');return}
+  el.disabled=true;try{await Store.set('replies',newId(),{post:S.page.post,text:v,by:S.uid,at:Date.now()});t.value='';t.style.height='auto';const b=$('#postbody');if(b){b.innerHTML=postBody(normStory(S.page.post,D.posts[S.page.post]));const L=$('#pagelayer').firstElementChild;L.scrollTo({top:L.scrollHeight,behavior:'smooth'})}}catch(e){toast('Couldn’t post your comment. Check your connection.')}el.disabled=false},
+ sfFake(){const f=storyForm();if(!f)return;
+  let i;do{i=Math.floor(Math.random()*FAKE_STORIES.length)}while(FAKE_STORIES.length>1&&i===f.fakeIdx);f.fakeIdx=i;
+  const st=FAKE_STORIES[i];
+  const place=S.view==='addpin'?(($('#pf-name')&&$('#pf-name').value.trim())||'this spot'):((pinById(S.page&&S.page.pin)||{}).name||'this spot');
+  const named=/^(the|a|an)\s/i.test(place)||place==='this spot'||!/\b(fountain|tree|bench|lawn|door|stairs|steps|garden|field|court|wall|statue|pond|hammocks|fountains|trees|benches|quad|patio|courtyard|walkway|bridge|path)$/i.test(place)?place:'the '+place;
+  f.headline=st.h;f.text=st.t.replace(/\{place\}/g,named);f.tags=st.tags.slice(0,3);
+  const h=$('#sf-head'),t=$('#sf-text');if(h)h.value=f.headline;if(t){t.value=f.text;t.dispatchEvent(new Event('input'))}
+  document.querySelectorAll('[data-act="sfTag"]').forEach(b=>b.setAttribute('aria-pressed',f.tags.includes(b.dataset.k)));
+  toast('Fake story added. Edit it or post it as is. Tap again for another.');
+ },
  sfTag(el){const f=storyForm();if(!f)return;f.tags=f.tags||[];const k=el.dataset.k;if(f.tags.includes(k))f.tags=f.tags.filter(x=>x!==k);else{if(f.tags.length>=3){toast('Pick up to 3 tags.');return}f.tags.push(k)}el.setAttribute('aria-pressed',f.tags.includes(k))},
  sfPick(){const i=$('#sf-photo');if(i)i.click()},
  sfClear(el){const f=storyForm();if(!f)return;f.photos.splice(+el.dataset.i,1);redrawStoryForm(f)},
@@ -1503,7 +1670,7 @@ const ACT={
  pickAvatar(){const i=$('#av-file');if(!i)return;i.onchange=async()=>{const f=i.files&&i.files[0];if(!f)return;try{const d=await compress(f,240);savePlayer({photo:d});toast('Profile photo updated')}catch(e){toast('That photo couldn’t be read.')}};i.click()},
  openScan(el){closeModal();openScan(el.dataset.id||null)},
  submitScanCode(){const v=($('#scancode').value||'').trim().toLowerCase().replace(/^#/,'');if(!v){$('#scan-err').textContent='Type the code printed under the QR code.';return}if(!pinById(v)&&!/^spare\d+$/.test(v)){$('#scan-err').textContent='No spot has that code. Check the spelling.';return}finishScan(v)},
- simScan(el){finishScan(el.dataset.id)},
+ simScan(el){if(S.page&&S.page.type==='admin'){S.page=null;$('#pagelayer').innerHTML='';scan(el.dataset.id);return}finishScan(el.dataset.id)},
  guess(el){
   const p=pinById(el.dataset.id);const v=($('#guess').value||'').trim().toLowerCase();
   if(!v){$('#guess-err').textContent='Type a guess first.';return}
@@ -1521,7 +1688,7 @@ const ACT={
   catch(e){console.error(e);el.disabled=false;el.textContent='Post story';err.textContent=(e&&/large|size|limit|exceed/i.test(String(e.message||e)))?'Those photos are too big together. Try fewer photos.':'Couldn’t post. Try fewer photos or check your connection.'}
  },
  like(el){const id=el.dataset.id;const k=safeSeg(id+'_'+S.uid);const post=(D.posts||{})[id];if((D.likes||{})[k])Store.del('likes',k).catch(()=>{});else Store.set('likes',k,{post:id,uid:S.uid,author:post&&post.by||'',at:Date.now()}).catch(()=>toast('Couldn’t save your reaction.'))},
- reply(el){openModal({type:'reply',post:el.dataset.id,autofocus:true})},
+ reply(el){openPost(el.dataset.id,true)},
  async submitReply(el){
   const t=($('#rtext').value||'').trim();const err=$('#r-err');
   if(!t){err.textContent='Write something to add.';return}
@@ -1533,7 +1700,7 @@ const ACT={
  startPin(){if(!freeSpares().length){toast('All spare QR codes are in use.');return}closeModal();S.addForm={teaser:'text',tags:[]};startPlacing()},
  movePin(){startPlacing()},
  cancelPlace(){S.placing=false;S.addForm={};renderView()},
- cancelPin(){S.addForm={};go('map')},
+ cancelPin(){releaseClaim(S.addForm.spare);S.addForm={};go('map')},
  claimSpare(el){closeModal();S.addForm={teaser:'text',tags:[],spare:el.dataset.id};startPlacing()},
  placePin(el,ev){const svg=$('#pf-map');const pt=svg.createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;const q=pt.matrixTransform(svg.getScreenCTM().inverse());S.addForm.x=Math.max(10,Math.min(350,Math.round(q.x)));S.addForm.y=Math.max(30,Math.min(530,Math.round(q.y)));drawPfMarker()},
  async submitPin(el){
@@ -1543,13 +1710,14 @@ const ACT={
   const miss=!f.name?'Give your pin a name.':f.x==null?'Place your pin on the map.':!f.spare?'Pick a spare QR code.':readStoryForm(f);
   if(miss){err.textContent=miss;return}
   if(hasProfanity(f.name)){err.textContent='The spot name includes a word that isn’t allowed.';return}
-  if(pinById(f.spare)){err.textContent='Someone just claimed that QR code. Pick another.';return}
+  if(pinById(f.spare)||claimedByOther(f.spare)){err.textContent='Someone just claimed that QR code. Pick another.';return}
   el.disabled=true;el.textContent='Dropping pin…';
   try{
    const id=f.spare;
    const rec=await storyRecord(f,id);
    await Store.set('pins',id,{name:f.name,x:f.x,y:f.y,by:S.uid,at:Date.now()});
    await Store.set('posts',newId(),rec);
+   Store.del('claims',id).catch(()=>{});
    savePlayer({unlocked:[...unlockedList(S.uid),{pin:id,at:Date.now()}]});
    S.addForm={};S.fresh=id;S.mapMode='map';go('map');
    openModal({type:'pinDropped',spare:id});
@@ -1584,7 +1752,7 @@ const ACT={
  cancelFriend(el){Store.del('friendreqs',pairId(S.uid,el.dataset.id)).catch(()=>toast('Couldn’t cancel. Try again.'))},
  qr(){openModal({type:'qr',after:drawQRs})},
  print(){try{window.print()}catch(e){toast('Printing isn’t available here. Take a screenshot instead.')}},
- async saveCfg(){const c={...cfg(),baseUrl:$('#q-base').value.trim(),spares:Math.max(0,Math.min(12,Number($('#q-sp').value)||0)),labels:{top:$('#q-top').value.trim()||'Top',bottom:$('#q-bottom').value.trim()||'Bottom',left:$('#q-left').value.trim()||'Left',right:$('#q-right').value.trim()||'Right'}};try{await Store.set('config','main',c);toast('Settings saved');renderModal();S.modal&&S.modal.after&&S.modal.after()}catch(e){toast('Couldn’t save settings.')}},
+ async saveCfg(){const c={...cfg(),baseUrl:$('#q-base').value.trim(),spares:Math.max(0,Math.min(50,Number($('#q-sp').value)||0)),labels:{top:$('#q-top').value.trim()||'Top',bottom:$('#q-bottom').value.trim()||'Bottom',left:$('#q-left').value.trim()||'Left',right:$('#q-right').value.trim()||'Right'}};try{await Store.set('config','main',c);toast('Settings saved');if(S.page&&S.page.type==='admin')renderPage()}catch(e){toast('Couldn’t save settings.')}},
  async submitName(el){
   const v=($('#uname').value||'').trim().replace(/^@/,'');const err=$('#u-err');
   if(!/^[A-Za-z0-9_]{3,20}$/.test(v)){err.textContent='Use 3 to 20 letters, numbers or underscores.';return}
@@ -1627,7 +1795,7 @@ document.addEventListener('keydown',ev=>{
  if(S.viewer&&(ev.key==='ArrowRight'||ev.key==='ArrowLeft')){ACT.viewerStep({dataset:{d:ev.key==='ArrowRight'?1:-1}});return}
  if(ev.key==='Escape'&&S.modal&&!S.modal.noclose)closeModal();
  if(ev.key==='Enter'&&ev.target.matches('.pin')){ev.preventDefault();ACT.pinTap(ev.target)}
- if(ev.key==='Enter'&&ev.target.matches('input.field')){const map={uname:'submitName',scancode:'submitScanCode',fname:'submitFriend'};const a=map[ev.target.id];if(a){ev.preventDefault();ACT[a]($('[data-act="'+a+'"]')||ev.target,ev)}else if(ev.target.id==='guess'){ev.preventDefault();$('[data-act="guess"]').click()}}
+ if(ev.key==='Enter'&&ev.target.matches('input.field')){const map={acode:'submitAdminCode',uname:'submitName',scancode:'submitScanCode',fname:'submitFriend'};const a=map[ev.target.id];if(a){ev.preventDefault();ACT[a]($('[data-act="'+a+'"]')||ev.target,ev)}else if(ev.target.id==='guess'){ev.preventDefault();$('[data-act="guess"]').click()}}
 });
 window.addEventListener('hashchange',()=>{const h=readHash();if(h)scan(h)});
 
@@ -1635,8 +1803,7 @@ window.addEventListener('hashchange',()=>{const h=readHash();if(h)scan(h)});
 (async function boot(){
  S.pendingScan=readHash()||null;
  Store.loadLocal();
- // Host tools (map labels, spare-code count) unlock on a phone that once opened the app with ?host at the end of the link.
- try{if(new URLSearchParams(location.search).has('host'))localStorage.setItem('em-host','1');S.isOwner=localStorage.getItem('em-host')==='1'}catch(e){}
+
  try{S.uid=localStorage.getItem('em-active')||localStorage.getItem('em-uid')}catch(e){}
  if(!S.uid){S.uid='u-'+newId();try{localStorage.setItem('em-uid',S.uid)}catch(e){}}
  S.canWrite=true;
