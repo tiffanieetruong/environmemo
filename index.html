@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F5FFE2">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="EnvironMemo">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon-192.png">
+<title>EnvironMemo</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.0/dist/umd/supabase.js"></script>
+<!-- Your Supabase project keys live in config.js -->
+<script src="config.js"></script>
+<style>
+@font-face{font-family:"Seurat";src:url(data:font/woff;base64,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) format("woff");font-weight:400 800;font-display:block}
+@font-face{font-family:"KiwiSoda";src:url(data:font/woff;base64,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) format("woff");font-display:block}
+:root{
+  --bg:#F5FFE2; --surface:#FFFFFD; --pill:rgba(227,249,185,.64); --pill-solid:#EDFAD4;
+  --ink:#0A3600; --ink-2:rgba(10,54,0,.72); --ink-3:rgba(10,54,0,.5); --black:#000;
+  --brand:#5A8900; --accent:#7EA730; --accent-ink:#FFFFFF; --line:#A9D359; --line-dark:#0A3600;
+  --track:#D9D9D9; --icon-bg:#E3F9B9; --badge-bg:#DDF6FF; --heart:#E5484D; --ph:#D0D0D0;
+  --scrim:rgba(70,70,70,.43); --shadow:4px 6px 6.5px rgba(0,0,0,.25); --shadow-sm:1px 2px 4.8px rgba(0,0,0,.25);
+  --t-all:#DEFF9E; --t-noticing:#CDEEFF; --t-memory:#FFC4C4; --t-photo:#EBD3FF; --t-fact:#CEFFDC; --t-history:#DEFF9E; --t-rec:#FFF9BB; --t-question:#FFE0C2;
+  --c-plant:#7EA730; --c-landmark:#9C88B8; --c-food:#F2B632; --c-hangout:#3FA7A8; --c-utility:#4F8FD1; --c-art:#E07A9A;
+  --m-ground:#E6F5CC; --m-lawn:#D2ECA6; --m-road:#FFFFFF; --m-road-edge:#DCEBC4; --m-bldg:#D9D9D3; --m-bldg-top:#EEEEEA; --m-tree:#B3DB84; --m-tree-2:#9DCC6A; --m-water:#BEE3F0;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{height:100%;background:var(--bg);scroll-padding-top:env(safe-area-inset-top,0px)}
+body{height:100%;margin:0;background:var(--bg);color:var(--ink);font-family:"Seurat","Hiragino Maru Gothic ProN","Arial Rounded MT Bold",system-ui,sans-serif;font-weight:400;font-synthesis:none;font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none;padding:0}
+:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;border-radius:10px}
+img{max-width:100%;display:block}
+#app{height:100%;display:flex;flex-direction:column;max-width:480px;margin:0 auto;background:var(--bg);position:relative;overflow:hidden}
+
+/* header */
+.top{display:flex;align-items:center;gap:10px;padding:14px 18px 12px 21px;background:var(--bg);flex:none}
+.brand{font-family:"KiwiSoda","Seurat",sans-serif;font-size:24px;color:var(--brand);margin-right:auto;line-height:1;letter-spacing:.01em}
+.iconbtn{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:var(--ink);position:relative;flex:none}
+.iconbtn:active{background:var(--pill)}
+.dot{position:absolute;top:4px;right:3px;min-width:17px;height:17px;border-radius:9px;background:var(--heart);color:#fff;font-size:10px;display:grid;place-items:center;padding:0 4px;line-height:1}
+.dot.g{background:var(--accent)}
+.screenhead{display:flex;align-items:center;gap:6px;padding:12px 14px 6px;flex:none;position:relative;min-height:62px}
+.screenhead h1{font-size:21px}
+.screenhead.center h1{position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap}
+
+main{flex:1;overflow-y:auto;overflow-x:hidden;position:relative}
+.pad{padding:8px 14px 28px}
+
+/* nav (Figma: 402x105, white, 20 top radius, active pill 81x77 r15) */
+.tabs{flex:none;display:flex;justify-content:space-around;background:var(--surface);border-radius:20px 20px 0 0;padding:12px 10px 12px;box-shadow:0 -1px 0 rgba(10,54,0,.06)}
+.tab{flex:1;max-width:81px;height:70px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:12px;color:var(--ink);border-radius:15px}
+.tabs{position:relative}
+.tab{position:relative;z-index:1}
+.tabpill{position:absolute;top:12px;left:0;width:81px;height:70px;border-radius:15px;background:var(--pill);z-index:0;pointer-events:none;transition:transform .34s cubic-bezier(.3,.8,.25,1),width .34s cubic-bezier(.3,.8,.25,1)}
+@keyframes inR{from{transform:translateX(24%);opacity:0}to{transform:none;opacity:1}}
+@keyframes inL{from{transform:translateX(-24%);opacity:0}to{transform:none;opacity:1}}
+.slide-r{animation:inR .3s cubic-bezier(.3,.8,.25,1)}
+.slide-l{animation:inL .3s cubic-bezier(.3,.8,.25,1)}
+@keyframes layerIn{from{transform:translateX(100%)}to{transform:none}}
+@keyframes layerOut{from{transform:none}to{transform:translateX(100%)}}
+.layer.enter{animation:layerIn .32s cubic-bezier(.3,.8,.25,1)}
+.layer.leave{animation:layerOut .24s ease-in forwards}
+
+/* map */
+.mapwrap{position:absolute;inset:0;background:var(--m-ground);display:flex;flex-direction:column}
+.maphud{flex:none;padding:8px 14px 6px;display:flex;flex-wrap:wrap;gap:8px;background:var(--bg)}
+.hudchip{background:var(--surface);border-radius:30px;padding:7px 14px;box-shadow:var(--shadow-sm);font-size:12px;display:flex;align-items:center;gap:10px;color:var(--ink)}
+.bar{height:11px;border-radius:10px;background:var(--track);overflow:hidden;flex:1;min-width:60px}
+.bar>i{display:block;height:100%;background:var(--accent);border-radius:10px;transition:width .4s}
+.hudchip .bar{height:7px;min-width:70px}
+.mapsvg{flex:1;width:100%;height:100%;display:block;touch-action:manipulation}
+.edge{position:absolute;font-size:10px;color:var(--ink);background:var(--surface);padding:3px 10px;border-radius:30px;box-shadow:var(--shadow-sm);z-index:1;pointer-events:none;white-space:nowrap;opacity:.92}
+.edge.t{top:6px;left:50%;transform:translateX(-50%)}
+.edge.b{bottom:8px;left:50%;transform:translateX(-50%)}
+.edge.l{left:13px;top:50%;transform:translate(-50%,-50%) rotate(-90deg)}
+.edge.r{right:13px;top:50%;transform:translate(50%,-50%) rotate(90deg)}
+.placebar{position:absolute;left:12px;right:12px;top:10px;z-index:3;display:flex;align-items:center;gap:10px;background:var(--ink);color:var(--bg);border-radius:15px;padding:10px 10px 10px 16px;box-shadow:var(--shadow-sm);font-size:14px}
+.placebar span{flex:1}
+.placebar button{background:var(--bg);color:var(--ink);border-radius:30px;padding:7px 14px;font-size:13px}
+#mapsvg.placing{cursor:crosshair}
+.addopt{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--surface);border:1px solid var(--accent);border-radius:15px;padding:14px}
+.addopt+.addopt{margin-top:12px}
+.addopt .iconcircle{width:58px;height:58px;flex:none}
+.addopt b{display:block;font-weight:400;font-size:17px}
+.addopt span.tiny{display:block;margin-top:3px}
+.addopt[disabled]{opacity:.5}
+.spotrow{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:10px 4px;border-bottom:1px solid var(--line)}
+.spotrow:last-child{border-bottom:0}
+.mapseg{display:flex;background:var(--surface);border-radius:30px;padding:3px;box-shadow:var(--shadow-sm)}
+.mapseg button{display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:30px;font-size:13px;color:var(--ink)}
+.mapseg button[aria-selected="true"]{background:var(--accent);color:var(--accent-ink)}
+.feedwrap{position:absolute;inset:0;overflow-y:auto;background:var(--bg)}
+.miniseg{display:flex;border:1.5px solid var(--line);border-radius:30px;overflow:hidden;background:var(--surface)}
+.miniseg button{padding:6px 12px;font-size:12px;color:var(--ink)}
+.miniseg button[aria-pressed="true"]{background:var(--pill)}
+.feedcard{display:block;width:100%;text-align:left;background:var(--surface);border:1px solid var(--accent);border-radius:15px;padding:12px 14px;margin-bottom:12px;color:var(--ink)}
+.peek{display:flex;gap:12px;align-items:flex-start}
+.peektxt{flex:1;min-width:0}
+.peekhead{font-size:16px;line-height:1.3}
+.peekmedia{position:relative;width:92px;flex:none;border-radius:12px;overflow:hidden;background:var(--pill-solid)}
+.peekmedia .zoom{position:absolute;inset:-10px;background-size:480%;filter:blur(2px) saturate(1.2)}
+.vteaser{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:blur(5px) saturate(1.2);transform:scale(1.35)}
+.vbadge{position:absolute;left:6px;bottom:6px;background:rgba(10,54,0,.75);color:#fff;border-radius:20px;padding:2px 7px;font-size:9px;display:flex;align-items:center;gap:3px}
+.pophero .peekmedia{width:100%}
+.tagrow{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.peekwrap{padding:10px 0;border-bottom:1px solid var(--line)}
+.peekwrap:last-of-type{border-bottom:0}
+.pinstats{display:flex;gap:16px;margin-top:12px;font-size:13px;color:var(--ink-2)}
+.pinstats b{font-weight:400;color:var(--ink);font-size:17px}
+.story{padding:18px 0;border-bottom:1px solid rgba(10,54,0,.25)}
+.story:last-child{border-bottom:0}
+.storytext{margin-top:10px;font-size:14px;line-height:1.65;white-space:pre-line;overflow-wrap:anywhere;color:var(--black)}
+.storymedia{width:100%;max-height:340px;object-fit:cover;border-radius:12px;margin-top:12px;background:#000}
+.lb.me{background:var(--pill);border-radius:12px;padding-left:6px;padding-right:6px}
+.lbheart{display:flex;align-items:center;gap:4px;color:var(--heart);font-size:15px}
+.pincount{font-size:9px;fill:#fff;font-family:"Seurat",sans-serif}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.fadein{animation:fadein .28s ease-out}
+.chip[disabled]{opacity:.4}
+.feedbar{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.miniseg.big{display:flex}
+.miniseg.big button{flex:1;padding:10px 12px;font-size:14px}
+.filterbtn{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:30px;padding:6px 14px;font-size:13px}
+.filterbtn.on{border-color:var(--line-dark);background:var(--pill)}
+.fcount{min-width:18px;height:18px;border-radius:9px;background:var(--accent);color:var(--accent-ink);font-size:10px;display:grid;place-items:center;padding:0 5px}
+.tagpick{display:flex;flex-wrap:wrap;gap:10px}
+.actabs button{font-size:15px;display:inline-flex;align-items:center;justify-content:center;gap:6px;line-height:1}
+.actabs .tiny{min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--pill-solid);display:inline-grid;place-items:center;font-size:11px;line-height:1}
+.actabs button[aria-pressed="true"] .tiny{background:var(--surface)}
+.acctlist{display:flex;flex-direction:column;gap:12px}
+.acct{display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--accent);border-radius:15px;padding:10px 8px 10px 12px}
+.acct.on{border-width:2px;background:var(--pill)}
+.acctmain{flex:1;display:flex;align-items:center;gap:14px;text-align:left;color:var(--ink);min-width:0}
+.actlist{margin-top:14px}
+.actrow{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--accent);border-radius:15px;padding:10px 8px 10px 14px;margin-bottom:10px}
+.actmain{flex:1;min-width:0;text-align:left;color:var(--ink)}
+.actmain p:first-child{overflow-wrap:anywhere}
+.actmain p+p{margin-top:3px}
+.actempty{margin:4px 4px 0}
+.ptile{position:relative;border-radius:15px;overflow:hidden}
+.ptile img{width:100%;height:100%;object-fit:cover}
+.pdel{position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:50%;background:rgba(10,54,0,.72);color:#fff;display:grid;place-items:center}
+.pfirst{position:absolute;left:6px;bottom:6px;background:rgba(10,54,0,.72);color:#fff;border-radius:20px;padding:2px 8px;font-size:10px}
+.gallery{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;margin-top:12px;border-radius:12px;scrollbar-width:none}
+.gallery::-webkit-scrollbar{display:none}
+.gallery>img{flex:none;width:86%;max-height:320px;aspect-ratio:4/3;object-fit:cover;border-radius:12px;scroll-snap-align:start}
+.photobtn{display:block;padding:0;border:0;background:none;cursor:zoom-in;border-radius:12px}
+.gallery .photobtn{flex:none;width:86%;scroll-snap-align:start}
+.gallery .photobtn img{width:100%;max-height:320px;aspect-ratio:4/3;object-fit:cover;border-radius:12px;display:block}
+.photobtn .storymedia{display:block}
+@keyframes vin{from{opacity:0}to{opacity:1}}
+.viewer{position:absolute;inset:0;z-index:55;background:#081204;display:flex;flex-direction:column;animation:vin .2s ease-out;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.vtop{display:flex;align-items:center;gap:10px;padding:12px 12px 8px 16px;color:#fff}
+.vcount{font-size:14px;white-space:nowrap}
+.vwho{flex:1;min-width:0;font-size:12px;opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vclose{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;display:grid;place-items:center;flex:none}
+.vstrip{flex:1;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none}
+.vstrip::-webkit-scrollbar{display:none}
+.vslide{flex:none;width:100%;height:100%;display:grid;place-items:center;scroll-snap-align:center;padding:8px}
+.vslide img{width:100%;height:100%;object-fit:contain}
+.vnav{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.16);color:#fff;display:grid;place-items:center}
+.vnav.prev{left:10px}.vnav.next{right:10px}
+.vnav[disabled]{opacity:.25}
+.vdots{display:flex;justify-content:center;gap:7px;padding:12px 0 18px}
+.vdots span{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.35);transition:background .2s,transform .2s}
+.vdots span.on{background:#fff;transform:scale(1.2)}
+.zoomctl{position:absolute;right:23px;bottom:150px;z-index:2;display:flex;flex-direction:column;gap:6px}
+.zoomctl button{width:36px;height:36px;border-radius:50%;background:var(--surface);color:var(--ink);display:grid;place-items:center;box-shadow:var(--shadow-sm)}
+.zoomctl button[hidden]{display:none}
+#mapsvg{touch-action:none;cursor:grab}
+#mapsvg:active{cursor:grabbing}
+.fab{position:absolute;right:17px;bottom:12px;width:60px;height:60px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;z-index:2;box-shadow:var(--shadow-sm)}
+.pin{cursor:pointer}
+.pin .lblbg{fill:var(--surface);filter:drop-shadow(1px 2px 2.4px rgba(0,0,0,.25))}
+.pin .lbl{font-size:9.5px;fill:var(--black);font-family:"Seurat",sans-serif}
+@keyframes pop{0%{transform:scale(.4)}70%{transform:scale(1.15)}100%{transform:scale(1)}}
+.pin.fresh>g.body{animation:pop .5s ease-out;transform-box:fill-box;transform-origin:50% 100%}
+
+/* type */
+h1,h2,h3{margin:0;font-weight:400;line-height:1.15}
+h1{font-size:24px}
+h2{font-size:19px}
+h3{font-size:17px}
+p{margin:0}
+.muted{color:var(--ink-2)}
+.green{color:var(--accent)}
+.small{font-size:12px}
+.tiny{font-size:10px}
+.stack>*+*{margin-top:14px}
+.row{display:flex;align-items:center;gap:10px}
+.spacer{flex:1}
+
+/* controls */
+.card{background:var(--surface);border:1px solid var(--accent);border-radius:15px;padding:16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 22px;border-radius:15px;font-size:16px;background:var(--accent);color:var(--accent-ink)}
+.btn.block{display:flex;width:100%}
+.btn.ghost{background:var(--surface);color:var(--ink);border:1.5px solid var(--line)}
+.btn.soft{background:var(--pill);color:var(--ink);border:1.5px solid var(--line)}
+.btn.sm{min-height:36px;padding:0 14px;border-radius:30px;font-size:13px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.pilltabs{display:flex;gap:16px;justify-content:space-between}
+.pilltabs button{flex:1;height:42px;border-radius:30px;border:2px solid var(--accent);background:rgba(255,255,255,.64);font-size:17px;color:var(--ink)}
+.pilltabs button[aria-pressed="true"]{background:var(--pill)}
+label.f,.flabel{display:block;font-size:17px;margin-bottom:8px;color:var(--ink)}
+.hint{font-size:11px;color:var(--ink-2);margin-top:5px}
+.field{width:100%;background:var(--surface);border:1.5px solid var(--line);border-radius:15px;padding:14px 16px;font-size:15px;color:var(--ink)}
+.field:focus{outline:none;border-color:var(--accent)}
+.field::placeholder,.dash textarea::placeholder{color:var(--accent);opacity:.85}
+.locfield{display:flex;align-items:center;gap:12px;background:var(--pill);border:1.5px solid var(--line-dark);border-radius:15px;padding:0 18px;min-height:71px;font-size:19px}
+.locfield input{flex:1;border:0;background:transparent;font-size:19px;color:var(--ink);min-width:0}
+.locfield input:focus{outline:none}
+.locfield input::placeholder{color:var(--ink-3)}
+.dash{border:1.5px dashed var(--line);border-radius:15px;background:var(--surface);position:relative}
+.dash textarea{width:100%;min-height:150px;border:0;background:transparent;resize:none;padding:16px 16px 30px;font-size:15px;color:var(--ink)}
+.dash textarea:focus{outline:none}
+.dash .count{position:absolute;right:16px;bottom:10px;font-size:11px;color:var(--accent)}
+.phototiles{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.phototiles>*{aspect-ratio:180/157;border-radius:15px;overflow:hidden}
+.phototiles img{width:100%;height:100%;object-fit:cover}
+.addphoto{border:1.5px dashed var(--line);background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--accent);font-size:16px}
+.picker{position:relative;display:flex;align-items:center;gap:15px;background:var(--surface);border:1.5px solid var(--line);border-radius:15px;padding:10px 18px 10px 12px;min-height:71px;font-size:19px}
+.picker .ico{width:50px;height:50px;border-radius:50%;display:grid;place-items:center;flex:none;color:var(--ink)}
+.picker select{position:absolute;inset:0;opacity:0;width:100%;cursor:pointer;font-size:16px}
+.picker .caret{margin-left:auto;color:var(--ink)}
+.err{color:var(--heart);font-size:12px;margin-top:6px;min-height:1em}
+.chiprow{display:flex;gap:11px;overflow-x:auto;padding:2px 2px 6px;margin:0 -2px;scrollbar-width:none}
+.chiprow::-webkit-scrollbar{display:none}
+.chip{flex:none;min-width:58px;max-width:78px;height:62px;padding:6px 8px;border-radius:10px;font-size:10px;line-height:1.1;text-align:center;color:var(--black);border:1.5px solid transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+.chip svg{flex:none}
+.chip{transition:transform .2s,border-color .2s}
+.chip[aria-pressed="true"]{border-color:var(--line-dark);transform:translateY(-2px)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.tag{display:inline-block;border-radius:8px;padding:2px 8px;font-size:10px;color:var(--black)}
+
+/* onboarding (Figma: username screen) */
+.splashmid{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;pointer-events:none}
+.onb.dark{background:#0A3600;color:#FFFFFD}
+.onb.dark .brandbig{color:#97E01C;text-align:center;font-size:clamp(46px,16.5vw,68px);line-height:1}
+.onb.dark .tagline{color:#DEFF9E;text-align:center;font-size:13px;line-height:1.6;margin-top:16px}
+.onb.dark .flabel{color:#FFFFFD;font-size:17px}
+.onb.dark .hint{color:#DEFF9E;font-size:10px}
+.onb.dark .err{color:#FFB4A8}
+.onb.dark .field{border:3px solid #DEFF9E;font-size:17px;padding:13px 16px;color:#0A3600;background:#FFFFFD}
+.onb.dark .field::placeholder{color:#55703F}
+.onb.dark .btn{background:#DEFF9E;color:#0A3600;font-size:17px;min-height:48px}
+.onb.dark .muted{color:rgba(255,255,253,.8)}
+.onb.dark .steps li{border-bottom-color:rgba(178,235,87,.35)}
+.onb.dark .steps li::before{background:#DEFF9E;color:#0A3600}
+.onb.dark .roommap{color:rgba(255,255,253,.8)}
+.onb.dark .roommap .box{background:#E6F5CC;border-color:#B2EB57;color:#0A3600}
+@keyframes onbIn{from{transform:translateX(100%)}to{transform:none}}
+@keyframes curtain{0%{transform:none}100%{transform:translateY(-104%)}}
+@keyframes rise{from{transform:translateY(18px);opacity:0}to{transform:none;opacity:1}}
+@keyframes arrive{from{transform:scale(.94);opacity:.3}to{transform:none;opacity:1}}
+.onb.enter{animation:onbIn .38s cubic-bezier(.3,.8,.25,1)}
+.onb.leave{animation:curtain .62s cubic-bezier(.65,0,.3,1) forwards;box-shadow:0 18px 30px rgba(10,54,0,.35)}
+.onb.first .brandbig{animation:rise .6s cubic-bezier(.3,.8,.25,1) both}
+.onb.first .tagline{animation:rise .6s .12s cubic-bezier(.3,.8,.25,1) both}
+.onb.first .onb-body{animation:rise .6s .24s cubic-bezier(.3,.8,.25,1) both}
+#app.arrive #view,#app.arrive #top,#app.arrive #tabs{animation:arrive .6s .15s cubic-bezier(.3,.8,.25,1) both}
+.mapsvg.arrive .pin>g.body{animation:pop .45s cubic-bezier(.3,.8,.25,1) both;animation-delay:calc(var(--i,0)*80ms + .55s);transform-box:fill-box;transform-origin:50% 100%}
+.mapsvg.arrive .pin .lblbg,.mapsvg.arrive .pin .lbl{animation:rise .35s both;animation-delay:calc(var(--i,0)*80ms + .75s)}
+.avpick{position:relative;width:158px;height:158px;margin:0 auto;display:block;border-radius:50%}
+.avpick .face{width:158px;height:158px;border-radius:50%;background:#D9DBE0;display:grid;place-items:center;overflow:hidden}
+.avpick .face img{width:100%;height:100%;object-fit:cover}
+.avpick .pencil{position:absolute;top:12px;right:-6px;width:40px;height:40px;border-radius:50%;background:#FFFFFD;color:#0A3600;display:grid;place-items:center;border:1.5px solid #0A3600}
+
+.onb{position:absolute;inset:0;z-index:50;background:var(--bg);overflow-y:auto;display:flex;flex-direction:column}
+.onb-hero{padding:56px 24px 10px}
+.brandbig{font-family:"KiwiSoda","Seurat",sans-serif;font-size:46px;color:var(--brand);line-height:1}
+.onb-body{padding:18px 22px 32px;flex:1;display:flex;flex-direction:column}
+.steps{list-style:none;margin:0;padding:0;counter-reset:s}
+.steps li{counter-increment:s;display:grid;grid-template-columns:40px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.steps li:last-child{border-bottom:0}
+.steps li::before{content:counter(s);width:34px;height:34px;border-radius:50%;background:var(--icon-bg);color:var(--ink);display:grid;place-items:center;font-size:15px}
+.steps b{display:block;font-weight:400;font-size:16px}
+.roommap{display:grid;grid-template-columns:auto 1fr auto;grid-template-rows:auto 84px auto;gap:4px;align-items:center;justify-items:center;font-size:11px;color:var(--ink-2);margin:6px 0}
+.roommap .box{width:100%;height:100%;border:2px dashed var(--accent);border-radius:15px;background:var(--m-ground);display:grid;place-items:center;color:var(--ink);font-size:13px}
+
+/* overlays */
+.scrim{position:absolute;inset:0;z-index:40;background:var(--scrim);display:flex;align-items:flex-end;justify-content:center;padding-top:env(safe-area-inset-top,0px)}
+.scrim.center{align-items:center;padding:20px 16px}
+.sheet{background:var(--surface);width:100%;max-height:92%;overflow-y:auto;border-radius:20px 20px 0 0;padding:22px 20px calc(24px + env(safe-area-inset-bottom,0px));position:relative}
+.popcard{background:var(--surface);width:min(342px,100%);max-height:100%;overflow-y:auto;border-radius:20px;box-shadow:var(--shadow);position:relative}
+@keyframes up{from{transform:translateY(30px);opacity:.4}to{transform:none;opacity:1}}
+@keyframes fade{from{transform:scale(.96);opacity:.4}to{transform:none;opacity:1}}
+.sheet.anim{animation:up .22s ease-out}
+.popcard.anim{animation:fade .2s ease-out}
+.close{position:absolute;top:16px;right:14px;width:32px;height:32px;border-radius:50%;background:var(--surface);display:grid;place-items:center;z-index:2;color:var(--ink);box-shadow:var(--shadow-sm)}
+.pophero{height:220px;background:var(--pill-solid);position:relative;overflow:hidden}
+.pophero img{width:100%;height:100%;object-fit:cover}
+.pophero .zoom{position:absolute;inset:-12px;background-size:520%;filter:blur(2.5px) saturate(1.2)}
+.pophero .cap{position:absolute;left:12px;bottom:10px;background:var(--surface);border-radius:30px;padding:3px 10px;font-size:10px;box-shadow:var(--shadow-sm)}
+.popbody{padding:14px 19px 20px}
+.catart{display:grid;place-items:center;color:#fff;width:100%;height:100%}
+.lockline{display:inline-flex;align-items:center;gap:7px;font-size:14px;color:rgba(10,54,0,.75)}
+.lockline svg{color:var(--line)}
+.scanrow{display:flex;align-items:center;gap:18px;margin-top:16px}
+.qrbubble{width:74px;height:74px;border-radius:50%;background:var(--surface);display:grid;place-items:center;flex:none;color:var(--ink);border:2px solid var(--line);box-shadow:var(--shadow-sm)}
+.scanpill{flex:1;background:var(--pill);border:1px solid var(--line);border-radius:15px;padding:12px 14px;text-align:center;font-size:16px;line-height:1.5;color:var(--black)}
+.viewfinder{position:relative;width:min(300px,100%);aspect-ratio:1;margin:4px auto 0;border-radius:20px;background:#0A3600;overflow:hidden;display:grid;place-items:center}
+.viewfinder video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .3s}
+.viewfinder.live video{opacity:1}
+.viewfinder.live .vf-idle{display:none}
+.vf-idle{color:#DEFF9E;opacity:.8}
+.vf-c{position:absolute;width:44px;height:44px;border:4px solid #DEFF9E;z-index:1}
+.vf-c.tl{top:18px;left:18px;border-right:0;border-bottom:0;border-radius:12px 0 0 0}
+.vf-c.tr{top:18px;right:18px;border-left:0;border-bottom:0;border-radius:0 12px 0 0}
+.vf-c.bl{bottom:18px;left:18px;border-right:0;border-top:0;border-radius:0 0 0 12px}
+.vf-c.br{bottom:18px;right:18px;border-left:0;border-top:0;border-radius:0 0 12px 0}
+.simrow{width:100%;min-height:58px;font-size:15px;text-align:left;padding:0 14px}
+.simrow .simname{flex:1}
+.simico{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:#fff;flex:none}
+.linkbtn{color:var(--accent);text-decoration:underline;text-underline-offset:3px;font-size:13px}
+
+/* landmark page */
+.layer{position:absolute;inset:0;z-index:30;background:var(--bg);overflow-y:auto}
+.layerhead{position:sticky;top:0;z-index:3;display:flex;align-items:center;padding:10px 10px;background:var(--bg);min-height:63px}
+.hero{height:282px;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;background:var(--pill-solid);scrollbar-width:none}
+.hero::-webkit-scrollbar{display:none}
+.hero img{height:100%;width:100%;flex:none;object-fit:cover;scroll-snap-align:start}
+.hero .catart{flex:none}
+.pinbody{background:var(--surface);border-radius:25px 25px 0 0;margin-top:-37px;position:relative;padding:23px 21px 40px;min-height:60vh}
+.post{display:grid;grid-template-columns:61px 1fr auto;gap:0 12px;padding:16px 0 18px;border-bottom:1px solid rgba(10,54,0,.6)}
+.post:last-child{border-bottom:0}
+.av{width:61px;height:61px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:22px;flex:none;overflow:hidden;background:var(--ph)}
+.av img{width:100%;height:100%;object-fit:cover}
+.av.sm{width:34px;height:34px;font-size:14px}
+.post .who{font-size:12px;color:var(--black);margin-top:3px}
+.post .meta{font-size:9px;color:rgba(10,54,0,.66);display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:3px}
+.post .meta i{width:5px;height:5px;border-radius:50%;background:var(--accent);display:inline-block}
+.post .txt{margin-top:6px;font-size:12px;line-height:20px;color:var(--black);overflow-wrap:anywhere}
+.post .thumb{width:76px;height:80px;border-radius:10px;object-fit:cover}
+.acts{display:flex;gap:18px;margin-top:8px;flex-wrap:wrap}
+.act{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--ink);min-height:30px}
+.act svg{flex:none}
+.act.heart svg{color:var(--heart)}
+.act.on svg{fill:var(--heart)}
+.act.ok{color:var(--accent)}
+.replies{grid-column:2/4;margin-top:6px;border-left:3px solid var(--line);padding-left:12px}
+.reply{font-size:12px;padding:5px 0;color:var(--black)}
+.hidden-post{font-size:12px;color:var(--ink-3);padding:14px 0;border-bottom:1px solid var(--line)}
+
+/* collection */
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.tile{border-radius:15px;overflow:hidden;background:var(--surface);border:1px solid var(--accent);text-align:left;display:flex;flex-direction:column}
+.tile .art{height:104px;display:grid;place-items:center;color:#fff;background-size:cover;background-position:center}
+.tile.locked .art{background:repeating-linear-gradient(135deg,var(--pill-solid) 0 10px,var(--icon-bg) 10px 20px);color:var(--ink-3)}
+.tile .cap2{padding:10px 12px}
+.tile .cap2 b{display:block;font-weight:400;font-size:15px;line-height:1.2;color:var(--ink)}
+
+/* challenges & profile */
+.chal{display:grid;grid-template-columns:84px 1fr;gap:16px;align-items:center;padding:30px 14px 30px 11px}
+.iconcircle{width:84px;height:84px;border-radius:50%;display:grid;place-items:center;background:var(--icon-bg);color:var(--ink)}
+.iconcircle.dim{background:var(--track);color:var(--ink-3);opacity:.7}
+.chal h3{font-size:19px}
+.chal .desc{font-size:10px;color:var(--accent);margin-top:4px}
+.chal .prog{display:flex;align-items:center;gap:12px;margin-top:10px}
+.chal .prog b{font-weight:400;font-size:11px;color:var(--black);white-space:nowrap}
+.badgegrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 8px;text-align:center}
+.badgec{width:87px;height:87px;border-radius:50%;display:grid;place-items:center;background:var(--badge-bg);color:var(--ink);margin:0 auto 6px}
+.badgec.dim{background:var(--track);opacity:.55}
+.badgegrid b{font-weight:400;font-size:15px;display:block;line-height:1.15}
+.badgegrid span{font-size:10px;color:var(--accent);display:block;line-height:1.2;margin-top:2px}
+.lb{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.lb:last-child{border-bottom:0}
+.lb .rank{width:20px;color:var(--ink-2)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);text-align:center;border:1.5px solid var(--line);border-radius:15px;background:var(--surface);padding:12px 0}
+.stats>*+*{border-left:1px solid var(--line)}
+.stats b{display:block;font-weight:400;font-size:19px;color:var(--ink)}
+.stats span{font-size:11px;color:var(--ink-2)}
+.member{display:flex;align-items:center;gap:10px;padding:8px 0}
+.friendspage>.card{padding:18px 18px}
+.friendspage>*+*{margin-top:20px}
+.friendspage>.sectionhead{margin:30px 4px 12px}
+.friendspage>.sectionhead+.card{margin-top:0}
+.friendspage .card h3{margin-bottom:10px!important}
+.friendspage .member{padding:12px 0;gap:12px}
+.friendspage .member+.member{border-top:1px solid var(--line)}
+.friendspage .member .btn.sm+.btn.sm{margin-left:2px}
+.friendspage .card>p{line-height:1.55}
+.sectionhead{display:flex;align-items:center;justify-content:space-between;margin:22px 4px 10px}
+.sectionhead h2{font-size:21px}
+.seeall{display:inline-flex;align-items:center;gap:4px;color:var(--accent);font-size:16px}
+.banner{background:var(--t-rec);color:var(--black);font-size:12px;padding:8px 16px;flex:none}
+
+.toast{position:absolute;left:50%;bottom:calc(112px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:15px;font-size:14px;box-shadow:var(--shadow-sm);max-width:88%;text-align:center}
+
+.qrgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.qrcard{border:1.5px dashed #A9D359;border-radius:15px;padding:12px;text-align:center;background:#fff;color:#0A3600}
+.qrcard .q{display:grid;place-items:center;min-height:140px}
+.qrcard .q img,.qrcard .q canvas{width:140px!important;height:140px!important}
+.qrcard b{display:block;margin-top:8px;font-weight:400;font-size:14px}
+.qrcard code{font-size:11px}
+@media print{body *{visibility:hidden}.qrsheet,.qrsheet *{visibility:visible}.qrsheet{position:absolute;left:0;top:0;width:100%}.noprint{display:none!important}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="banner"></div>
+  <header id="top"></header>
+  <main id="view"></main>
+  <nav class="tabs" id="tabs" aria-label="Main"></nav>
+  <div id="pinlayer"></div>
+  <div id="pagelayer"></div>
+  <div id="modal"></div>
+  <div id="onb"></div>
+  <div id="toast"></div>
+</div>
+<script>
+"use strict";
+/* ---------- icons (drawn to match the Figma icon set) ---------- */
+const P={
+map:'<path d="M9.5 5 3.5 7v13l6-2 5 1.6"/><path d="M9.5 5l5 2 6-2v6.5"/><path d="M9.5 5v13"/><path d="M14.5 7v4"/><path d="M18 21s-3.5-3.2-3.5-6a3.5 3.5 0 0 1 7 0c0 2.8-3.5 6-3.5 6z"/><circle cx="18" cy="15" r="1.1"/>',
+pluscircle:'<circle cx="12" cy="12" r="9.5"/><path d="M12 7.5v9M7.5 12h9"/>',
+plus:'<path d="M12 5v14M5 12h14"/>',
+flag:'<path d="M5.5 21V4.5"/><path d="M5.5 4.5h12.5l-2.6 4.3 2.6 4.3H5.5"/>',
+usercircle:'<circle cx="12" cy="12" r="9.5"/><circle cx="12" cy="9.5" r="3.2"/><path d="M6.4 18.6c1.3-2.3 3.2-3.4 5.6-3.4s4.3 1.1 5.6 3.4"/>',
+user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/>',
+users:'<circle cx="8.5" cy="8" r="3.3"/><circle cx="16" cy="8" r="3.3"/><path d="M2.5 19.5c.8-3.3 3-5 6-5s5.2 1.7 6 5"/><path d="M14.2 14.7c.6-.1 1.2-.2 1.8-.2 3 0 5.2 1.7 6 5"/>',
+bell:'<path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.8 1.8H4.2z"/><path d="M10 21h4"/>',
+lock:'<rect x="5" y="10.5" width="14" height="10.5" rx="2"/><path d="M8 10.5V7.8a4 4 0 0 1 8 0v2.7"/>',
+unlock:'<rect x="5" y="10.5" width="14" height="10.5" rx="2"/><path d="M8 10.5V7.8a4 4 0 0 1 7.6-1.8"/>',
+heart:'<path d="M12 19.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 6.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/>',
+chat:'<path d="M5 4.5h14a1.5 1.5 0 0 1 1.5 1.5v9a1.5 1.5 0 0 1-1.5 1.5H11l-4.5 3.5v-3.5H5A1.5 1.5 0 0 1 3.5 15V6A1.5 1.5 0 0 1 5 4.5z"/>',
+check:'<path d="m5 12 5 5 9-10"/>',
+camera:'<path d="M3.5 8.5A1.5 1.5 0 0 1 5 7h2.5l1.8-2.5h5.4L16.5 7H19a1.5 1.5 0 0 1 1.5 1.5V18A1.5 1.5 0 0 1 19 19.5H5A1.5 1.5 0 0 1 3.5 18z"/><circle cx="12" cy="13" r="3.6"/>',
+leaf:'<path d="M12 21v-8"/><path d="M12 13c0-4.5 3-7.5 8-7.5 0 4.5-3 7.5-8 7.5z"/><path d="M12 15c0-3.5-2.4-6-6.5-6 0 3.5 2.4 6 6.5 6z"/>',
+landmark:'<path d="M4 5.5h5.5a2.5 2.5 0 0 1 2.5 2.5v12a2 2 0 0 0-2-2H4z"/><path d="M20 5.5h-5.5A2.5 2.5 0 0 0 12 8v12a2 2 0 0 1 2-2h6z"/>',
+food:'<path d="M7 3v8M5 3v5a2 2 0 0 0 4 0V3M7 11v10M16 3c-2 0-3 3-3 6s1 4 3 4v8"/>',
+hammock:'<path d="M3 6v14M21 6v14M3 9c4 7 14 7 18 0"/>',
+drop:'<path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z"/>',
+art:'<path d="m12 3.5 2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/>',
+qr:'<path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><rect x="7.5" y="7.5" width="3.5" height="3.5" rx=".5"/><rect x="13" y="7.5" width="3.5" height="3.5" rx=".5"/><rect x="7.5" y="13" width="3.5" height="3.5" rx=".5"/><path d="M13 13h1.5v1.5H13zM15 15h1.5v1.5H15z"/>',
+back:'<path d="M20 12H4.5M10.5 5.5 4 12l6.5 6.5"/>',
+arrowr:'<path d="M4 12h15.5M13.5 5.5 20 12l-6.5 6.5"/>',
+x:'<path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/>',
+grid:'<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>',
+help:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.7M12 17h.01"/>',
+search:'<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.3-4.3"/>',
+explore:'<circle cx="11" cy="11" r="7"/><path d="M20.5 20.5 16 16"/><path d="M4.5 11h13M11 4c-2 2.2-2.8 4.5-2.8 7s.8 4.8 2.8 7M11 4c2 2.2 2.8 4.5 2.8 7s-.8 4.8-2.8 7"/>',
+star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>',
+mountain:'<path d="M2.5 19.5 9 7l3.6 6.5 2.2-3 6.7 9z"/><path d="m7.4 10 1.6 1.6 1.5-1.5"/>',
+shield:'<path d="M12 3L5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6z"/><path d="M9 12l2 2 4-4"/>',
+pin:'<path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/>',
+crown:'<path d="M4 17L3 7l5 4 4-6 4 6 5-4-1 10z"/>',
+print:'<path d="M7 9V3h10v6M7 17H4v-7h16v7h-3M7 14h10v7H7z"/>',
+smile:'<circle cx="12" cy="12" r="9"/><path d="M8.5 14.5c.9 1.3 2.1 2 3.5 2s2.6-.7 3.5-2"/><path d="M9 9.5h.01M15 9.5h.01"/>',
+trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
+video:'<rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10.5 21 7.5v9l-5-3"/>',
+play:'<path d="M7 5l12 7-12 7z"/>',
+sparkle:'<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 16l.7 1.8 1.8.7-1.8.7L19 21l-.7-1.8-1.8-.7 1.8-.7z"/>',
+filter:'<path d="M4 6h16M7 12h10M10 18h4"/>',
+caret:'<path d="M6 9l6 6 6-6" />',
+pencil:'<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>'
+};
+function ic(n,s=22,sw=1.7){return `<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[n]||''}</svg>`}
+
+/* ---------- vocab ---------- */
+/* Pins are places; what people post there are stories. Every pin looks the same. */
+const STORY_PIN={label:'Stories',icon:'landmark',color:'var(--accent)'};
+const PIN_CATS=new Proxy({},{get:()=>STORY_PIN});
+/* Story tags: people pick up to 3, and feeds filter by them. */
+const TAGS={
+ heartfelt:{label:'Heartfelt',icon:'heart',bg:'var(--t-memory)'},
+ firsts:{label:'First times',icon:'star',bg:'var(--t-rec)'},
+ funny:{label:'Funny',icon:'smile',bg:'var(--t-question)'},
+ hidden:{label:'Hidden gem',icon:'search',bg:'var(--t-noticing)'},
+ history:{label:'History',icon:'landmark',bg:'var(--t-fact)'},
+ advice:{label:'Advice',icon:'flag',bg:'var(--t-photo)'},
+ nature:{label:'Nature',icon:'leaf',bg:'var(--t-history)'}
+};
+const LEGACY_TAG={memory:'heartfelt',photo:'hidden',rec:'advice',fact:'history',history:'history',question:'advice',noticing:'hidden'};
+function firstSentence(t){
+ t=String(t||'').replace(/\s+/g,' ').trim();if(!t)return '';
+ const m=t.match(/^.+?[.!?…](?=\s|$)/);let out=m?m[0]:t;
+ if(out.length>140){out=out.slice(0,130).replace(/\s+\S*$/,'')+'…'}
+ return out;
+}
+function normStory(id,v){
+ const tags=Array.isArray(v.tags)&&v.tags.length?v.tags.filter(t=>TAGS[t]):[LEGACY_TAG[v.type]||'heartfelt'];
+ const photos=Array.isArray(v.photos)&&v.photos.length?v.photos.filter(Boolean):(v.photo?[v.photo]:[]);
+ const teaser=photos.length&&v.teaser!=='text'?(v.teaser==='photo'||!v.teaser?'photo':'text'):'text';
+ return {id,...v,photos,photo:photos[0]||null,video:null,headline:v.headline||firstSentence(v.text)||'A story',peek:firstSentence(v.text),tags,teaser};
+}
+/* "Give me a prompt" ideas: heartfelt first, per the class feedback. */
+const PROMPTS=[
+ ['The first time this place felt like mine','The first time I came here, I…'],
+ ['Someone I met right here','I didn’t expect to meet anyone that day, but…'],
+ ['What I was carrying the day I sat here','I remember sitting here, worrying about…'],
+ ['A small kindness I got here','Someone I didn’t know…'],
+ ['The night I stayed too late','It was way past midnight when…'],
+ ['What I’d tell a freshman standing here','If you’re standing where I stood, here’s what I wish I’d known…'],
+ ['A call home I made from this spot','I called home from right here because…'],
+ ['Where I celebrated good news','I found out right here that…'],
+ ['A detail almost everyone walks past','Next time you’re here, look for…'],
+ ['The best and worst day here','This spot was part of both my best and worst day.'],
+ ['Where I go when it’s all too much','When things get overwhelming, I come here because…'],
+ ['A tradition I started here','Every week I…'],
+ ['What this place sounds like at 7am','If you come early enough…'],
+ ['The friend I made because of this spot','We probably wouldn’t be friends if not for…']
+];
+const AV_COLORS=['#7EA730','#9C88B8','#E0A21E','#3FA7A8','#4F8FD1','#E07A9A','#8A6D1E','#5A8900'];
+
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s);
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+function newId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function safeSeg(s){return String(s).replace(/[^A-Za-z0-9_\-.~:@+]/g,'-')}
+function hashStr(s){let h=0;for(const c of String(s))h=(h*31+c.charCodeAt(0))|0;return Math.abs(h)}
+function ago(t){if(!t)return'';const s=(Date.now()-t)/1000;if(s<60)return'just now';if(s<3600)return Math.floor(s/60)+' min ago';if(s<86400)return Math.floor(s/3600)+' h ago';const d=Math.floor(s/86400);return d===1?'yesterday':d+' days ago'}
+function toast(msg,ms=2600){const t=$('#toast');t.innerHTML=`<div class="toast" role="status">${esc(msg)}</div>`;clearTimeout(toast._t);toast._t=setTimeout(()=>{t.innerHTML=''},ms)}
+
+/* profanity filter */
+const BAD_SUB=['fuck','shit','cunt','nigg','fagg','motherf','bitch','whore','slut','retard'];
+const BAD_WORD=['ass','asshole','dick','cock','pussy','bastard','fag','twat','wank','prick','damn','piss','tits','douche','jackass','dumbass'];
+function norm(s){return s.toLowerCase().replace(/[0]/g,'o').replace(/[1!|]/g,'i').replace(/3/g,'e').replace(/[4@]/g,'a').replace(/[5$]/g,'s').replace(/7/g,'t')}
+function hasProfanity(s){if(!s)return false;const n=norm(s);const squashed=n.replace(/[^a-z]/g,'');if(BAD_SUB.some(w=>squashed.includes(w)))return true;return n.split(/[^a-z]+/).some(w=>BAD_WORD.includes(w))}
+
+/* ---------- store: shared db with a local fallback ---------- */
+const S={uid:null,me:null,isOwner:false,canWrite:null,view:'map',pin:null,page:null,modal:null,filter:'all',chalTab:'you',addForm:{},onb:null,pendingScan:null,fresh:null,seenBadges:null,ready:false};
+/* Every record lives in one Supabase table, "docs": (coll, id, data jsonb).
+   coll is the collection name (pins, posts, players, likes, ...), id is the record id,
+   data is the record itself. Realtime pushes every change to every open phone. */
+const Store={sb:null,practice:false,remote:{},local:{},data:{},loaded:{},
+ loadLocal(){try{this.local=JSON.parse(localStorage.getItem('em-local')||'{}')||{}}catch(e){this.local={}}},
+ saveLocal(){try{localStorage.setItem('em-local',JSON.stringify(this.local))}catch(e){toast('This phone ran out of room for photos. Try a smaller photo.')}},
+ async init(){
+  const c=window.EM_CONFIG||{};
+  if(window.supabase&&c.supabaseUrl&&c.supabaseAnonKey&&!/YOUR-/.test(c.supabaseUrl)){
+   try{this.sb=window.supabase.createClient(c.supabaseUrl,c.supabaseAnonKey,{auth:{persistSession:false}})}catch(e){this.sb=null}
+  }
+  if(!this.sb){this.goPractice();COLLS.forEach(k=>{this.loaded[k]=true;this.merge(k)});return}
+  this.sb.channel('em-docs').on('postgres_changes',{event:'*',schema:'public',table:'docs'},p=>this.apply(p)).subscribe();
+  await this.loadAll();
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')this.loadAll()});
+ },
+ async loadAll(){
+  const out={};const page=1000;let from=0;
+  try{
+   for(;;){const {data,error}=await this.sb.from('docs').select('coll,id,data').range(from,from+page-1);if(error)throw error;
+    data.forEach(r=>{(out[r.coll]||(out[r.coll]={}))[r.id]=r.data});if(data.length<page)break;from+=page}
+   COLLS.forEach(k=>{this.remote[k]=out[k]||{};this.loaded[k]=true;this.merge(k)});
+  }catch(e){console.error(e);toast('Couldn’t reach the shared map. Check your connection.');COLLS.forEach(k=>{this.loaded[k]=true;this.merge(k)})}
+ },
+ apply(p){
+  const row=(p.new&&p.new.coll)?p.new:p.old;if(!row||!row.coll)return;
+  const k=row.coll;this.remote[k]=this.remote[k]||{};
+  if(p.eventType==='DELETE')delete this.remote[k][row.id];else this.remote[k][row.id]=p.new.data;
+  this.merge(k);
+ },
+ merge(coll){this.data[coll]={...(this.remote[coll]||{}),...(this.local[coll]||{})};for(const k in this.data[coll])if(this.data[coll][k]===null)delete this.data[coll][k];schedule()},
+ goPractice(){if(this.practice)return;this.practice=true;renderBanner()},
+ async set(coll,id,obj){
+  if(this.sb&&!this.practice){
+   const {error}=await this.sb.from('docs').upsert({coll,id,data:obj,updated_at:new Date().toISOString()});
+   if(error){console.error(error);throw error}
+   (this.remote[coll]||(this.remote[coll]={}))[id]=obj;this.merge(coll);return;
+  }
+  (this.local[coll]||(this.local[coll]={}))[id]=obj;this.saveLocal();this.merge(coll);
+ },
+ async del(coll,id){
+  if(this.sb&&!this.practice){
+   const {error}=await this.sb.from('docs').delete().eq('coll',coll).eq('id',id);
+   if(error){console.error(error);throw error}
+   if(this.remote[coll])delete this.remote[coll][id];this.merge(coll);return;
+  }
+  if(this.local[coll])delete this.local[coll][id];this.saveLocal();this.merge(coll);
+ }
+};
+const D=Store.data;
+const COLLS=['config','pins','posts','players','likes','checks','replies','invites','groups','scans','friendreqs'];
+
+/* ---------- data accessors ---------- */
+const cfg=()=>(D.config&&D.config.main)||{};
+const labels=()=>Object.assign({top:'North - front of class',bottom:'South - back of the class',left:'Windows',right:'Door'},cfg().labels||{});
+const spareCount=()=>Number(cfg().spares)||5;
+function pinsList(){return Object.entries(D.pins||{}).map(([id,v])=>({id,...v})).sort((a,b)=>(a.at||0)-(b.at||0))}
+function pinById(id){const v=(D.pins||{})[id];return v?{id,...v}:null}
+function postsAt(pin){return Object.entries(D.posts||{}).map(([id,v])=>normStory(id,v)).filter(p=>p.pin===pin).sort((a,b)=>(a.at||0)-(b.at||0))}
+function allPosts(){return Object.entries(D.posts||{}).map(([id,v])=>normStory(id,v))}
+function player(uid){if(uid===S.uid&&S.me)return S.me;return (D.players||{})[uid]||null}
+function players(){const o={...(D.players||{})};if(S.uid&&S.me)o[S.uid]=S.me;return Object.entries(o).map(([id,v])=>({id,...v})).filter(p=>p.username)}
+function nameOf(uid,fallback){const p=player(uid);return p&&p.username?p.username:(fallback||'someone')}
+function likesOf(post){return Object.values(D.likes||{}).filter(l=>l.post===post)}
+function checksOf(post){return Object.values(D.checks||{}).filter(c=>c.post===post)}
+function repliesOf(post){return Object.entries(D.replies||{}).map(([id,v])=>({id,...v})).filter(r=>r.post===post).sort((a,b)=>a.at-b.at)}
+function isHidden(post){return checksOf(post.id).filter(c=>c.v==='dup'&&c.uid!==post.by).length>=2}
+function unlockedList(uid){const p=player(uid);return (p&&Array.isArray(p.unlocked))?p.unlocked:[]}
+function isUnlocked(pin,uid=S.uid){return unlockedList(uid).some(u=>u.pin===pin)}
+function groupId(){return S.me&&S.me.groupId||null}
+function groupMembers(gid){if(!gid)return[];return players().filter(p=>p.groupId===gid)}
+function scansFor(gid,pin){return Object.values(D.scans||{}).filter(s=>s.group===gid&&s.pin===pin).map(s=>s.uid)}
+function myInvites(){return Object.entries(D.invites||{}).map(([id,v])=>({id,...v})).filter(i=>i.to===S.uid&&i.status==='pending'&&(D.groups||{})[i.group])}
+function friendReqs(){return Object.entries(D.friendreqs||{}).map(([id,v])=>({id,...v}))}
+function pairId(a,b){return safeSeg([a,b].sort().join('__'))}
+function reqWith(uid){return (D.friendreqs||{})[pairId(S.uid,uid)]||null}
+function friendIds(uid=S.uid){const s=new Set();friendReqs().forEach(r=>{if(r.status!=='accepted')return;if(r.from===uid)s.add(r.to);else if(r.to===uid)s.add(r.from)});return [...s]}
+function incomingReqs(){return friendReqs().filter(r=>r.to===S.uid&&r.status==='pending'&&player(r.from))}
+function outgoingReqs(){return friendReqs().filter(r=>r.from===S.uid&&r.status==='pending'&&player(r.to))}
+function notifCount(){return myInvites().length+incomingReqs().length}
+function avColor(uid){return AV_COLORS[hashStr(uid)%AV_COLORS.length]}
+function avatar(uid,name,cls='',style=''){
+ const p=uid?player(uid):null;const n=name||nameOf(uid);
+ if(p&&p.photo)return `<span class="av ${cls}" style="${style}" aria-hidden="true"><img src="${p.photo}" alt=""></span>`;
+ return `<span class="av ${cls}" style="background:${avColor(uid||n)};${style}" aria-hidden="true">${esc((n[0]||'?').toUpperCase())}</span>`}
+function firstPhoto(pin){const p=postsAt(pin).find(p=>p.photo&&!isHidden(p));return p?p.photo:null}
+function heroPhotos(p){const a=[];if(p.cover)a.push(p.cover);postsAt(p.id).forEach(x=>{if(!isHidden(x))x.photos.forEach(ph=>a.push(ph))});return a}
+function likeCount(post){return likesOf(post).length}
+function pinLikes(pin){return postsAt(pin).reduce((n,x)=>n+likeCount(x.id),0)}
+function canDelete(rec){return !!rec&&!!S.uid&&rec.by===S.uid}
+
+/* ---------- stats, challenges, badges ---------- */
+function statsFor(uid){
+ const posts=allPosts().filter(p=>p.by===uid);
+ const myPostIds=new Set(posts.map(p=>p.id));
+ const likes=Object.values(D.likes||{}).filter(l=>myPostIds.has(l.post)&&l.uid!==uid).length;
+ const likesGiven=Object.values(D.likes||{}).filter(l=>l.uid===uid&&!myPostIds.has(l.post)).length;
+ const mediaStories=posts.filter(p=>p.photo||p.video).length;
+ const unlocked=unlockedList(uid);
+ const created=pinsList().filter(p=>p.by===uid).length;
+ let first=0;for(const pin of pinsList()){const ps=postsAt(pin.id);if(ps.length&&ps[0].by===uid)first++}
+ const group=unlocked.filter(u=>u.group).length;
+ const total=pinsList().length;
+ return {posts:posts.length,likes,helpful:likes,likesGiven,mediaStories,unlocked:unlocked.length,created,first,group,total};
+}
+const CHALLENGES=[
+ {id:'explorer',name:'Local Explorer',desc:'Unlock 3 spots on the map.',icon:'mountain',target:3,val:s=>s.unlocked},
+ {id:'storyteller',name:'Storyteller',desc:'Share 3 stories.',icon:'landmark',target:3,val:s=>s.posts},
+ {id:'loved',name:'Well Loved',desc:'Get 5 likes on your stories.',icon:'heart',target:5,val:s=>s.likes},
+ {id:'listener',name:'Good Listener',desc:'Like 5 stories by other people.',icon:'star',target:5,val:s=>s.likesGiven},
+ {id:'photographer',name:'Photographer',desc:'Add a photo or video to 2 stories.',icon:'camera',target:2,val:s=>s.mediaStories},
+ {id:'trail',name:'Trailblazer',desc:'Drop a new pin with a spare QR code.',icon:'pin',target:1,val:s=>s.created},
+ {id:'first',name:'First Storyteller',desc:'Be the first to share a story at a spot.',icon:'crown',target:1,val:s=>s.first},
+ {id:'buddy',name:'Walk Buddy',desc:'Unlock a spot together on a group walk.',icon:'users',target:1,val:s=>s.group},
+ {id:'complete',name:'Explorer',desc:'Unlock every spot on the map.',icon:'explore',target:0,val:s=>s.unlocked}
+];
+function chalTarget(c,s){return c.id==='complete'?Math.max(s.total,1):c.target}
+function earned(uid){const s=statsFor(uid);return CHALLENGES.filter(c=>c.val(s)>=chalTarget(c,s)&&(c.id!=='complete'||s.total>0)).map(c=>c.id)}
+
+/* ---------- player writes (serialized) ---------- */
+let pq=Promise.resolve();
+function savePlayer(patch){
+ S.me={...(S.me||{}),...patch};
+ const snapshot=JSON.parse(JSON.stringify(S.me));
+ pq=pq.then(()=>Store.set('players',S.uid,snapshot)).catch(()=>{toast('Couldn’t save your progress. Check your connection.')});
+ schedule();
+ return pq;
+}
+
+/* ---------- render scheduling ---------- */
+let rq=false;
+function schedule(){if(rq)return;rq=true;requestAnimationFrame(()=>{rq=false;renderAll()})}
+const STATIC_VIEWS=['addpin'];
+function renderAll(){
+ if(!S.ready)return;
+ if(!S.me&&Store.loaded.players&&!S.onb){S.onb='name';renderOnb()}
+ if(S.me&&!S.me.onboarded&&!S.onb){S.onb='steps';renderOnb()}
+ if(S.onb)return;
+ renderTop();renderTabs();
+ if(!STATIC_VIEWS.includes(S.view)&&!(S.arrive&&S.view==='map'&&$('#view .mapsvg')))renderView();
+ if(S.pin)renderPin();
+ if(S.modal&&S.modal.live)renderModal();
+ checkBadges();
+ checkGroupUnlocks();
+ checkWalkEnded();
+ if(S.pendingScan&&Store.loaded.pins&&!S.arrive&&!S.splash){const c=S.pendingScan;S.pendingScan=null;scan(c)}
+}
+function checkWalkEnded(){
+ const g=groupId();if(!g||!Store.loaded.groups||!S.me||!S.me.onboarded)return;
+ if(!(D.groups||{})[g]){if(S.endedWalk===g)return;S.endedWalk=g;savePlayer({groupId:null});toast('Your group walk ended because everyone else left.',3200)}
+}
+function checkGroupUnlocks(){
+ const g=groupId();if(!g||!S.me||!S.me.onboarded||S.splash||S.arrive)return;
+ const gm=groupMembers(g);if(gm.length<2)return;
+ S.autoU=S.autoU||new Set();
+ const by={};Object.values(D.scans||{}).forEach(x=>{if(x.group===g)(by[x.pin]||(by[x.pin]=new Set())).add(x.uid)});
+ for(const pin in by){
+  if(S.autoU.has(pin)||isUnlocked(pin)||!pinById(pin)||!by[pin].has(S.uid))continue;
+  if(gm.every(m=>by[pin].has(m.id))){S.autoU.add(pin);setTimeout(()=>{closeModal();unlock(pin,{group:true});toast('Unlocked together with your group!')},0);break}
+ }
+}
+function checkBadges(){
+ if(!S.uid||!Store.loaded.likes||!Store.loaded.posts)return;
+ const now=earned(S.uid);
+ if(S.seenBadges===null){let saved=null;try{saved=JSON.parse(localStorage.getItem('em-badges-'+S.uid)||'null')}catch(e){}S.seenBadges=new Set(saved||now)}
+ const fresh=now.filter(b=>!S.seenBadges.has(b));
+ if(fresh.length){fresh.forEach(b=>S.seenBadges.add(b));const c=CHALLENGES.find(x=>x.id===fresh[0]);toast('Badge earned: '+c.name,3200)}
+ try{localStorage.setItem('em-badges-'+S.uid,JSON.stringify([...S.seenBadges]))}catch(e){}
+}
+function renderBanner(){$('#banner').innerHTML=Store.practice?`<div class="banner">Offline practice mode: posts stay on this phone. Add your Supabase keys to config.js to share them.</div>`:''}
+
+/* ---------- header + nav ---------- */
+function renderTop(){
+ const T=$('#top');
+ if(S.view!=='map'){T.className='';T.innerHTML='';return}
+ const inv=notifCount();const g=groupId();
+ T.className='top';
+ T.innerHTML=`<span class="brand">EnvironMemo</span>
+  <button class="iconbtn" data-act="openScan" aria-label="Scan a QR code">${ic('qr',28,1.6)}</button>
+  <button class="iconbtn" data-act="tab" data-tab="friends" aria-label="Friends and group walk">${ic('users',30,1.6)}${g?'<span class="dot g">'+groupMembers(g).length+'</span>':''}</button>
+  <button class="iconbtn" data-act="invites" aria-label="Notifications${inv?', '+inv+' new':''}">${ic('bell',28,1.6)}${inv?'<span class="dot">'+inv+'</span>':''}</button>`;
+}
+function navOf(v){return v==='collection'?'profile':(v==='addpin'||v==='add')?'map':v}
+const TABS=[['map','Map','map'],['friends','Friends','users'],['challenges','Challenges','flag'],['profile','Profile','usercircle']];
+function renderTabs(){
+ const nav=$('#tabs');const cur=navOf(S.view);
+ if(!nav.dataset.built){
+  nav.innerHTML='<span class="tabpill" aria-hidden="true"></span>'+TABS.map(([id,l,i])=>`<button class="tab" data-act="tab" data-tab="${id}">${ic(i,32,1.6)}<span>${l}</span></button>`).join('');
+  nav.dataset.built='1';
+ }
+ nav.querySelectorAll('.tab').forEach(b=>{if(b.dataset.tab===cur)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
+ placePill();
+}
+function placePill(instant){
+ const nav=$('#tabs');const pill=nav.querySelector('.tabpill');const b=nav.querySelector('.tab[aria-current="page"]');
+ if(!pill||!b)return;
+ if(instant||!pill.dataset.placed){pill.style.transition='none'}
+ pill.style.width=b.offsetWidth+'px';pill.style.transform=`translateX(${b.offsetLeft}px)`;
+ if(instant||!pill.dataset.placed){void pill.offsetWidth;pill.style.transition='';pill.dataset.placed='1'}
+}
+window.addEventListener('resize',()=>placePill(true));
+function renderView(){
+ if(S.view==='map'&&S.mapGesture){S.mapDirty=true;return}
+ const v=$('#view');const keep=v.scrollTop;
+ v.innerHTML=({map:viewMap,friends:viewFriends,collection:viewCollection,add:viewAdd,addpin:viewCreatePin,challenges:viewChallenges,profile:viewProfile}[S.view]||viewMap)();
+ if(S.view!=='map')v.scrollTop=keep;
+ if(S.view==='addpin')afterCreatePin();
+ if(S.view==='map')bindMap();
+}
+
+/* ---------- map ---------- */
+const TREES=[[24,36],[40,28],[58,40],[30,58],[116,30],[134,50],[22,98],[100,100],[86,112],[246,52],[262,44],[278,52],[318,60],[332,98],[238,104],[30,312],[48,322],[56,356],[120,312],[134,352],[216,370],[232,384],[244,394],[330,372],[328,420],[220,452],[300,500],[316,508],[338,480],[150,180],[230,160],[12,170],[352,250],[350,140],[94,190],[150,400],[16,470],[30,482],[176,500],[110,520],[262,520]];
+const MAP_BG=`<rect x="-200" y="-200" width="760" height="940" fill="var(--m-ground)"/>
+<rect x="12" y="18" width="140" height="110" rx="24" fill="var(--m-lawn)"/>
+<rect x="206" y="352" width="146" height="170" rx="26" fill="var(--m-lawn)"/>
+<rect x="16" y="296" width="130" height="82" rx="22" fill="var(--m-lawn)"/>
+<rect x="224" y="34" width="126" height="92" rx="24" fill="var(--m-lawn)"/>
+<path d="M30 430c10-14 34-16 46-6s14 30-2 36-44 4-48-10 0-14 4-20z" fill="var(--m-water)"/>
+<g fill="none" stroke-linecap="round" stroke-linejoin="round">
+${[['M-20 214C70 196 130 236 190 222S310 168 380 182',16],['M184 -20C172 70 212 130 192 222S150 380 172 560',16],['M-20 452C90 434 160 468 236 430S330 384 380 398',12],['M192 226C236 262 300 262 380 300',10],['M40 -20C60 80 30 160 60 214',9],['M100 560C110 500 96 476 120 452',9],['M262 182C258 140 290 120 300 -20',8]].map(([d,w])=>`<path d="${d}" stroke="var(--m-road-edge)" stroke-width="${w+3}"/><path d="${d}" stroke="var(--m-road)" stroke-width="${w}"/>`).join('')}
+</g>
+<g>${[[150,112,66,30],[236,232,62,34],[34,228,58,40],[262,296,56,40],[40,398,52,34],[104,254,40,30],[226,470,44,40],[66,480,70,36],[290,96,40,26],[300,410,36,30]].map(([x,y,w,h])=>`<rect x="${x}" y="${y+4}" width="${w}" height="${h}" rx="5" fill="var(--m-bldg)"/><rect x="${x+2}" y="${y}" width="${w-4}" height="${h-6}" rx="4" fill="var(--m-bldg-top)"/>`).join('')}</g>
+<g>${TREES.map(([x,y],i)=>`<circle cx="${x}" cy="${y}" r="${5+(i%3)*2}" fill="${i%2?'var(--m-tree)':'var(--m-tree-2)'}"/>`).join('')}</g>`;
+function pinMarker(p,opts={}){
+ const un=opts.forceUnlocked||isUnlocked(p.id);
+ const fill=un?'var(--accent)':'#B9BFB2';
+ const icon=un?P.landmark:P.lock;
+ const fresh=S.fresh===p.id?' fresh':'';
+ const name=p.name.length>20?p.name.slice(0,19)+'…':p.name;
+ const w=Math.round(name.length*5.6+20);
+ const k=opts.k||1;
+ const n=opts.nolabel?0:postsAt(p.id).filter(x=>!isHidden(x)).length;
+ return `<g class="pin${fresh}" style="--i:${opts.i||0}" data-x="${p.x}" data-y="${p.y}" ${opts.inert?'':`data-act="pinTap" data-id="${esc(p.id)}" role="button" tabindex="0" aria-label="${esc(p.name)}, ${un?'unlocked':'locked'}, ${n} ${n===1?'story':'stories'}"`} transform="translate(${p.x},${p.y})${k!==1?` scale(${k})`:''}">
+  <circle r="22" cy="-20" fill="transparent"/>
+  <g class="body"><path d="M0 0C-8-10-15-17-15-26A15 15 0 1 1 15-26C15-17 8-10 0 0z" fill="${fill}" stroke="#fff" stroke-width="2.2"/>
+  <g transform="translate(-8,-34) scale(.68)" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">${icon}</g>
+  ${n?`<circle cx="12" cy="-38" r="8.5" fill="var(--ink)" stroke="#fff" stroke-width="1.6"/><text x="12" y="-34.6" text-anchor="middle" class="pincount">${n>99?'99+':n}</text>`:''}</g>
+  ${opts.nolabel?'':`<rect class="lblbg" x="${-w/2}" y="6" width="${w}" height="18" rx="9"/><text class="lbl" y="18.5" text-anchor="middle">${esc(name)}</text>`}
+ </g>`;
+}
+/* ---------- map zoom & pan ---------- */
+const MAPBASE={x:-10,y:-6,w:380,h:552};const MINW=95;
+function mv(){return S.mapView||MAPBASE}
+function zoomed(){return !!S.mapView&&S.mapView.w<MAPBASE.w-0.5}
+function clampView(v){
+ const w=Math.max(MINW,Math.min(MAPBASE.w,v.w));const h=w*MAPBASE.h/MAPBASE.w;
+ const x=Math.max(MAPBASE.x,Math.min(MAPBASE.x+MAPBASE.w-w,v.x));const y=Math.max(MAPBASE.y,Math.min(MAPBASE.y+MAPBASE.h-h,v.y));
+ return {x,y,w,h};
+}
+function applyView(){
+ const svg=$('#mapsvg');if(!svg)return;const v=mv();
+ svg.setAttribute('viewBox',`${v.x} ${v.y} ${v.w} ${v.h}`);
+ const k=v.w/MAPBASE.w;
+ svg.querySelectorAll('.pin').forEach(g=>g.setAttribute('transform',`translate(${g.dataset.x},${g.dataset.y})${k!==1?` scale(${k})`:''}`));
+ const r=document.querySelector('[data-act="zoomReset"]');if(r)r.hidden=!zoomed();
+}
+function zoomAt(f,cx,cy){
+ const v=mv();const w=v.w/f;
+ const nv=clampView({x:cx-(cx-v.x)*(w/v.w),y:cy-(cy-v.y)*(w/v.w),w});
+ S.mapView=nv.w>=MAPBASE.w-0.5?null:nv;applyView();
+}
+function unitsPerPx(svg,v){return Math.max(v.w/svg.clientWidth,v.h/svg.clientHeight)}
+function toSvg(svg,cx,cy){const pt=svg.createSVGPoint();pt.x=cx;pt.y=cy;return pt.matrixTransform(svg.getScreenCTM().inverse())}
+function bindMap(){
+ const svg=$('#mapsvg');if(!svg||svg.dataset.bound)return;svg.dataset.bound='1';
+ const pts=new Map();let g=null;
+ const begin=()=>{
+  const v={...mv()};const a=[...pts.values()];
+  if(a.length===1)g={mode:'pan',v,sx:a[0].x,sy:a[0].y};
+  else if(a.length>=2){const[m,n]=a;const mid={x:(m.x+n.x)/2,y:(m.y+n.y)/2};const p=toSvg(svg,mid.x,mid.y);
+   g={mode:'pinch',v,d:Math.hypot(m.x-n.x,m.y-n.y)||1,mid,fx:(p.x-v.x)/v.w,fy:(p.y-v.y)/v.h,px:p.x,py:p.y}}
+ };
+ const move=e=>{
+  if(!pts.has(e.pointerId))return;pts.set(e.pointerId,{x:e.clientX,y:e.clientY});if(!g)return;
+  const a=[...pts.values()];
+  if(g.mode==='pan'&&a.length===1){
+   const dx=a[0].x-g.sx,dy=a[0].y-g.sy;if(Math.abs(dx)+Math.abs(dy)>6)S.mapMoved=true;
+   if(!S.mapMoved)return;const u=unitsPerPx(svg,g.v);
+   const nv=clampView({x:g.v.x-dx*u,y:g.v.y-dy*u,w:g.v.w});S.mapView=nv.w>=MAPBASE.w-0.5&&nv.x===MAPBASE.x&&nv.y===MAPBASE.y?null:nv;applyView();
+  }else if(g.mode==='pinch'&&a.length>=2){
+   S.mapMoved=true;const[m,n]=a;const d=Math.hypot(m.x-n.x,m.y-n.y)||1;const mid={x:(m.x+n.x)/2,y:(m.y+n.y)/2};
+   const w=g.v.w/(d/g.d);const h=w*MAPBASE.h/MAPBASE.w;const u=Math.max(w/svg.clientWidth,h/svg.clientHeight);
+   const nv=clampView({x:g.px-g.fx*w-(mid.x-g.mid.x)*u,y:g.py-g.fy*h-(mid.y-g.mid.y)*u,w});
+   S.mapView=nv.w>=MAPBASE.w-0.5?null:nv;applyView();
+  }
+ };
+ const end=e=>{
+  if(!pts.has(e.pointerId))return;pts.delete(e.pointerId);
+  if(pts.size){begin();return}
+  window.removeEventListener('pointermove',move);window.removeEventListener('pointerup',end);window.removeEventListener('pointercancel',end);
+  if(S.mapMoved)S.mapDragAt=Date.now();
+  g=null;S.mapGesture=false;S.mapMoved=false;
+  if(S.mapDirty){S.mapDirty=false;setTimeout(renderView,0)}
+ };
+ svg.addEventListener('pointerdown',e=>{
+  if(e.pointerType==='mouse'&&e.button!==0)return;
+  if(!pts.size){S.mapMoved=false;window.addEventListener('pointermove',move);window.addEventListener('pointerup',end);window.addEventListener('pointercancel',end)}
+  pts.set(e.pointerId,{x:e.clientX,y:e.clientY});S.mapGesture=true;begin();
+ });
+ svg.addEventListener('wheel',e=>{e.preventDefault();const p=toSvg(svg,e.clientX,e.clientY);zoomAt(e.deltaY<0?1.18:1/1.18,p.x,p.y)},{passive:false});
+ svg.addEventListener('click',e=>{
+  if(!S.placing||Date.now()-(S.mapDragAt||0)<350)return;
+  e.stopPropagation();const p=toSvg(svg,e.clientX,e.clientY);
+  S.addForm.x=Math.max(10,Math.min(350,Math.round(p.x)));S.addForm.y=Math.max(30,Math.min(530,Math.round(p.y)));
+  S.placing=false;go('addpin');
+ });
+ svg.addEventListener('dblclick',e=>{e.preventDefault();const p=toSvg(svg,e.clientX,e.clientY);zoomAt(zoomed()&&mv().w<=MINW+1?1/4:2,p.x,p.y)});
+}
+function edgeLabels(){const L=labels();return `<span class="edge t">${esc(L.top)}</span><span class="edge b">${esc(L.bottom)}</span><span class="edge l">${esc(L.left)}</span><span class="edge r">${esc(L.right)}</span>`}
+function viewMap(){
+ const pins=pinsList();
+ const n=pins.filter(p=>isUnlocked(p.id)).length;
+ const g=groupId();const gm=groupMembers(g);
+ const seg=`<div class="mapseg" role="tablist" aria-label="Map or stories"><button role="tab" data-act="mapMode" data-k="map" aria-selected="${S.mapMode!=='feed'}">${ic('map',18,1.7)} Map</button><button role="tab" data-act="mapMode" data-k="feed" aria-selected="${S.mapMode==='feed'}">${ic('landmark',18,1.7)} Stories</button></div>`;
+ if(false)return `<div style="position:absolute;inset:0" class="${S.feedAnim||''}"><div class="feedwrap"><div class="maphud">${seg}</div><div class="pad stack" style="padding-top:4px;padding-bottom:96px">${feedControls('feed')}<div id="feedlist" class="${S.listAnim||''}">${feedList(allPosts(),'feed')}</div></div></div><button class="fab" data-act="addMenu" aria-label="Add a pin or a story">${ic('plus',32,2)}</button></div>`;
+ const body=!Store.loaded.pins?`<p class="muted" style="padding:80px 24px;text-align:center;width:100%">Loading the map…</p>`
+  :`<svg id="mapsvg" class="mapsvg${S.arrive?' arrive':''}${S.placing?' placing':''}" viewBox="${mv().x} ${mv().y} ${mv().w} ${mv().h}" preserveAspectRatio="xMidYMid meet" aria-label="Map of campus. Pinch or use the buttons to zoom.">${MAP_BG}${pins.map((p,i)=>pinMarker(p,{i,k:mv().w/MAPBASE.w})).join('')}</svg>`;
+ return `<div class="mapwrap ${S.feedAnim||''}">
+  ${g&&gm.length>1&&!S.placing?`<div class="maphud"><button class="hudchip" data-act="tab" data-tab="friends">${ic('users',16)} Walking with ${gm.length-1}</button></div>`:''}
+  <div style="position:relative;flex:1;display:flex">${edgeLabels()}${S.placing?`<div class="placebar" role="status"><span>Tap the map where your new pin goes. Pinch to zoom in first.</span><button data-act="cancelPlace">Cancel</button></div>`:''}${body}</div>
+  <div class="zoomctl"><button data-act="zoomIn" aria-label="Zoom in">${ic('plus',18,2)}</button><button data-act="zoomOut" aria-label="Zoom out"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button><button data-act="zoomReset" aria-label="Show the whole map" ${zoomed()?'':'hidden'}>${ic('grid',16,1.8)}</button></div>
+  ${S.placing?'':`<button class="fab" data-act="addMenu" aria-label="Add a pin or a story">${ic('plus',32,2)}</button>`}
+ </div>`;
+}
+/* shared feed controls: sort, who, tags. scope = 'feed' (all stories) or 'pin' (one spot) */
+function feedControls(scope){
+ const F=feedState(scope);
+ const active=(F.sort!=='likes'?1:0)+(F.tag!=='all'?1:0);
+ return `<div class="feedbar">
+   <div class="miniseg" role="group" aria-label="Whose stories">${[['all','Everyone'],['friends','Friends']].map(([k,l])=>`<button data-act="feedWho" data-scope="${scope}" data-k="${k}" aria-pressed="${F.who===k}">${l}</button>`).join('')}</div>
+   <button class="filterbtn ${active?'on':''}" data-act="openFilters" data-scope="${scope}" aria-label="Filter and sort${active?', '+active+' active':''}">${ic('filter',16,1.8)} Filter${active?`<span class="fcount">${active}</span>`:''}</button>
+  </div>
+  ${active?`<p class="tiny muted" style="margin:8px 2px 0">${[F.sort==='new'?'Newest first':'',F.tag!=='all'?TAGS[F.tag].label:''].filter(Boolean).join(' • ')} <button class="linkbtn" data-act="clearFilters" data-scope="${scope}" style="font-size:11px;margin-left:4px">Clear</button></p>`:''}`;
+}
+function feedState(scope){S.feeds=S.feeds||{};return S.feeds[scope]||(S.feeds[scope]={sort:'likes',who:'all',tag:'all'})}
+function filterStories(list,scope){
+ const F=feedState(scope);const fr=new Set(friendIds());
+ let L=list.filter(x=>!isHidden(x)&&pinById(x.pin));
+ if(F.tag!=='all')L=L.filter(x=>x.tags.includes(F.tag));
+ if(F.who==='friends')L=L.filter(x=>fr.has(x.by));
+ const lk=x=>likeCount(x.id);
+ L.sort(F.sort==='new'?(a,b)=>(b.at||0)-(a.at||0):(a,b)=>lk(b)-lk(a)||(b.at||0)-(a.at||0));
+ return L;
+}
+function feedList(list,scope){
+ const L=filterStories(list,scope);
+ if(!L.length)return `<p class="muted small" style="padding:22px 4px">${feedState(scope).who==='friends'?'None of your friends have shared a story here yet.':'No stories match yet.'}</p>`;
+ return L.map(x=>scope==='feed'?feedCard(x):storyCard(x)).join('');
+}
+/* A sneak-peek card: headline + what it's about + teaser media, never the full story. */
+function peekCard(x,compact){
+ const tm=teaserMedia(x,compact?64:110);
+ return `<div class="peek">${tm}<div class="peektxt"><p class="peekhead">${esc(x.headline)}</p>${x.peek?`<p class="small muted" style="margin-top:3px">${esc(x.peek)}</p>`:''}
+  <p class="tiny muted" style="margin-top:6px">by @${esc(nameOf(x.by,x.byName))} • ${ic('heart',11,2)} ${likeCount(x.id)}</p>
+  <div class="tagrow">${x.tags.map(t=>`<span class="tag" style="background:${TAGS[t].bg}">${TAGS[t].label}</span>`).join('')}</div></div></div>`;
+}
+function teaserMedia(x,h){
+ if(x.teaser==='photo'&&x.photo){const hh=hashStr(x.id);return `<div class="peekmedia" style="height:${h}px"><div class="zoom" style="background-image:url('${x.photo}');background-position:${20+hh%60}% ${20+(hh>>3)%60}%"></div></div>`}
+ return '';
+}
+function feedCard(x){
+ const p=pinById(x.pin);const un=isUnlocked(x.pin);
+ return `<button class="feedcard" data-act="${un?'openStory':'pinTap'}" data-id="${esc(un?x.id:x.pin)}" data-pin="${esc(x.pin)}">
+  <p class="tiny" style="display:flex;align-items:center;gap:6px;margin-bottom:8px">${ic(un?'unlock':'lock',14,1.8)} ${esc(p.name)}${un?'':' • walk there to read it'}</p>
+  ${peekCard(x)}</button>`;
+}
+/* ---------- collection ---------- */
+function catArt(cat,size=40){const c=PIN_CATS[cat]||PIN_CATS.landmark;return `<div class="catart" style="background:${c.color}">${ic(c.icon,size,1.5)}</div>`}
+function head(title,back,center=true){return `<div class="screenhead ${center?'center':''}">${back?`<button class="iconbtn" data-act="${back}" aria-label="Back">${ic('back',32,1.8)}</button>`:''}<h1>${title}</h1></div>`}
+function viewCollection(){
+ const pins=pinsList();const mine=unlockedList(S.uid);
+ const got=mine.map(u=>({u,p:pinById(u.pin)})).filter(x=>x.p).sort((a,b)=>b.u.at-a.u.at);
+ return `${head('Your Collection','toProfile')}<div class="pad stack">
+  <div class="card"><div class="row"><span>${got.length} spot${got.length===1?'':'s'} collected</span><span class="spacer"></span><span class="small green">${pins.length?Math.round(got.length/pins.length*100):0}% of the room</span></div><div class="bar" style="margin-top:10px"><i style="width:${pins.length?got.length/pins.length*100:0}%"></i></div></div>
+  ${got.length?`<div class="grid">${got.map(({u,p})=>{
+   const c=PIN_CATS[p.cat]||PIN_CATS.landmark;const ph=heroPhotos(p)[0]||null;
+   return `<button class="tile" data-act="pinTap" data-id="${esc(p.id)}">
+    <div class="art" style="${ph?`background-image:url('${ph}')`:`background:${c.color}`}">${ph?'':ic(c.icon,34,1.5)}</div>
+    <div class="cap2"><b>${esc(p.name)}</b><span class="tiny green">Unlocked ${ago(u.at)}</span></div></button>`}).join('')}</div>`
+  :`<div class="card" style="text-align:center"><div class="iconcircle" style="margin:6px auto 12px">${ic('map',40,1.4)}</div><h3>Nothing collected yet</h3><p class="small muted" style="margin:6px 0 14px">Unlock a spot on the map and it’ll show up here.</p><button class="btn" data-act="tab" data-tab="map">Go to the map</button></div>`}
+ </div>`;
+}
+
+/* ---------- challenges + leaderboard ---------- */
+function viewChallenges(){
+ const s=statsFor(S.uid);let inner='';
+ if(S.chalTab==='you'){
+  inner=CHALLENGES.map(c=>{const t=chalTarget(c,s);const v=Math.min(c.val(s),t);const done=v>=t&&(c.id!=='complete'||s.total>0);
+   return `<div class="card chal"><div class="iconcircle">${ic(c.icon,44,1.4)}</div><div><h3>${c.name}</h3><p class="desc">${c.desc}${done?' Earned!':''}</p><div class="prog"><span class="bar"><i style="width:${t?v/t*100:0}%"></i></span><b>${v} / ${t}</b></div></div></div>`}).join('');
+ }else if(S.chalTab==='board'){
+  const fr=new Set(friendIds());
+  const list=players().map(p=>({...p,s:statsFor(p.id)})).filter(p=>p.s.posts>0||p.id===S.uid).sort((a,b)=>b.s.likes-a.s.likes||b.s.posts-a.s.posts);
+  inner=`<p class="small muted">Storytellers ranked by the likes their stories have received.</p><div class="card">${list.map((p,i)=>`<div class="lb ${p.id===S.uid?'me':''}"><span class="rank">${i<3?['🥇','🥈','🥉'][i]:i+1}</span>${avatar(p.id,p.username,'sm')}<span style="flex:1">@${esc(p.username)}${p.id===S.uid?' <span class="tiny muted">(you)</span>':fr.has(p.id)?' <span class="tiny green">friend</span>':''}<span class="tiny muted" style="display:block">${p.s.posts} ${p.s.posts===1?'story':'stories'}</span></span><span class="lbheart">${ic('heart',16,2)} ${p.s.likes}</span></div>`).join('')||'<p class="small muted">No stories yet.</p>'}</div>`;
+ }else{
+  const top=allPosts().filter(x=>!isHidden(x)&&pinById(x.pin)).sort((a,b)=>likeCount(b.id)-likeCount(a.id)||(b.at||0)-(a.at||0)).slice(0,10);
+  inner=`<p class="small muted">The most-liked stories on the map right now.</p>${top.map((x,i)=>{const un=isUnlocked(x.pin);return `<button class="feedcard" data-act="${un?'openStory':'pinTap'}" data-id="${esc(un?x.id:x.pin)}" data-pin="${esc(x.pin)}"><p class="tiny" style="display:flex;gap:8px;align-items:center;margin-bottom:8px"><b style="font-weight:400;font-size:15px">${i+1}</b>${ic(un?'unlock':'lock',14,1.8)} ${esc(pinById(x.pin).name)}</p>${peekCard(x,true)}</button>`}).join('')||'<p class="small muted">No stories yet.</p>'}`;
+ }
+ return `${head('Challenges',null,false)}<div class="pad stack">
+  <div class="pilltabs">${[['you','For You'],['board','Leaderboard'],['top','Top stories']].map(([k,l])=>`<button data-act="chalTab" data-k="${k}" aria-pressed="${S.chalTab===k}" style="font-size:15px">${l}</button>`).join('')}</div>
+  <div class="stack ${S.chalDir||''}" style="margin-top:24px">${inner}</div></div>`;
+}
+
+/* ---------- profile ---------- */
+function viewProfile(){
+ const s=statsFor(S.uid);const e=new Set(earned(S.uid));
+ const shown=S.allBadges?CHALLENGES:CHALLENGES.filter(c=>e.has(c.id));
+ const mine=allPosts().filter(x=>x.by===S.uid).sort((a,b)=>(b.at||0)-(a.at||0));
+ const likedIds=Object.values(D.likes||{}).filter(l=>l.uid===S.uid).sort((a,b)=>(b.at||0)-(a.at||0)).map(l=>l.post);
+ const liked=likedIds.map(id=>(D.posts||{})[id]?normStory(id,D.posts[id]):null).filter(x=>x&&pinById(x.pin));
+ const myComments=Object.entries(D.replies||{}).map(([id,v])=>({id,...v})).filter(r=>r.by===S.uid).sort((a,b)=>(b.at||0)-(a.at||0));
+ return `${head('Your Profile')}<div class="pad">
+  <div style="text-align:center">
+   <button data-act="pickAvatar" aria-label="Change profile photo" style="display:block;margin:0 auto;border-radius:50%">${avatar(S.uid,S.me.username,'','width:120px;height:120px;font-size:44px')}</button>
+   <input type="file" accept="image/*" id="av-file" hidden>
+   <p style="font-size:17px;margin-top:10px">@${esc(S.me.username)}</p>
+  </div>
+  <div class="stats" style="margin:16px 19px 0">
+   <button data-act="tab" data-tab="collection"><b>${s.unlocked}</b><span>Pins Visited</span></button>
+   <div><b>${s.posts}</b><span>Stories</span></div>
+   <div><b>${s.likes}</b><span>Likes</span></div>
+  </div>
+  <div class="sectionhead"><h2>Your activity</h2></div>
+  <div class="pilltabs actabs">${[['stories','Stories',mine.length],['liked','Liked',liked.length],['comments','Comments',myComments.length]].map(([k,l,n])=>`<button data-act="actTab" data-k="${k}" aria-pressed="${(S.actTab||'stories')===k}">${l} <span class="tiny">${n}</span></button>`).join('')}</div>
+  <div class="actlist ${S.actDir||''}">${activityList(S.actTab||'stories',mine,liked,myComments)}</div>
+  <div class="sectionhead"><h2>Badges</h2><button class="seeall" data-act="allBadges">${S.allBadges?'Show earned':'See All'} ${ic('arrowr',20,1.6)}</button></div>
+  ${shown.length?`<div class="badgegrid">${shown.map(c=>`<div><div class="badgec ${e.has(c.id)?'':'dim'}">${ic(c.icon,42,1.4)}</div><b>${c.name}</b><span>${e.has(c.id)?c.desc:'Not earned yet'}</span></div>`).join('')}</div>`:'<p class="small muted" style="margin:0 4px">No badges yet. Unlock spots and share stories to earn your first one.</p>'}
+  <div class="stack" style="margin-top:22px">
+   <button class="btn block ghost" data-act="tab" data-tab="collection">${ic('grid',20)} Your collection</button>
+   <button class="btn block ghost" data-act="help">${ic('help',20)} How to play</button>
+   <button class="btn block ghost" data-act="qr">${ic('qr',20)} QR codes</button>
+   <button class="btn block ghost" data-act="switchUser">${ic('users',20)} Switch account</button>
+  </div>
+ </div>`;
+}
+
+/* ---------- friends tab ---------- */
+function activityList(tab,mine,liked,comments){
+ const where=x=>esc((pinById(x.pin)||{name:'Removed spot'}).name);
+ const open=x=>isUnlocked(x.pin)?`data-act="openStory" data-id="${esc(x.id)}" data-pin="${esc(x.pin)}"`:`data-act="pinTap" data-id="${esc(x.pin)}"`;
+ if(tab==='stories'){
+  if(!mine.length)return '<p class="small muted actempty">No stories yet. Tap + on the map to share one.</p>';
+  return mine.map(x=>`<div class="actrow"><button class="actmain" ${open(x)}><p>${esc(x.headline)}</p><p class="tiny muted">${where(x)} • ${ago(x.at)} • ${ic('heart',11,2)} ${likeCount(x.id)} • ${ic('chat',11,2)} ${repliesOf(x.id).length}</p></button><button class="iconbtn" data-act="delStory" data-id="${esc(x.id)}" aria-label="Delete this story" style="width:36px;height:36px">${ic('trash',18,1.7)}</button></div>`).join('');
+ }
+ if(tab==='liked'){
+  if(!liked.length)return '<p class="small muted actempty">Stories you like will show up here.</p>';
+  return liked.map(x=>`<div class="actrow"><button class="actmain" ${open(x)}><p>${esc(x.headline)}</p><p class="tiny muted">by @${esc(nameOf(x.by,x.byName))} • ${where(x)} • ${ic('heart',11,2)} ${likeCount(x.id)}</p></button><button class="iconbtn act heart on" data-act="like" data-id="${esc(x.id)}" aria-label="Unlike" style="width:36px;height:36px">${ic('heart',18,1.7)}</button></div>`).join('');
+ }
+ if(!comments.length)return '<p class="small muted actempty">Comments you leave on stories will show up here.</p>';
+ return comments.map(r=>{const x=(D.posts||{})[r.post]?normStory(r.post,D.posts[r.post]):null;
+  return `<div class="actrow"><button class="actmain" ${x&&pinById(x.pin)?open(x):'disabled'}><p>“${esc(r.text)}”</p><p class="tiny muted">${x?'on '+esc(x.headline)+' • '+where(x):'on a deleted story'} • ${ago(r.at)}</p></button><button class="iconbtn" data-act="delReply" data-id="${esc(r.id)}" aria-label="Delete this comment" style="width:36px;height:36px">${ic('trash',18,1.7)}</button></div>`}).join('');
+}
+function viewFriends(){
+ const g=groupId();const gm=groupMembers(g);
+ const inc=incomingReqs();const out=outgoingReqs();
+ const fr=friendIds().map(id=>({id,p:player(id)})).filter(x=>x.p).sort((a,b)=>a.p.username.localeCompare(b.p.username));
+ const invited=new Set(Object.values(D.invites||{}).filter(i=>i.group===g&&i.status==='pending'&&i.from===S.uid).map(i=>i.to));
+ const inWalk=new Set(gm.map(m=>m.id));
+ const row=(id,name,right)=>`<div class="member">${avatar(id,name,'sm')}<span style="flex:1">@${esc(name)}</span>${right}</div>`;
+ return `${head('Friends',null,false)}<div class="pad friendspage">
+  ${inc.length?`<div class="card"><h3 style="margin-bottom:6px">Friend requests</h3>${inc.map(r=>row(r.from,nameOf(r.from),`<button class="btn sm" data-act="acceptFriend" data-id="${esc(r.from)}">Accept</button><button class="btn sm ghost" data-act="declineFriend" data-id="${esc(r.from)}">Decline</button>`)).join('')}</div>`:''}
+  ${myInvites().length?`<div class="card"><h3 style="margin-bottom:6px">Walk invites</h3>${myInvites().map(i=>row(i.from,nameOf(i.from),`<button class="btn sm" data-act="acceptInvite" data-id="${esc(i.id)}">Join</button><button class="btn sm ghost" data-act="declineInvite" data-id="${esc(i.id)}">Decline</button>`)).join('')}</div>`:''}
+  <div class="card">
+   <div class="row"><h3 style="flex:1">Group walk</h3>${g?`<button class="btn sm ghost" data-act="leaveGroup">Leave walk</button>`:`<button class="btn sm" data-act="startGroup">Start a walk</button>`}</div>
+   ${g?`<p class="small muted" style="margin:6px 0 4px">${gm.length>1?'A spot unlocks for everyone as soon as all of you scan it.':'Invite friends below to start walking together.'}</p>${gm.map(m=>row(m.id,m.username,m.id===S.uid?'<span class="tiny muted">You</span>':'<span class="tiny green">Walking</span>')).join('')}`
+     :`<p class="small muted" style="margin-top:6px">Explore with friends. On a group walk, a spot unlocks for everyone once all of you scan it.</p>`}
+  </div>
+  <div class="sectionhead"><h2>Your friends</h2><button class="btn sm soft" data-act="addFriend">Add friend</button></div>
+  <div class="card">${fr.length?fr.map(f=>row(f.id,f.p.username,inWalk.has(f.id)?'<span class="tiny green">On your walk</span>':invited.has(f.id)?'<span class="tiny muted">Invited</span>':`<button class="btn sm ghost" data-act="inviteUser" data-id="${esc(f.id)}">Invite to walk</button>`)).join('')
+    :'<p class="small muted">No friends yet. Add classmates by username, and they’ll show up here once they accept.</p>'}</div>
+  ${out.length?`<div class="card"><h3 style="margin-bottom:6px">Waiting to accept</h3>${out.map(r=>row(r.to,nameOf(r.to),`<button class="btn sm ghost" data-act="cancelFriend" data-id="${esc(r.to)}">Cancel</button>`)).join('')}</div>`:''}
+ </div>`;
+}
+
+/* ---------- add ---------- */
+function freeSpares(){const used=new Set(pinsList().map(p=>p.id));const a=[];for(let i=1;i<=spareCount();i++){if(!used.has('spare'+i))a.push('spare'+i)}return a}
+function viewAdd(){
+ const un=pinsList().filter(p=>isUnlocked(p.id));
+ const free=freeSpares();
+ return `${head('Add')}<div class="pad stack">
+  <div class="card stack">
+   <div class="row"><span class="iconcircle" style="width:56px;height:56px">${ic('chat',28,1.5)}</span><div><h3>Create a new post</h3><p class="desc tiny green">At a spot you’ve unlocked</p></div></div>
+   ${un.length?un.map(p=>`<button class="locfield" style="min-height:58px;font-size:16px;width:100%;text-align:left" data-act="compose" data-id="${esc(p.id)}">${ic('pin',24,1.7)}${esc(p.name)}</button>`).join(''):'<p class="small">Unlock a spot first: tap a pin on the map, walk to its QR code and scan it.</p>'}
+  </div>
+  <div class="card stack">
+   <div class="row"><span class="iconcircle" style="width:56px;height:56px">${ic('pin',28,1.5)}</span><div><h3>Create a new pin</h3><p class="desc tiny green">${free.length} spare QR code${free.length===1?'':'s'} left</p></div></div>
+   <p class="small muted">Noticed something nobody has pinned? Grab a spare QR code, create the pin here, then stick the code up at that spot.</p>
+   ${free.length?`<button class="btn block" data-act="startPin">Create a pin</button>`:'<p class="small">All spare QR codes are in use. Ask the host for more.</p>'}
+  </div>
+ </div>`;
+}
+function photoTiles(prefix,store){return `<div class="phototiles" id="${prefix}-tiles">${store.photo?`<div style="position:relative"><img src="${store.photo}" alt="Your photo"><button type="button" class="btn sm ghost" data-act="clearPhoto" data-p="${prefix}" style="position:absolute;top:8px;right:8px">Remove</button></div>`:''}<button type="button" class="addphoto" data-act="pickPhoto" data-p="${prefix}">${ic('plus',26,1.6)}<span>${store.photo?'Replace Photo':'Add Photo'}</span></button></div><input type="file" accept="image/*" id="${prefix}-file" hidden>`}
+function bindPhoto(prefix,store){
+ const inp=$('#'+prefix+'-file');if(!inp)return;
+ const redraw=()=>{const t=$('#'+prefix+'-tiles');if(t)t.outerHTML=photoTiles(prefix,store).replace(/<input[^>]*>$/,'')};
+ inp.addEventListener('change',async()=>{const file=inp.files&&inp.files[0];if(!file)return;try{store.photo=await compress(file);redraw()}catch(e){toast('That photo couldn’t be read. Try another one.')}inp.value=''});
+ store._show=redraw;
+}
+function storyFormHtml(f){
+ const tags=f.tags||[];const photos=f.photos||(f.photos=[]);
+ const tm=photos.length&&f.teaser!=='text'?'photo':'text';f.teaser=tm;
+ const opt=(k,l,ok)=>`<button type="button" class="chip" data-act="sfTeaser" data-k="${k}" aria-pressed="${tm===k}" ${ok?'':'disabled'} style="background:var(--surface);border-color:${tm===k?'var(--line-dark)':'var(--line)'};max-width:none;flex:1">${l}</button>`;
+ return `<div class="card" style="background:var(--pill);border-color:var(--line)">
+   <div class="row"><span style="flex:1">Need an idea?</span><button type="button" class="btn sm" data-act="sfPrompt">${ic('sparkle',16,1.8)} Give me a prompt</button></div>
+   <p class="small" id="sf-prompt" style="margin-top:8px;${f.prompt?'':'display:none'}">${f.prompt?esc(f.prompt[0]):''}</p>
+   <button type="button" class="linkbtn" data-act="sfUsePrompt" id="sf-use" style="margin-top:6px;${f.prompt?'':'display:none'}">Use this prompt</button>
+  </div>
+  <div><label class="flabel" for="sf-head">Headline</label><input class="field" id="sf-head" maxlength="70" placeholder="The bench where I made my first friend" value="${esc(f.headline||'')}"></div>
+  <div><div class="dash"><textarea id="sf-text" maxlength="1200" placeholder="Your full story" aria-label="Your full story" style="min-height:170px">${esc(f.text||'')}</textarea><span class="count" id="sf-count">0 / 1200</span></div>
+   <p class="hint">Your first sentence is the sneak peek: people see it with your headline before they walk over. The rest stays hidden until they scan.</p></div>
+  <div><span class="flabel">Tags <span class="tiny muted">(up to 3)</span></span><div class="chiprow" style="flex-wrap:wrap" id="sf-tags">${Object.entries(TAGS).map(([k,t])=>`<button type="button" class="chip" data-act="sfTag" data-k="${k}" aria-pressed="${tags.includes(k)}" style="background:${t.bg}">${ic(t.icon,18,1.7)}<span>${t.label}</span></button>`).join('')}</div></div>
+  <div><span class="flabel">Photos <span class="tiny muted">(optional, up to 4)</span></span>
+   <div class="phototiles" id="sf-media">${mediaTiles(f)}</div>
+   <input type="file" accept="image/*" id="sf-photo" multiple hidden></div>
+  <div><span class="flabel">What people see before they walk there</span>
+   <div class="row" style="gap:8px">${opt('text','Headline only',true)}${opt('photo','Part of a photo',photos.length>0)}</div>
+   <p class="hint" id="sf-teaserhint">${tm==='photo'?'They’ll see a zoomed-in piece of your first photo, plus your headline and first sentence.':'They’ll see your headline and first sentence.'}</p></div>`;
+}
+function mediaTiles(f){
+ const ph=f.photos||[];
+ return ph.map((src,i)=>`<div class="ptile"><img src="${src}" alt="Photo ${i+1}">${i===0?'<span class="pfirst">Cover</span>':''}<button type="button" class="pdel" data-act="sfClear" data-i="${i}" aria-label="Remove photo ${i+1}">${ic('x',14,2.2)}</button></div>`).join('')
+  +(ph.length<4?`<button type="button" class="addphoto" data-act="sfPick">${ic('camera',26,1.6)}<span>${ph.length?'Add more':'Add Photos'}</span><span class="tiny">${ph.length}/4</span></button>`:'');
+}
+function bindStoryForm(f){
+ f.photos=f.photos||[];
+ const t=$('#sf-text');if(t){const u=()=>{$('#sf-count').textContent=t.value.length+' / 1200';f.text=t.value};t.addEventListener('input',u);u()}
+ const h=$('#sf-head');if(h)h.addEventListener('input',()=>{f.headline=h.value});
+ const ph=$('#sf-photo');if(ph)ph.addEventListener('change',async()=>{
+  const files=[...(ph.files||[])];ph.value='';if(!files.length)return;
+  const room=4-f.photos.length;if(files.length>room)toast(`Up to ${4} photos. Added the first ${room}.`);
+  for(const file of files.slice(0,room)){try{f.photos.push(await compress(file,560,44000))}catch(e){toast('One photo couldn’t be read. Try another one.')}}
+  if(f.photos.length&&f.teaser!=='text')f.teaser='photo';
+  if(f.photos.length&&!f.teaserTouched)f.teaser='photo';
+  redrawStoryForm(f);
+ });
+}
+function redrawStoryForm(f){
+ const m=$('#sf-media');if(m)m.innerHTML=mediaTiles(f);
+ if(!f.photos.length)f.teaser='text';
+ document.querySelectorAll('[data-act="sfTeaser"]').forEach(b=>{const k=b.dataset.k;b.disabled=k==='photo'&&!f.photos.length;b.setAttribute('aria-pressed',f.teaser===k);b.style.borderColor=f.teaser===k?'var(--line-dark)':'var(--line)'});
+ const hh=$('#sf-teaserhint');if(hh)hh.textContent=f.teaser==='photo'?'They’ll see a zoomed-in piece of your first photo, plus your headline and first sentence.':'They’ll see your headline and first sentence.';
+}
+function readStoryForm(f){
+ ['headline','text'].forEach(k=>{f[k]=(f[k]||'').trim()});
+ if(!f.headline)return 'Give your story a headline.';
+ if(!f.text)return 'Write your story. Its first sentence becomes the sneak peek.';
+ if([f.headline,f.text].some(hasProfanity))return 'Your story includes a word that isn’t allowed. Remove it to post.';
+ if(!(f.tags&&f.tags.length))return 'Pick at least one tag so people can find your story.';
+ return '';
+}
+async function storyRecord(f,pin){
+ const photos=(f.photos||[]).slice(0,4);
+ return {pin,headline:f.headline,text:f.text||'',tags:(f.tags||[]).slice(0,3),photos,photo:photos[0]||null,teaser:photos.length&&f.teaser==='photo'?'photo':'text',by:S.uid,at:Date.now()};
+}
+function viewCreatePin(){
+ const f=S.addForm;const free=freeSpares();
+ if(f.spare&&!free.includes(f.spare))f.spare=null;
+ if(!f.spare)f.spare=free[0]||null;
+ return `${head('Create a New Pin','cancelPin')}<div class="pad stack">
+  ${!f.spare?'<p class="err">All spare QR codes are in use.</p>':''}
+  <label class="locfield">${ic('pin',30,1.7)}<input id="pf-name" maxlength="40" placeholder="Name this spot" value="${esc(f.name||'')}" aria-label="Spot name"></label>
+  <div><span class="flabel">Location</span>
+   <div class="row" style="background:var(--surface);border:1.5px solid var(--line);border-radius:15px;padding:8px;gap:12px">
+    <div style="width:96px;height:96px;border-radius:12px;overflow:hidden;background:var(--m-ground);flex:none">${f.x!=null?`<svg viewBox="${f.x-70} ${f.y-70} 140 140" width="96" height="96" aria-hidden="true">${MAP_BG}${pinMarker({id:'_new',name:'',x:f.x,y:f.y},{nolabel:true,inert:true,forceUnlocked:true,k:.5})}</svg>`:''}</div>
+    <div style="flex:1"><p>${f.x!=null?'Placed on the map':'Not placed yet'}</p><p class="tiny muted" style="margin-top:2px">${f.x!=null?'Near the '+esc(nearEdge(f.x,f.y)):'Choose where it goes'}</p></div>
+    <button class="btn sm soft" data-act="movePin">${f.x!=null?'Move':'Place'}</button>
+   </div></div>
+  <div><label class="flabel" for="pf-spare">Spare QR code you’ll stick up</label>
+   <div class="picker" style="min-height:58px;font-size:16px"><span class="ico" style="background:var(--icon-bg)">${ic('qr',26,1.6)}</span><span id="pf-spare-face">Spare QR ${f.spare?f.spare.replace('spare','#'):''}</span><span class="caret"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M4 7h16l-8 10z" fill="currentColor"/></svg></span><select id="pf-spare">${free.map(s=>`<option value="${s}" ${f.spare===s?'selected':''}>Spare QR ${s.replace('spare','#')}</option>`).join('')}</select></div>
+   <p class="hint">Every new pin starts with your story, so whoever scans this code finds something waiting.</p></div>
+  <h2 style="margin-top:8px">Your story here</h2>
+  ${storyFormHtml(f)}
+  <p class="err" id="pf-err"></p>
+  <button class="btn block" data-act="submitPin" ${f.spare?'':'disabled'}>Drop pin</button>
+ </div>`;
+}
+function afterCreatePin(){
+ const f=S.addForm;
+ const el=$('#pf-name');if(el)el.addEventListener('input',()=>{f.name=el.value});
+ const sp=$('#pf-spare');if(sp)sp.addEventListener('change',()=>{f.spare=sp.value;$('#pf-spare-face').textContent='Spare QR '+sp.value.replace('spare','#')});
+ bindStoryForm(f);
+}
+function nearEdge(x,y){const L=labels();const d=[[y,L.top],[530-y,L.bottom],[x,L.left],[350-x,L.right]].sort((a,b)=>a[0]-b[0]);return String(d[0][1]).toLowerCase()}
+function drawPfMarker(){const f=S.addForm;const g=$('#pf-marker');if(!g)return;g.innerHTML=f.x!=null?pinMarker({id:'_new',name:'',cat:f.cat||'landmark',x:f.x,y:f.y},{nolabel:true,inert:true,forceUnlocked:true}):''}
+function compress(file,max=760,limit=160000){return new Promise((res,rej)=>{const fr=new FileReader();fr.onerror=rej;fr.onload=()=>{const img=new Image();img.onerror=rej;img.onload=()=>{let w=img.naturalWidth,h=img.naturalHeight;const k=Math.min(1,max/Math.max(w,h));w=Math.round(w*k);h=Math.round(h*k);const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);let q=.75,d=c.toDataURL('image/jpeg',q);while(d.length>limit&&q>.3){q-=.08;d=c.toDataURL('image/jpeg',q)}res(d)};img.src=fr.result};fr.readAsDataURL(file)})}
+
+/* ---------- create story page ---------- */
+function openCompose(pin){S.page={type:'compose',pin,form:{teaser:'text',tags:[]}};renderPage();const el=$('#pagelayer').firstElementChild;if(el)el.classList.add('enter')}
+function renderPage(){
+ const L=$('#pagelayer');const pg=S.page;
+ if(!pg){L.innerHTML='';return}
+ if(pg.type==='scan'){L.innerHTML=scanHtml(pg);return}
+ if(pg.type==='accounts'){L.innerHTML=accountsHtml();return}
+ const p=pinById(pg.pin);if(!p){S.page=null;L.innerHTML='';return}
+ L.innerHTML=`<div class="layer">${head('Share a Story','closePage')}<div class="pad stack">
+  <div class="locfield">${ic('pin',30,1.7)}<span>${esc(p.name)}</span></div>
+  ${storyFormHtml(pg.form)}
+  <p class="err" id="c-err"></p>
+  <button class="btn block" data-act="submitPost">Post story</button>
+ </div></div>`;
+ bindStoryForm(pg.form);
+}
+function openScan(target){S.page={type:'scan',pin:target};renderPage();const el=$('#pagelayer').firstElementChild;if(el)el.classList.add('enter');startCamera()}
+function scanHtml(pg){
+ const pins=pinsList().filter(p=>!/^spare\d+$/.test(p.id));
+ if(pg.pin){pins.sort((a,b)=>(b.id===pg.pin)-(a.id===pg.pin))}
+ const spares=Array.from({length:spareCount()},(_,i)=>'spare'+(i+1));
+ const row=(id,name,icon,color,state)=>`<button class="locfield simrow" data-act="simScan" data-id="${esc(id)}" style="${id===pg.pin?'border-width:2.5px':''}"><span class="simico" style="background:${color}">${ic(icon,20,1.8)}</span><span class="simname">${esc(name)}</span><span class="tiny ${state==='Unlocked'?'green':'muted'}">${state}</span></button>`;
+ return `<div class="layer">${head('Scan QR Code','closePage')}<div class="pad stack">
+  <div class="viewfinder" id="scanbox"><video id="scanvideo" playsinline muted></video><canvas id="scancanvas" hidden></canvas>
+   <span class="vf-c tl"></span><span class="vf-c tr"></span><span class="vf-c bl"></span><span class="vf-c br"></span>
+   <div class="vf-idle">${ic('qr',56,1.3)}</div></div>
+  <p class="small" id="scanstatus" style="text-align:center" aria-live="polite">Starting the camera…</p>
+  <div class="card stack">
+   <div><h3>No QR codes yet?</h3><p class="small muted" style="margin-top:4px">Test mode: tap a spot to pretend you scanned its QR code.</p></div>
+   ${pins.map(p=>{const c=PIN_CATS[p.cat]||PIN_CATS.landmark;return row(p.id,p.name,c.icon,c.color,isUnlocked(p.id)?'Unlocked':'Locked')}).join('')}
+   ${spares.map((id,i)=>{const p=pinById(id);return p?row(id,p.name,(PIN_CATS[p.cat]||PIN_CATS.landmark).icon,(PIN_CATS[p.cat]||PIN_CATS.landmark).color,isUnlocked(id)?'Unlocked':'Locked'):row(id,'Spare QR #'+(i+1),'qr','#B9BFB2','Empty')}).join('')}
+  </div>
+  <div class="card stack"><label class="flabel" for="scancode" style="font-size:16px;margin:0">Or type the code under a QR</label><div class="row"><input class="field" id="scancode" autocapitalize="none" autocomplete="off" placeholder="e.g. geisel"><button class="btn sm" data-act="submitScanCode" style="min-height:48px;border-radius:15px">Unlock</button></div><p class="err" id="scan-err"></p></div>
+ </div></div>`;
+}
+async function startCamera(){
+ const st=()=>$('#scanstatus');const v=$('#scanvideo');
+ const fail=msg=>{if(st())st().textContent=msg};
+ if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){fail('This browser can’t use the camera here. Use test mode below.');return}
+ try{
+  const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false});
+  if(!S.page||S.page.type!=='scan'){stream.getTracks().forEach(t=>t.stop());return}
+  S.cam=stream;v.srcObject=stream;await v.play();
+  $('#scanbox').classList.add('live');fail('Point your camera at a spot’s QR code.');
+  const det=('BarcodeDetector' in window)?new BarcodeDetector({formats:['qr_code']}):null;
+  const cv=$('#scancanvas');const ctx=cv.getContext('2d',{willReadFrequently:true});
+  const tick=async()=>{
+   if(!S.cam)return;
+   try{
+    let text=null;
+    if(det){const r=await det.detect(v);if(r&&r[0])text=r[0].rawValue}
+    else if(window.jsQR&&v.videoWidth){cv.width=Math.min(640,v.videoWidth);cv.height=Math.round(cv.width*v.videoHeight/v.videoWidth);ctx.drawImage(v,0,0,cv.width,cv.height);const r=jsQR(ctx.getImageData(0,0,cv.width,cv.height).data,cv.width,cv.height);if(r)text=r.data}
+    if(text){const code=String(text).split('#').pop().trim().toLowerCase();if(pinById(code)||/^spare\d+$/.test(code)){finishScan(code);return}fail('That QR code isn’t one of this room’s spots.')}
+   }catch(e){}
+   S.camLoop=setTimeout(tick,250);
+  };
+  tick();
+ }catch(e){fail(e&&e.name==='NotAllowedError'?'Camera access is blocked. Use test mode below, or open the QR link with your phone’s camera app.':'The camera isn’t available here. Use test mode below, or your phone’s camera app.')}
+}
+function stopCamera(){clearTimeout(S.camLoop);if(S.cam){S.cam.getTracks().forEach(t=>t.stop());S.cam=null}}
+function finishScan(code){stopCamera();S.page=null;$('#pagelayer').innerHTML='';scan(code)}
+/* ---------- spot page: its stories ---------- */
+function renderPin(){
+ const p=pinById(S.pin);const L=$('#pinlayer');
+ if(!p){L.innerHTML='';S.pin=null;return}
+ const keep=L.firstElementChild?L.firstElementChild.scrollTop:0;const chipKeep=L.querySelector('.chiprow')?L.querySelector('.chiprow').scrollLeft:0;
+ const posts=postsAt(p.id).filter(x=>!isHidden(x));
+ const photos=heroPhotos(p);
+ const likes=pinLikes(p.id);
+ const creator=p.by&&p.by!=='seed'?p.by:null;
+ L.innerHTML=`<div class="layer">
+  <div class="layerhead"><button class="iconbtn" data-act="closePin" aria-label="Back to map" style="width:44px;height:44px">${ic('back',34,1.8)}</button></div>
+  <div class="hero">${photos.length?photos.map(ph=>`<img src="${ph}" alt="">`).join(''):catArt(p.cat,80)}</div>
+  <div class="pinbody">
+   <div class="row" style="align-items:flex-start"><h1 style="flex:1">${esc(p.name)}</h1><span class="lockline" style="margin-top:6px">${ic('unlock',20,1.8)} Unlocked</span></div>
+   <p class="small muted" style="margin-top:8px">${posts.length} ${posts.length===1?'story':'stories'} • ${ic('heart',12,2)} ${likes} ${likes===1?'like':'likes'}</p>
+   ${creator?`<p class="small row" style="gap:6px;margin-top:6px;color:var(--accent)">${ic('crown',16)} Pinned by @${esc(nameOf(creator))}</p>`:''}
+   <button class="btn block" style="margin-top:16px" data-act="compose" data-id="${esc(p.id)}">${ic('plus',20,2)} Share your story here</button>
+   <div style="margin-top:22px">${feedControls('pin')}</div>
+   <div id="pinlist" style="margin-top:10px" class="${S.listAnim||''}">${feedList(posts,'pin')}</div>
+   ${canDelete(p)?`<button class="btn block ghost" style="margin-top:22px;color:var(--heart)" data-act="delPin" data-id="${esc(p.id)}">${ic('trash',18,1.7)} Delete this pin and its stories</button>`:''}
+  </div></div>`;
+ L.firstElementChild.scrollTop=keep;const cr=L.querySelector('.chiprow');if(cr)cr.scrollLeft=chipKeep;
+ if(S.scrollStory){const el=document.getElementById('story-'+S.scrollStory);S.scrollStory=null;if(el)setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),60)}
+}
+/* A full story, shown once the spot is unlocked. */
+function storyCard(x){
+ const likes=likesOf(x.id);const liked=likes.some(l=>l.uid===S.uid);
+ const reps=repliesOf(x.id);const name=nameOf(x.by,x.byName);
+ return `<article class="story" id="story-${esc(x.id)}">
+  <div class="row" style="gap:10px">${avatar(x.by==='seed'?null:x.by,name,'sm')}<div style="flex:1"><p class="small">@${esc(name)}</p><p class="tiny muted">${ago(x.at)}</p></div>
+   ${canDelete(x)?`<button class="iconbtn" data-act="delStory" data-id="${esc(x.id)}" aria-label="Delete this story" style="width:36px;height:36px">${ic('trash',18,1.7)}</button>`:''}</div>
+  <h3 style="margin-top:10px">${esc(x.headline)}</h3>
+  <div class="tagrow">${x.tags.map(t=>`<span class="tag" style="background:${TAGS[t].bg}">${TAGS[t].label}</span>`).join('')}</div>
+  ${x.text?`<p class="storytext">${esc(x.text)}</p>`:''}
+  ${x.photos.length===1?`<button class="photobtn" data-act="viewPhoto" data-id="${esc(x.id)}" data-i="0" aria-label="View photo from @${esc(name)}"><img class="storymedia" src="${x.photos[0]}" alt="Photo from @${esc(name)}"></button>`:x.photos.length?`<div class="gallery" aria-label="${x.photos.length} photos, swipe to see more">${x.photos.map((ph,i)=>`<button class="photobtn" data-act="viewPhoto" data-id="${esc(x.id)}" data-i="${i}" aria-label="View photo ${i+1} of ${x.photos.length} from @${esc(name)}"><img src="${ph}" alt="Photo ${i+1} of ${x.photos.length} from @${esc(name)}"></button>`).join('')}</div><p class="tiny muted" style="margin-top:6px">${ic('camera',12,1.8)} ${x.photos.length} photos • swipe</p>`:''}
+  <div class="acts">
+   <button class="act heart ${liked?'on':''}" data-act="like" data-id="${esc(x.id)}" aria-pressed="${liked}" aria-label="Like, ${likes.length}">${ic('heart',21,1.7)} ${likes.length}</button>
+   <button class="act" data-act="reply" data-id="${esc(x.id)}" aria-label="Comment, ${reps.length}">${ic('chat',21,1.7)} ${reps.length}</button>
+  </div>
+  ${reps.length?`<div class="replies" style="margin-top:8px">${reps.map(r=>`<div class="reply">@${esc(nameOf(r.by,r.byName))}: ${esc(r.text)} <span class="tiny muted">${ago(r.at)}</span>${r.by===S.uid?` <button class="linkbtn" data-act="delReply" data-id="${esc(r.id)}" style="font-size:11px">Delete</button>`:''}</div>`).join('')}</div>`:''}
+ </article>`;
+}
+/* ---------- modals ---------- */
+function openModal(m){S.modal=m;renderModal(true)}
+function closeModal(){S.modal=null;$('#modal').innerHTML=''}
+function renderModal(anim){
+ const m=S.modal;if(!m){$('#modal').innerHTML='';return}
+ const html=MODALS[m.type](m);
+ if(html===null){closeModal();return}
+ const box=$('#modal .sheet,#modal .popcard');const prev=box?box.scrollTop:0;
+ const pop=m.type==='teaser'||m.type==='unlocked';
+ $('#modal').innerHTML=`<div class="scrim ${pop?'center':''}" data-act="scrim"><div class="${pop?'popcard':'sheet'} ${anim?'anim':''}" role="dialog" aria-modal="true">${m.noclose?'':`<button class="close" data-act="closeModal" aria-label="Close">${ic('x',16,2)}</button>`}${html}</div></div>`;
+ const nb=$('#modal .sheet,#modal .popcard');if(!anim&&nb)nb.scrollTop=prev;
+ if(m.after)m.after();
+ if(anim&&m.autofocus){const f=$('#modal input,#modal textarea');if(f)setTimeout(()=>f.focus(),60)}
+}
+const MODALS={
+ filters(m){
+  const F=feedState(m.scope);
+  return `<h2>Filter stories</h2>
+   <p class="flabel" style="margin:18px 0 10px;font-size:15px">Sort by</p>
+   <div class="miniseg big" role="group" aria-label="Sort">${[['likes','Most liked'],['new','Newest']].map(([k,l])=>`<button data-act="fSort" data-k="${k}" aria-pressed="${F.sort===k}">${l}</button>`).join('')}</div>
+   <p class="flabel" style="margin:22px 0 10px;font-size:15px">Tag</p>
+   <div class="tagpick">${['all',...Object.keys(TAGS)].map(t=>`<button class="chip" data-act="fTag" data-k="${t}" aria-pressed="${F.tag===t}" style="background:${t==='all'?'var(--t-all)':TAGS[t].bg}">${ic(t==='all'?'grid':TAGS[t].icon,18,1.7)}<span>${t==='all'?'All':TAGS[t].label}</span></button>`).join('')}</div>
+   <div class="row" style="margin-top:24px;gap:10px"><button class="btn ghost" style="flex:1" data-act="fReset">Reset</button><button class="btn" style="flex:2" data-act="closeModal">Show stories</button></div>`;
+ },
+ teaser(m){
+  const p=pinById(m.pin);if(!p)return null;
+  const un=isUnlocked(p.id);
+  const posts=postsAt(p.id).filter(x=>!isHidden(x)).sort((a,b)=>likeCount(b.id)-likeCount(a.id)||(b.at||0)-(a.at||0));
+  const likes=pinLikes(p.id);const fr=new Set(friendIds());const fcount=new Set(posts.filter(x=>fr.has(x.by)).map(x=>x.by)).size;
+  const g=groupId();const gm=groupMembers(g);
+  const lead=posts.find(x=>x.teaser!=='text');
+  const hero=p.cover?`<img src="${p.cover}" alt="">`:lead?teaserMedia(lead,220).replace('class="peekmedia" style="height:220px"','class="peekmedia" style="height:100%;border-radius:0"'):catArt(p.cat,64);
+  return `<div class="pophero">${hero}</div><div class="popbody">
+   <h2>${esc(p.name)}</h2>
+   <div class="row" style="margin-top:6px"><span class="lockline">${ic(un?'unlock':'lock',20,1.8)} ${un?'Unlocked':'Locked'}</span></div>
+   <div class="pinstats"><span><b>${posts.length}</b> ${posts.length===1?'story':'stories'}</span><span><b>${likes}</b> ${likes===1?'like':'likes'}</span>${fcount?`<span class="green"><b>${fcount}</b> friend${fcount>1?'s':''} posted</span>`:''}</div>
+   ${posts.length?`<p class="tiny muted" style="margin:12px 0 6px">${un?'Stories here':'Sneak peeks: walk over to read the full stories'}</p>${posts.slice(0,4).map(x=>`<div class="peekwrap">${peekCard(x,true)}</div>`).join('')}${posts.length>4?`<p class="tiny muted">+ ${posts.length-4} more</p>`:''}`:'<p class="small muted" style="margin-top:10px">No stories yet. Unlock it and be the first storyteller.</p>'}
+   ${un?`<button class="btn block" style="margin-top:16px" data-act="openPin" data-id="${esc(p.id)}">Read the stories</button>`:
+   `<button class="scanrow" data-act="openScan" data-id="${esc(p.id)}" style="width:100%;text-align:inherit"><span class="qrbubble">${ic('qr',44,1.5)}</span><span class="scanpill">Scan the QR code here to read the full stories!</span></button>
+    ${g&&gm.length>1?`<p class="tiny muted" style="margin-top:10px">You’re on a group walk: all ${gm.length} of you need to scan it.</p>`:''}`}
+  </div>`;
+ },
+ addMenu(){
+  const free=freeSpares().length;
+  return `<h2 style="margin-bottom:14px">What would you like to add?</h2>
+   <button class="addopt" data-act="startPin" ${free?'':'disabled'}><span class="iconcircle">${ic('pin',30,1.5)}</span><span><b>Drop a new pin with your story</b><span class="tiny green">${free?`Put a new spot on the map. ${free} spare QR code${free===1?'':'s'} left.`:'All spare QR codes are in use. Ask the host for more.'}</span></span></button>
+   <button class="addopt" data-act="pickSpot"><span class="iconcircle">${ic('chat',30,1.5)}</span><span><b>Share a story at an existing spot</b><span class="tiny green">Share a story at a spot you’ve unlocked.</span></span></button>`;
+ },
+ pickSpot(){
+  return `<h2>Share at which spot?</h2><p class="small muted" style="margin:4px 0 12px">You can share stories at spots you’ve unlocked.</p>
+   <input class="field" id="spotq" autocomplete="off" placeholder="Search your unlocked spots" aria-label="Search your unlocked spots">
+   <div id="spotlist" style="margin-top:10px">${spotListHtml('')}</div>`;
+ },
+ groupwait(m){
+  const p=pinById(m.pin);const g=groupId();if(!p||!g)return null;
+  const gm=groupMembers(g);const sc=new Set(scansFor(g,p.id));const n=gm.filter(x=>sc.has(x.id)).length;
+  const done=gm.every(x=>sc.has(x.id));
+  return `<h2>Group unlock: ${esc(p.name)}</h2>
+   <p class="muted" style="margin:8px 0 10px"><span style="color:var(--ink);font-size:28px">${n}/${gm.length}</span> have scanned</p>
+   <div class="bar" style="margin-bottom:12px"><i style="width:${gm.length?n/gm.length*100:0}%"></i></div>
+   ${gm.map(x=>`<div class="member">${avatar(x.id,x.username,'sm')}<span style="flex:1">@${esc(x.username)}${x.id===S.uid?' (you)':''}</span>${sc.has(x.id)?`<span class="lockline">${ic('check',18,2)} Scanned</span>`:'<span class="small muted">On the way</span>'}</div>`).join('')}
+   <div style="margin-top:14px"><p class="small muted">${done?'Everyone’s here. Unlocking for the whole group…':'Waiting for the rest of your group to scan this spot’s QR code. It unlocks for everyone automatically.'}</p></div>`;
+ },
+ spare(m){const n=m.spare.replace('spare','');return `<h2>Spare QR #${esc(n)} is empty</h2><p class="muted small" style="margin:8px 0 16px">Nobody has claimed this code yet. Create a pin for something you noticed, then stick this code up at that spot.</p><button class="btn block" data-act="claimSpare" data-id="${esc(m.spare)}">Create a pin with this code</button>`},
+ reply(m){
+  const x=(D.posts||{})[m.post];if(!x)return null;
+  return `<h2>Add a comment</h2>
+   <div style="margin:12px 0;background:var(--pill);border-radius:15px;padding:12px"><p class="small">${esc(normStory(m.post,x).headline)}</p></div>
+   <p class="small muted">Be kind. Comments show under the story for everyone.</p>
+   <div class="dash" style="margin-top:12px"><textarea id="rtext" maxlength="200" style="min-height:100px" placeholder="Write here"></textarea></div><p class="err" id="r-err"></p>
+   <button class="btn block" data-act="submitReply">Add</button>`;
+ },
+ invites(){
+  const inv=myInvites();const inc=incomingReqs();
+  const fr=inc.map(r=>`<div class="card" style="margin-top:12px"><div class="row">${avatar(r.from,nameOf(r.from),'sm')}<p style="flex:1">@${esc(nameOf(r.from))} sent you a friend request.</p></div><div class="row" style="margin-top:10px"><button class="btn sm" data-act="acceptFriend" data-id="${esc(r.from)}">Accept</button><button class="btn sm ghost" data-act="declineFriend" data-id="${esc(r.from)}">Decline</button></div></div>`).join('');
+  const wk=inv.map(i=>`<div class="card" style="margin-top:12px"><div class="row">${avatar(i.from,nameOf(i.from),'sm')}<p style="flex:1">@${esc(nameOf(i.from))} invited you on a group walk.</p></div><div class="row" style="margin-top:10px"><button class="btn sm" data-act="acceptInvite" data-id="${esc(i.id)}">Join walk</button><button class="btn sm ghost" data-act="declineInvite" data-id="${esc(i.id)}">Decline</button></div></div>`).join('');
+  return `<h2>Notifications</h2>${fr||wk?fr+wk:'<p class="muted small" style="margin-top:10px">Nothing new. Friend requests and walk invites show up here.</p>'}`;
+ },
+ addFriend(){return `<h2>Add a friend</h2><label class="flabel" for="fname" style="margin-top:14px;font-size:15px">Their username</label><input class="field" id="fname" autocapitalize="none" autocomplete="off" placeholder="username"><p class="err" id="f-err"></p><button class="btn block" data-act="submitFriend">Send friend request</button>`},
+ help(){return `<h2 style="margin-bottom:8px">How to play</h2>${stepsHtml()}<button class="btn block" style="margin-top:12px" data-act="closeModal">Got it</button>`},
+ unlocked(m){const p=pinById(m.pin);if(!p)return null;const c=PIN_CATS[p.cat]||PIN_CATS.landmark;return `<div class="pophero" style="height:180px">${p.cover?`<img src="${p.cover}" alt="">`:catArt(p.cat,64)}</div><div class="popbody" style="text-align:center"><span class="lockline" style="font-size:16px">${ic('unlock',22,1.8)} Unlocked</span><h2 style="margin-top:8px">${esc(p.name)}</h2><p class="small muted" style="margin:8px 0 16px">It’s now colored on your map and saved to your collection.</p><button class="btn block" data-act="openPin" data-id="${esc(p.id)}">Read the stories</button><button class="btn block ghost" style="margin-top:8px" data-act="compose" data-id="${esc(p.id)}">${ic('plus',18,2)} Share your own story</button></div>`},
+ pinDropped(m){return `<div style="text-align:center"><div class="iconcircle" style="margin:4px auto 14px">${ic('qr',42,1.5)}</div><h2>Your pin is on the map</h2><p class="muted small" style="margin:8px 0 16px">Now stick <b style="font-weight:400;color:var(--ink)">Spare QR ${esc(m.spare.replace('spare','#'))}</b> up at the real spot so others can scan it and find your noticing.</p><button class="btn block" data-act="closeModal">Done</button></div>`},
+ qr(){
+  const base=(cfg().baseUrl||(location.protocol.startsWith('http')?location.origin+location.pathname:'')).split('#')[0];const L=labels();
+  const items=[...pinsList().filter(p=>!/^spare\d+$/.test(p.id)).map(p=>({id:p.id,name:p.name})),...Array.from({length:spareCount()},(_,i)=>{const id='spare'+(i+1);const p=pinById(id);return {id,name:'Spare QR #'+(i+1)+(p?': '+p.name:'')}})];
+  return `<div class="qrsheet"><h2 class="noprint">QR codes for the room</h2>
+   ${S.isOwner?`<div class="noprint stack" style="margin:14px 0;background:var(--pill);border-radius:15px;padding:14px"><span>Host settings</span>
+     <div><label class="small" for="q-base">App link</label><input class="field" id="q-base" value="${esc(base)}" placeholder="https://claude.ai/…"><p class="hint">Leave blank to use this site’s address. Each QR code opens the app at one spot.</p></div>
+     <div class="grid">${['top','bottom','left','right'].map(k=>`<div><label class="small" for="q-${k}">Map ${k} edge</label><input class="field" id="q-${k}" value="${esc(L[k])}"></div>`).join('')}</div>
+     <div><label class="small" for="q-sp">Number of spare QR codes</label><input class="field" id="q-sp" type="number" min="0" max="12" value="${spareCount()}"></div>
+     <button class="btn" data-act="saveCfg">Save settings</button></div>`:''}
+   ${base?`<p class="small muted noprint" style="margin:8px 0">Print these, cut them out, and tape each one where its spot is on the map. The code under each one works as a typed backup.</p>
+    <button class="btn ghost noprint" data-act="print" style="margin-bottom:12px">${ic('print',20)} Print</button>
+    <div class="qrgrid">${items.map(it=>`<div class="qrcard"><div class="q" data-qr="${esc(base+'#'+it.id)}"></div><b>${esc(it.name)}</b><code>code: ${esc(it.id)}</code></div>`).join('')}</div>`:'<p class="muted small" style="margin-top:10px">The host hasn’t added the app link yet, so the QR codes can’t be made.</p>'}
+  </div>`;
+ }
+};
+function spotListHtml(q){
+ const mine=unlockedList(S.uid).slice().sort((a,b)=>b.at-a.at).map(u=>pinById(u.pin)).filter(Boolean);
+ if(!mine.length)return `<p class="small">You haven’t unlocked any spots yet. Scan a spot’s QR code first, then you can post there.</p>`;
+ const qq=q.trim().toLowerCase();
+ const list=qq?mine.filter(p=>p.name.toLowerCase().includes(qq)).slice(0,8):mine.slice(0,3);
+ const row=p=>{const c=PIN_CATS[p.cat]||PIN_CATS.landmark;return `<button class="spotrow" data-act="compose" data-id="${esc(p.id)}"><span class="simico" style="background:${c.color}">${ic(c.icon,20,1.8)}</span><span style="flex:1">${esc(p.name)}</span>${ic('arrowr',18,1.6)}</button>`};
+ return `<p class="tiny muted" style="margin:4px 4px 2px">${qq?(list.length?'Matching spots':'No unlocked spot matches that name.'):'Recently unlocked'}</p>${list.map(row).join('')}`;
+}
+function stepsHtml(){const L=labels();return `<div class="roommap" aria-hidden="true"><span></span><span>${esc(L.top)}</span><span></span><span style="writing-mode:vertical-rl;transform:rotate(180deg)">${esc(L.left)}</span><div class="box">The map is this room</div><span style="writing-mode:vertical-rl">${esc(L.right)}</span><span></span><span>${esc(L.bottom)}</span><span></span></div>
+ <ol class="steps">
+ <li><div><b>The map is the room</b><span class="small muted">Each edge of the map matches a side of the classroom, so a pin near “${esc(L.top)}” is near the ${esc(L.top.toLowerCase())}.</span></div></li>
+ <li><div><b>Tap a pin for a teaser</b><span class="small muted">Grey pins are locked. You’ll see each story’s headline and a sneak peek, but not the full story.</span></div></li>
+ <li><div><b>Walk there and scan</b><span class="small muted">Find that spot’s QR code and scan it. The spot unlocks right away.</span></div></li>
+ <li><div><b>Read, react and add</b><span class="small muted">Read the full stories, like the ones that move you, and comment. Switch to Stories at the top to browse every headline.</span></div></li>
+ <li><div><b>Drop a new pin</b><span class="small muted">Tap the green + on the map, choose Drop a new pin, tap where it goes, write your story, then stick a spare QR code up at that spot.</span></div></li>
+ <li><div><b>Walk together</b><span class="small muted">Add friends in the Friends tab and invite them on a group walk. When everyone scans a spot, it unlocks for the whole group.</span></div></li>
+ </ol>`}
+
+/* ---------- onboarding ---------- */
+function renderOnb(){
+ const o=$('#onb');
+ if(!S.onb){o.innerHTML='';return}
+ if(S.onb==='name'){
+  const ph=S.onbPhoto;
+  o.innerHTML=`<div class="onb dark${S.onbFirst===false?'':' first'}"><div class="onb-hero" style="padding:64px 24px 0"><div class="brandbig">EnvironMemo</div><p class="tagline">Every place has a story. Discover the ones left<br>behind by those who came before you.</p></div>
+  <div class="onb-body" style="padding-top:44px">
+   <button class="avpick" data-act="onbPhoto" aria-label="Add a profile photo"><span class="face">${ph?`<img src="${ph}" alt="">`:`<svg viewBox="0 0 158 158" width="158" height="158" aria-hidden="true"><rect x="48" y="20" width="62" height="68" rx="31" fill="#737880"/><path d="M23 136c12-24 32-37 56-37s44 13 56 37a79 79 0 0 1-112 0z" fill="#737880"/></svg>`}</span><span class="pencil">${ic('pencil',18,1.8)}</span></button>
+   <input type="file" accept="image/*" id="onb-file" hidden>
+   <label class="flabel" for="uname" style="margin-top:56px">Pick a username</label><input class="field" id="uname" maxlength="20" autocapitalize="none" autocomplete="off" placeholder="Username"><p class="hint">3 to 20 letters, numbers or underscores. Classmates see this name.</p><p class="err" id="u-err" aria-live="polite"></p><span class="spacer"></span><button class="btn block" data-act="submitName" style="margin-top:24px">Continue</button></div></div>`;
+  S.onbFirst=false;setTimeout(()=>{const i=$('#uname');if(i)i.focus()},80);
+ }else{
+  o.innerHTML=`<div class="onb dark${S.onbSlide?' enter':''}"><div class="onb-hero" style="padding-top:40px"><h1 style="color:#B2EB57">Welcome, @${esc(S.me.username)}</h1><p class="muted small" style="margin-top:6px">Here’s how today’s session works.</p></div><div class="onb-body">${stepsHtml()}<button class="btn block" style="margin-top:16px" data-act="finishOnb">Start exploring</button></div></div>`;
+ }
+}
+
+function accounts(){try{return JSON.parse(localStorage.getItem('em-accounts')||'[]')||[]}catch(e){return []}}
+function saveAccounts(a){try{localStorage.setItem('em-accounts',JSON.stringify(a))}catch(e){}}
+function rememberAccount(){
+ if(!S.uid||!S.me||!S.me.username)return;
+ const a=accounts().filter(x=>x.uid!==S.uid);a.unshift({uid:S.uid,username:S.me.username,photo:S.me.photo||null,at:Date.now()});saveAccounts(a.slice(0,12));
+}
+function setActive(uid){
+ try{localStorage.setItem('em-active',uid)}catch(e){}
+ const o=$('#onb');o.innerHTML='<div class="onb dark" style="justify-content:center;align-items:center;display:flex"><div class="brandbig">EnvironMemo</div></div>';
+ const el=$('#pagelayer').firstElementChild;if(el)el.classList.add('leave');
+ setTimeout(()=>{location.hash='';location.reload()},260);
+}
+function openAccounts(){S.page={type:'accounts'};renderPage();const el=$('#pagelayer').firstElementChild;if(el)el.classList.add('enter')}
+function accountsHtml(){
+ rememberAccount();
+ const list=accounts().map(a=>{const live=player(a.uid);return {...a,username:(live&&live.username)||a.username,photo:(live&&live.photo)||a.photo}});
+ return `<div class="layer">${head('Switch Account','closePage')}<div class="pad">
+  <p class="small muted" style="margin:0 4px 18px">Accounts used on this phone. Tap one to sign back in.</p>
+  <div class="acctlist">${list.map(a=>`<div class="acct ${a.uid===S.uid?'on':''}">
+    <button class="acctmain" data-act="pickAccount" data-id="${esc(a.uid)}">${a.photo?`<span class="av sm" style="width:48px;height:48px"><img src="${a.photo}" alt=""></span>`:`<span class="av sm" style="width:48px;height:48px;font-size:18px;background:${avColor(a.uid)}">${esc((a.username[0]||'?').toUpperCase())}</span>`}
+     <span style="flex:1;min-width:0"><span style="display:block;font-size:16px">@${esc(a.username)}</span><span class="tiny ${a.uid===S.uid?'green':'muted'}">${a.uid===S.uid?'Signed in now':'Tap to sign in'}</span></span>${a.uid===S.uid?ic('check',20,2):ic('arrowr',18,1.6)}</button>
+    ${a.uid===S.uid?'':`<button class="iconbtn" data-act="forgetAccount" data-id="${esc(a.uid)}" aria-label="Remove @${esc(a.username)} from this phone" style="width:36px;height:36px">${ic('x',16,2)}</button>`}
+   </div>`).join('')}</div>
+  <button class="btn block" style="margin-top:22px" data-act="newAccount">${ic('plus',20,2)} Create a new user</button>
+  <p class="tiny muted" style="margin:14px 4px 0;line-height:1.6">Removing an account only takes it off this list. Its stories stay on the map.</p>
+ </div></div>`;
+}
+function openViewer(postId,i){
+ const raw=(D.posts||{})[postId];if(!raw)return;const x=normStory(postId,raw);if(!x.photos.length)return;
+ let v=document.getElementById('viewer');if(!v){v=document.createElement('div');v.id='viewer';$('#app').appendChild(v)}
+ S.viewer={post:postId,i:Math.max(0,Math.min(+i||0,x.photos.length-1)),n:x.photos.length};
+ const name=nameOf(x.by,x.byName);
+ v.innerHTML=`<div class="viewer" role="dialog" aria-modal="true" aria-label="Photos from @${esc(name)}">
+  <div class="vtop"><span class="vcount" id="vcount">${S.viewer.i+1} of ${x.photos.length}</span><span class="vwho">@${esc(name)} • ${esc(x.headline)}</span><button class="vclose" data-act="closeViewer" aria-label="Close photos">${ic('x',20,2.2)}</button></div>
+  <div class="vstrip" id="vstrip">${x.photos.map((ph,k)=>`<div class="vslide"><img src="${ph}" alt="Photo ${k+1} of ${x.photos.length}"></div>`).join('')}</div>
+  ${x.photos.length>1?`<button class="vnav prev" data-act="viewerStep" data-d="-1" aria-label="Previous photo">${ic('back',22,2)}</button><button class="vnav next" data-act="viewerStep" data-d="1" aria-label="Next photo">${ic('arrowr',22,2)}</button><div class="vdots">${x.photos.map((_,k)=>`<span class="${k===S.viewer.i?'on':''}"></span>`).join('')}</div>`:''}
+ </div>`;
+ const st=$('#vstrip');
+ requestAnimationFrame(()=>{st.style.scrollBehavior='auto';st.scrollLeft=S.viewer.i*st.clientWidth;st.style.scrollBehavior=''});
+ st.addEventListener('scroll',()=>{if(!S.viewer)return;const k=Math.round(st.scrollLeft/st.clientWidth);if(k!==S.viewer.i){S.viewer.i=k;viewerUI()}},{passive:true});
+ viewerUI();setTimeout(()=>{const c=v.querySelector('.vclose');c&&c.focus()},50);
+}
+function viewerUI(){const V=S.viewer;if(!V)return;const c=$('#vcount');if(c)c.textContent=(V.i+1)+' of '+V.n;
+ document.querySelectorAll('.vdots span').forEach((d,k)=>d.classList.toggle('on',k===V.i));
+ const pv=document.querySelector('.vnav.prev'),nx=document.querySelector('.vnav.next');if(pv)pv.disabled=V.i===0;if(nx)nx.disabled=V.i===V.n-1}
+function closeViewer(){S.viewer=null;const v=document.getElementById('viewer');if(v)v.innerHTML=''}
+function reveal(){
+ S.splash=null;S.arrive=true;
+ renderBanner();renderAll();
+ const app=$('#app');app.classList.add('arrive');
+ const o=$('#onb').firstElementChild;if(o)o.classList.add('leave');
+ setTimeout(()=>{$('#onb').innerHTML='';},640);
+ setTimeout(()=>{app.classList.remove('arrive');S.arrive=false;if(S.pendingScan){const c=S.pendingScan;S.pendingScan=null;scan(c)}},1600);
+}
+function showSplash(){
+ S.splash=true;
+ $('#onb').innerHTML=`<div class="onb dark first">
+  <div class="onb-hero" style="padding:64px 24px 0;position:relative;z-index:1"><div class="brandbig">EnvironMemo</div><p class="tagline">Every place has a story. Discover the ones left<br>behind by those who came before you.</p></div>
+  <div class="splashmid onb-body">${avatar(S.uid,S.me.username,'','width:158px;height:158px;font-size:56px')}<p style="margin-top:20px;font-size:19px">Welcome back, @${esc(S.me.username)}</p></div>
+  <div style="margin-top:auto;padding:0 32px 40px;position:relative;z-index:1"><button class="btn block" data-act="continueSplash">Continue</button></div>
+ </div>`;
+}
+/* ---------- scanning & unlocking ---------- */
+function readHash(){const h=decodeURIComponent((location.hash||'').slice(1)).trim().toLowerCase();if(!h)return;try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}return h}
+function scan(code){
+ code=String(code||'').trim().toLowerCase().replace(/^#/,'');
+ if(!code)return;
+ if(S.onb||!S.me||!S.me.onboarded||!Store.loaded.pins){S.pendingScan=code;return}
+ const p=pinById(code);
+ if(!p){
+  if(/^spare\d+$/.test(code)&&Number(code.slice(5))<=spareCount()){openModal({type:'spare',spare:code});return}
+  toast('That code doesn’t match a spot on the map.');return;
+ }
+ closePinLayer();closePage();
+ if(isUnlocked(p.id)){openPin(p.id);toast('You’ve already unlocked '+p.name+'.');return}
+ const g=groupId();const gm=groupMembers(g);
+ if(g&&gm.length>1){
+  Store.set('scans',safeSeg(g+'_'+p.id+'_'+S.uid),{group:g,pin:p.id,uid:S.uid,at:Date.now()}).catch(()=>toast('Couldn’t record your scan. Try again.'));
+  openModal({type:'groupwait',pin:p.id,live:true});return;
+ }
+ unlock(p.id);
+}
+function unlock(pin,opts={}){
+ if(isUnlocked(pin))return;
+ savePlayer({unlocked:[...unlockedList(S.uid),{pin,at:Date.now(),group:!!opts.group}]});
+ S.fresh=pin;setTimeout(()=>{if(S.fresh===pin)S.fresh=null},1500);
+ S.view='map';renderTop();renderView();renderTabs();
+ openModal({type:'unlocked',pin});
+}
+function openPin(id){closeModal();const was=S.pin;S.pin=id;S.filter='all';renderPin();if(!was){const el=$('#pinlayer').firstElementChild;if(el)el.classList.add('enter')}}
+function closePinLayer(){S.pin=null;$('#pinlayer').innerHTML=''}
+function closePage(){stopCamera();S.page=null;$('#pagelayer').innerHTML=''}
+const ORDER={map:0,addpin:0.5,add:0.5,friends:1,challenges:2,profile:3,collection:3.5};
+function go(view){
+ const from=S.view;S.view=view;closePinLayer();closePage();renderTop();renderTabs();renderView();
+ const v=$('#view');v.scrollTop=0;
+ if(from!==view){v.classList.remove('slide-l','slide-r');void v.offsetWidth;v.classList.add((ORDER[view]??0)>=(ORDER[from]??0)?'slide-r':'slide-l')}
+}
+function slideOut(id,after){const L=$('#'+id);const el=L.firstElementChild;if(!el){after&&after();return}el.classList.remove('enter');el.classList.add('leave');setTimeout(()=>{after&&after()},230)}
+
+/* ---------- actions ---------- */
+const ACT={
+ tab(el){go(el.dataset.tab)},
+ toProfile(){go('profile')},
+ zoomIn(){const v=mv();zoomAt(1.6,v.x+v.w/2,v.y+v.h/2)},
+ zoomOut(){const v=mv();zoomAt(1/1.6,v.x+v.w/2,v.y+v.h/2)},
+ zoomReset(){S.mapView=null;applyView()},
+ switchUser(){openAccounts()},
+ pickAccount(el){if(el.dataset.id===S.uid){closePage();return}setActive(el.dataset.id)},
+ newAccount(){setActive('u-'+newId())},
+ forgetAccount(el){const id=el.dataset.id;if(id===S.uid)return;saveAccounts(accounts().filter(a=>a.uid!==id));renderPage()},
+ help(){openModal({type:'help'})},
+ group(){go('friends')},
+ invites(){openModal({type:'invites',live:true})},
+ scrim(el,ev){if(ev.target===el&&!(S.modal&&S.modal.noclose))closeModal()},
+ closeModal(){closeModal()},
+ pinTap(el){if(S.placing)return;if(el.closest('#mapsvg')&&Date.now()-(S.mapDragAt||0)<350)return;const id=el.dataset.id;if(isUnlocked(id))openPin(id);else openModal({type:'teaser',pin:id})},
+ openPin(el){openPin(el.dataset.id)},
+ closePin(){const id=S.pin;S.pin=null;renderView();slideOut('pinlayer',()=>{if(!S.pin)$('#pinlayer').innerHTML=''})},
+ closePage(){stopCamera();S.page=null;slideOut('pagelayer',()=>{if(!S.page)$('#pagelayer').innerHTML=''})},
+ chalTab(el){const o=['you','board','top'];if(el.dataset.k===S.chalTab)return;const d=o.indexOf(el.dataset.k)>=o.indexOf(S.chalTab)?'slide-r':'slide-l';S.chalTab=el.dataset.k;S.chalDir=d;renderView();S.chalDir=null},
+ mapMode(el){if(S.mapMode===el.dataset.k||(!S.mapMode&&el.dataset.k==='map'))return;S.feedAnim=el.dataset.k==='feed'?'slide-r':'slide-l';S.mapMode=el.dataset.k;renderView();S.feedAnim=null},
+ openFilters(el){openModal({type:'filters',scope:el.dataset.scope})},
+ fSort(el){const sc=S.modal.scope;const F=feedState(sc);if(F.sort===el.dataset.k)return;F.sort=el.dataset.k;renderModal();rerenderFeed(sc,'fade')},
+ fTag(el){const sc=S.modal.scope;const F=feedState(sc);if(F.tag===el.dataset.k)return;F.tag=el.dataset.k;renderModal();rerenderFeed(sc,'fade')},
+ fReset(){const sc=S.modal.scope;const F=feedState(sc);F.sort='likes';F.tag='all';renderModal();rerenderFeed(sc,'fade')},
+ clearFilters(el){const F=feedState(el.dataset.scope);F.sort='likes';F.tag='all';rerenderFeed(el.dataset.scope,'fade')},
+ feedSort(el){const F=feedState(el.dataset.scope);if(F.sort===el.dataset.k)return;F.sort=el.dataset.k;rerenderFeed(el.dataset.scope,'fade')},
+ feedWho(el){const F=feedState(el.dataset.scope);if(F.who===el.dataset.k)return;F.who=el.dataset.k;rerenderFeed(el.dataset.scope,'fade')},
+ feedTag(el){const F=feedState(el.dataset.scope);if(F.tag===el.dataset.k)return;const o=['all',...Object.keys(TAGS)];const d=o.indexOf(el.dataset.k)>o.indexOf(F.tag)?'slide-r':'slide-l';F.tag=el.dataset.k;rerenderFeed(el.dataset.scope,d)},
+ openStory(el){S.scrollStory=el.dataset.id;openPin(el.dataset.pin)},
+ sfPrompt(){const f=storyForm();if(!f)return;let i;do{i=Math.floor(Math.random()*PROMPTS.length)}while(PROMPTS.length>1&&f.prompt&&PROMPTS[i][0]===f.prompt[0]);f.prompt=PROMPTS[i];const pe=$('#sf-prompt');pe.textContent='“'+f.prompt[0]+'”';pe.style.display='';$('#sf-use').style.display=''},
+ sfUsePrompt(){const f=storyForm();if(!f||!f.prompt)return;const h=$('#sf-head'),t=$('#sf-text');if(h&&!h.value.trim()){h.value=f.prompt[0];f.headline=h.value}if(t&&!t.value.trim()){t.value=f.prompt[1]+' ';f.text=t.value;t.dispatchEvent(new Event('input'))}if(!(f.tags||[]).length){f.tags=['heartfelt'];document.querySelectorAll('[data-act="sfTag"]').forEach(b=>b.setAttribute('aria-pressed',f.tags.includes(b.dataset.k)))}t&&t.focus()},
+ sfTag(el){const f=storyForm();if(!f)return;f.tags=f.tags||[];const k=el.dataset.k;if(f.tags.includes(k))f.tags=f.tags.filter(x=>x!==k);else{if(f.tags.length>=3){toast('Pick up to 3 tags.');return}f.tags.push(k)}el.setAttribute('aria-pressed',f.tags.includes(k))},
+ sfPick(){const i=$('#sf-photo');if(i)i.click()},
+ sfClear(el){const f=storyForm();if(!f)return;f.photos.splice(+el.dataset.i,1);redrawStoryForm(f)},
+ sfTeaser(el){const f=storyForm();if(!f||el.disabled)return;f.teaser=el.dataset.k;f.teaserTouched=true;redrawStoryForm(f)},
+ async delStory(el){const x=(D.posts||{})[el.dataset.id];if(!x||!canDelete(x))return;if(!confirm('Delete this story? This can’t be undone.'))return;
+  try{await Store.del('posts',el.dataset.id);Object.entries(D.likes||{}).filter(([k,l])=>l.post===el.dataset.id).forEach(([k])=>Store.del('likes',k).catch(()=>{}));Object.entries(D.replies||{}).filter(([k,r])=>r.post===el.dataset.id).forEach(([k])=>Store.del('replies',k).catch(()=>{}));if(x.video&&Store.sb){const m=String(x.video).split('/media/')[1];if(m)Store.sb.storage.from('media').remove([decodeURIComponent(m)]).catch(()=>{})}toast('Story deleted')}catch(e){toast('Couldn’t delete that. Check your connection.')}},
+ async delPin(el){const p=pinById(el.dataset.id);if(!p||!canDelete(p))return;const n=postsAt(p.id).length;if(!confirm(`Delete “${p.name}” and its ${n} ${n===1?'story':'stories'}? This can’t be undone.`))return;
+  try{for(const x of postsAt(p.id))await Store.del('posts',x.id);await Store.del('pins',p.id);closePinLayer();go('map');toast('Pin deleted'+(/^spare\d+$/.test(p.id)?'. Its QR code is free to reuse.':''))}catch(e){toast('Couldn’t delete that. Check your connection.')}},
+ delReply(el){const r=(D.replies||{})[el.dataset.id];if(!r||r.by!==S.uid)return;Store.del('replies',el.dataset.id).catch(()=>toast('Couldn’t delete that.'))},
+ viewPhoto(el){openViewer(el.dataset.id,el.dataset.i)},
+ closeViewer(){closeViewer()},
+ viewerStep(el){const V=S.viewer;if(!V)return;const k=Math.max(0,Math.min(V.n-1,V.i+(+el.dataset.d)));const st=$('#vstrip');st.scrollTo({left:k*st.clientWidth,behavior:'smooth'})},
+ allBadges(){S.allBadges=!S.allBadges;renderView()},
+ actTab(el){const o=['stories','liked','comments'];const cur=S.actTab||'stories';if(el.dataset.k===cur)return;S.actDir=o.indexOf(el.dataset.k)>o.indexOf(cur)?'slide-r':'slide-l';S.actTab=el.dataset.k;renderView();S.actDir=null},
+ onbPhoto(){const i=$('#onb-file');if(!i)return;i.onchange=async()=>{const f=i.files&&i.files[0];if(!f)return;const v=$('#uname').value;try{S.onbPhoto=await compress(f,240);S.onbFirst=false;renderOnb();$('#uname').value=v}catch(e){toast('That photo couldn’t be read.')}};i.click()},
+ pickAvatar(){const i=$('#av-file');if(!i)return;i.onchange=async()=>{const f=i.files&&i.files[0];if(!f)return;try{const d=await compress(f,240);savePlayer({photo:d});toast('Profile photo updated')}catch(e){toast('That photo couldn’t be read.')}};i.click()},
+ openScan(el){closeModal();openScan(el.dataset.id||null)},
+ submitScanCode(){const v=($('#scancode').value||'').trim().toLowerCase().replace(/^#/,'');if(!v){$('#scan-err').textContent='Type the code printed under the QR code.';return}if(!pinById(v)&&!/^spare\d+$/.test(v)){$('#scan-err').textContent='No spot has that code. Check the spelling.';return}finishScan(v)},
+ simScan(el){finishScan(el.dataset.id)},
+ guess(el){
+  const p=pinById(el.dataset.id);const v=($('#guess').value||'').trim().toLowerCase();
+  if(!v){$('#guess-err').textContent='Type a guess first.';return}
+  if((p.guess||[]).some(g=>v.includes(String(g).toLowerCase()))){savePlayer({guesses:{...(S.me.guesses||{}),[p.id]:true}});toast('You got it! Plant Detective points earned.');renderModal()}
+  else{$('#guess-err').textContent='Not quite. Unlock the spot to find out.'}
+ },
+ compose(el){closeModal();openCompose(el.dataset.id)},
+ pickPhoto(el){const i=$('#'+el.dataset.p+'-file');if(i)i.click()},
+ clearPhoto(el){const st=el.dataset.p==='pf'?S.addForm:S.page.form;st.photo=null;st._show&&st._show()},
+ async submitPost(el){
+  const pg=S.page;const f=pg.form;const err=$('#c-err');
+  const miss=readStoryForm(f);if(miss){err.textContent=miss;return}
+  el.disabled=true;el.textContent='Posting…';
+  try{const rec=await storyRecord(f,pg.pin);const id=newId();await Store.set('posts',id,rec);closePage();toast('Story shared at '+(pinById(pg.pin)||{}).name);S.scrollStory=id;openPin(pg.pin)}
+  catch(e){console.error(e);el.disabled=false;el.textContent='Post story';err.textContent=(e&&/large|size|limit|exceed/i.test(String(e.message||e)))?'Those photos are too big together. Try fewer photos.':'Couldn’t post. Try fewer photos or check your connection.'}
+ },
+ like(el){const id=el.dataset.id;const k=safeSeg(id+'_'+S.uid);const post=(D.posts||{})[id];if((D.likes||{})[k])Store.del('likes',k).catch(()=>{});else Store.set('likes',k,{post:id,uid:S.uid,author:post&&post.by||'',at:Date.now()}).catch(()=>toast('Couldn’t save your reaction.'))},
+ reply(el){openModal({type:'reply',post:el.dataset.id,autofocus:true})},
+ async submitReply(el){
+  const t=($('#rtext').value||'').trim();const err=$('#r-err');
+  if(!t){err.textContent='Write something to add.';return}
+  if(hasProfanity(t)){err.textContent='That includes a word that isn’t allowed. Remove it to post.';return}
+  el.disabled=true;try{await Store.set('replies',newId(),{post:S.modal.post,text:t,by:S.uid,at:Date.now()});closeModal();toast('Added')}catch(e){el.disabled=false;err.textContent='Couldn’t add that. Check your connection.'}
+ },
+ addMenu(){openModal({type:'addMenu'})},
+ pickSpot(){openModal({type:'pickSpot',autofocus:true,after:()=>{const i=$('#spotq');if(i)i.addEventListener('input',()=>{$('#spotlist').innerHTML=spotListHtml(i.value)})}})},
+ startPin(){if(!freeSpares().length){toast('All spare QR codes are in use.');return}closeModal();S.addForm={teaser:'text',tags:[]};startPlacing()},
+ movePin(){startPlacing()},
+ cancelPlace(){S.placing=false;S.addForm={};renderView()},
+ cancelPin(){S.addForm={};go('map')},
+ claimSpare(el){closeModal();S.addForm={teaser:'text',tags:[],spare:el.dataset.id};startPlacing()},
+ placePin(el,ev){const svg=$('#pf-map');const pt=svg.createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;const q=pt.matrixTransform(svg.getScreenCTM().inverse());S.addForm.x=Math.max(10,Math.min(350,Math.round(q.x)));S.addForm.y=Math.max(30,Math.min(530,Math.round(q.y)));drawPfMarker()},
+ async submitPin(el){
+  const f=S.addForm;const err=$('#pf-err');
+  const ne=$('#pf-name');if(ne)f.name=ne.value.trim();
+  const sp=$('#pf-spare');if(sp)f.spare=sp.value;
+  const miss=!f.name?'Give your pin a name.':f.x==null?'Place your pin on the map.':!f.spare?'Pick a spare QR code.':readStoryForm(f);
+  if(miss){err.textContent=miss;return}
+  if(hasProfanity(f.name)){err.textContent='The spot name includes a word that isn’t allowed.';return}
+  if(pinById(f.spare)){err.textContent='Someone just claimed that QR code. Pick another.';return}
+  el.disabled=true;el.textContent='Dropping pin…';
+  try{
+   const id=f.spare;
+   const rec=await storyRecord(f,id);
+   await Store.set('pins',id,{name:f.name,x:f.x,y:f.y,by:S.uid,at:Date.now()});
+   await Store.set('posts',newId(),rec);
+   savePlayer({unlocked:[...unlockedList(S.uid),{pin:id,at:Date.now()}]});
+   S.addForm={};S.fresh=id;S.mapMode='map';go('map');
+   openModal({type:'pinDropped',spare:id});
+  }catch(e){console.error(e);el.disabled=false;el.textContent='Drop pin';err.textContent='Couldn’t drop the pin. Try fewer photos or check your connection.'}
+ },
+ async startGroup(){const g=newId();try{await Store.set('groups',g,{leader:S.uid,at:Date.now()});await savePlayer({groupId:g});toast('Walk started. Invite friends to join.')}catch(e){toast('Couldn’t start a walk. Try again.')}},
+ leaveGroup(){
+  const g=groupId();if(!g)return;
+  const rest=groupMembers(g).filter(m=>m.id!==S.uid);
+  savePlayer({groupId:null});
+  if(rest.length<=1){Store.del('groups',g).catch(()=>{});toast(rest.length?'You left, so the walk ended.':'Walk ended.')}
+  else toast('You left the group walk.');
+ },
+ inviteUser(el){sendInviteTo(el.dataset.id)},
+ acceptInvite(el){const i=(D.invites||{})[el.dataset.id];if(!i)return;Store.set('invites',el.dataset.id,{...i,status:'accepted'}).catch(()=>{});savePlayer({groupId:i.group});closeModal();toast('You joined @'+nameOf(i.from)+'’s walk.')},
+ declineInvite(el){const i=(D.invites||{})[el.dataset.id];if(!i)return;Store.set('invites',el.dataset.id,{...i,status:'declined'}).catch(()=>{})},
+ addFriend(){openModal({type:'addFriend',autofocus:true})},
+ submitFriend(){
+  const n=($('#fname').value||'').trim().replace(/^@/,'').toLowerCase();const err=$('#f-err');
+  const t=players().find(p=>p.username.toLowerCase()===n);
+  if(!t){err.textContent='No one has that username yet.';return}
+  if(t.id===S.uid){err.textContent='That’s you.';return}
+  const r=reqWith(t.id);
+  if(r&&r.status==='accepted'){err.textContent='You’re already friends.';return}
+  if(r&&r.status==='pending'&&r.from===S.uid){err.textContent='Request already sent. Waiting for them to accept.';return}
+  const status=(r&&r.status==='pending'&&r.to===S.uid)?'accepted':'pending';
+  Store.set('friendreqs',pairId(S.uid,t.id),status==='accepted'?{...r,status,at:Date.now()}:{from:S.uid,to:t.id,status,at:Date.now()})
+   .then(()=>{closeModal();toast(status==='accepted'?'You and @'+t.username+' are now friends':'Friend request sent to @'+t.username)}).catch(()=>{err.textContent='Couldn’t send that. Check your connection.'});
+ },
+ acceptFriend(el){const r=reqWith(el.dataset.id);if(!r)return;Store.set('friendreqs',pairId(S.uid,el.dataset.id),{...r,status:'accepted',at:Date.now()}).then(()=>toast('You and @'+nameOf(el.dataset.id)+' are now friends')).catch(()=>toast('Couldn’t accept. Try again.'))},
+ declineFriend(el){const r=reqWith(el.dataset.id);if(!r)return;Store.set('friendreqs',pairId(S.uid,el.dataset.id),{...r,status:'declined',at:Date.now()}).catch(()=>toast('Couldn’t decline. Try again.'))},
+ cancelFriend(el){Store.del('friendreqs',pairId(S.uid,el.dataset.id)).catch(()=>toast('Couldn’t cancel. Try again.'))},
+ qr(){openModal({type:'qr',after:drawQRs})},
+ print(){try{window.print()}catch(e){toast('Printing isn’t available here. Take a screenshot instead.')}},
+ async saveCfg(){const c={...cfg(),baseUrl:$('#q-base').value.trim(),spares:Math.max(0,Math.min(12,Number($('#q-sp').value)||0)),labels:{top:$('#q-top').value.trim()||'Top',bottom:$('#q-bottom').value.trim()||'Bottom',left:$('#q-left').value.trim()||'Left',right:$('#q-right').value.trim()||'Right'}};try{await Store.set('config','main',c);toast('Settings saved');renderModal();S.modal&&S.modal.after&&S.modal.after()}catch(e){toast('Couldn’t save settings.')}},
+ async submitName(el){
+  const v=($('#uname').value||'').trim().replace(/^@/,'');const err=$('#u-err');
+  if(!/^[A-Za-z0-9_]{3,20}$/.test(v)){err.textContent='Use 3 to 20 letters, numbers or underscores.';return}
+  if(hasProfanity(v)){err.textContent='Pick a different username.';return}
+  if(players().some(p=>p.id!==S.uid&&p.username.toLowerCase()===v.toLowerCase())){err.textContent='Someone already has that name. Try another.';return}
+  el.disabled=true;
+  S.me={username:v,unlocked:[],friends:[],guesses:{},groupId:null,onboarded:false,at:Date.now()};if(S.onbPhoto)S.me.photo=S.onbPhoto;
+  try{await savePlayer({});rememberAccount();S.onb='steps';S.onbSlide=true;renderOnb();S.onbSlide=false}catch(e){el.disabled=false;err.textContent='Couldn’t save. Check your connection.'}
+ },
+ finishOnb(){savePlayer({onboarded:true});S.onb=null;reveal()},
+ continueSplash(){if(S.splash){S.splash=null;reveal()}}
+};
+function startPlacing(){
+ S.placing=true;S.mapMode='map';go('map');
+ // zoom in a little so it's easier to aim
+ if(!zoomed()){const v=mv();zoomAt(1.5,v.x+v.w/2,v.y+v.h/2)}
+}
+function storyForm(){return S.view==='addpin'?S.addForm:(S.page&&S.page.type==='compose'?S.page.form:null)}
+function rerenderFeed(scope,anim){
+ S.listAnim=anim==='fade'?'fadein':anim;
+ if(scope==='pin'){renderPin()}else{renderView()}
+ S.listAnim=null;
+}
+// Keep video teasers to their first few seconds.
+document.addEventListener('timeupdate',e=>{const v=e.target;if(v&&v.dataset&&v.dataset.clip&&v.currentTime>+v.dataset.clip)v.currentTime=0},true);
+function sendInviteTo(uid){
+ (async()=>{let g=groupId();if(!g){g=newId();await Store.set('groups',g,{leader:S.uid,at:Date.now()});await savePlayer({groupId:g})}
+  await Store.set('invites',newId(),{from:S.uid,to:uid,group:g,status:'pending',at:Date.now()});toast('Walk invite sent to @'+nameOf(uid))})().catch(()=>toast('Couldn’t send the invite.'));
+}
+function drawQRs(){document.querySelectorAll('[data-qr]').forEach(el=>{el.innerHTML='';if(typeof QRCode==='undefined'){el.textContent='QR library didn’t load. Use the code below.';return}try{new QRCode(el,{text:el.dataset.qr,width:140,height:140,colorDark:'#0A3600',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M})}catch(e){el.textContent='Couldn’t draw this code.'}})}
+
+document.addEventListener('click',ev=>{
+ const el=ev.target.closest('[data-act]');if(!el)return;
+ const fn=ACT[el.dataset.act];if(!fn)return;
+ if(el.dataset.act==='scrim'&&ev.target!==el)return;
+ ev.preventDefault();fn(el,ev);
+});
+document.addEventListener('keydown',ev=>{
+ if(ev.key==='Escape'&&S.viewer){closeViewer();return}
+ if(S.viewer&&(ev.key==='ArrowRight'||ev.key==='ArrowLeft')){ACT.viewerStep({dataset:{d:ev.key==='ArrowRight'?1:-1}});return}
+ if(ev.key==='Escape'&&S.modal&&!S.modal.noclose)closeModal();
+ if(ev.key==='Enter'&&ev.target.matches('.pin')){ev.preventDefault();ACT.pinTap(ev.target)}
+ if(ev.key==='Enter'&&ev.target.matches('input.field')){const map={uname:'submitName',scancode:'submitScanCode',fname:'submitFriend'};const a=map[ev.target.id];if(a){ev.preventDefault();ACT[a]($('[data-act="'+a+'"]')||ev.target,ev)}else if(ev.target.id==='guess'){ev.preventDefault();$('[data-act="guess"]').click()}}
+});
+window.addEventListener('hashchange',()=>{const h=readHash();if(h)scan(h)});
+
+/* ---------- boot ---------- */
+(async function boot(){
+ S.pendingScan=readHash()||null;
+ Store.loadLocal();
+ // Host tools (map labels, spare-code count) unlock on a phone that once opened the app with ?host at the end of the link.
+ try{if(new URLSearchParams(location.search).has('host'))localStorage.setItem('em-host','1');S.isOwner=localStorage.getItem('em-host')==='1'}catch(e){}
+ try{S.uid=localStorage.getItem('em-active')||localStorage.getItem('em-uid')}catch(e){}
+ if(!S.uid){S.uid='u-'+newId();try{localStorage.setItem('em-uid',S.uid)}catch(e){}}
+ S.canWrite=true;
+ await Store.init();
+ const mine=(D.players||{})[S.uid];if(mine)S.me={...mine};
+ rememberAccount();
+ S.ready=true;renderBanner();
+ if(!S.me){S.onb='name';renderOnb();renderAll()}else if(!S.me.onboarded){S.onb='steps';renderOnb();renderAll()}else{showSplash()}
+})();
+</script>
+</body>
+</html>
